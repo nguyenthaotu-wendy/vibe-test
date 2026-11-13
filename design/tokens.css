@@ -1,0 +1,193 @@
+/* =====================================================================
+   DESIGN TOKENS — phong cách "Đêm cực quang"
+   Học phong cách từ mau-giao-dien.html: nền đêm sâu, điểm nhấn cực quang,
+   bề mặt băng sáng, nút cam nổi khối, bo góc lớn, kính mờ.
+   Cách dùng: <link rel="stylesheet" href="design/tokens.css"> rồi gọi var(--...).
+   ===================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap");
+
+:root {
+  /* ------------------------------------------------------------------
+     1. MÀU GỐC (primitive) — không dùng trực tiếp trong giao diện,
+        hãy dùng màu theo vai trò ở mục 2.
+     ------------------------------------------------------------------ */
+
+  /* Đêm — nền và chữ đậm */
+  --night-950: #050C1E;
+  --night-900: #071026;
+  --night-800: #0B1E3F;
+  --night-700: #1B3A6B;
+  --night-600: #2A4F86;
+  --night-500: #3E6FA8;
+
+  /* Băng — bề mặt sáng */
+  --ice-50:  #F4FBFF;
+  --ice-100: #E3F2FF;
+  --ice-200: #BFE3FF;
+  --ice-300: #9CCBEF;
+  --ice-400: #7FB8E6;
+
+  /* Cực quang — điểm nhấn trang trí, phát sáng */
+  --aurora-teal:   #4FF0C8;
+  --aurora-violet: #8A7CFF;
+  --aurora-pink:   #FF8AD8;
+
+  /* Cam — hành động chính */
+  --orange-300: #FFB547;
+  --orange-500: #FF8A3D;
+  --orange-700: #C4561B;
+
+  /* Vàng — thưởng, thành tích */
+  --gold-300: #FFE98A;
+  --gold-400: #FFD447;
+  --gold-700: #C98B00;
+
+  /* Đỏ — lỗi, cảnh báo */
+  --red-300: #FF8FA3;
+  --red-500: #FF4D6D;
+  --red-700: #C2304D;
+
+  /* Xanh ngọc — thành công */
+  --green-300: #7CF5C9;
+  --green-600: #17A57E;
+
+  /* ------------------------------------------------------------------
+     2. MÀU THEO VAI TRÒ (semantic) — dùng các biến này khi dựng giao diện
+     ------------------------------------------------------------------ */
+  --color-bg:             var(--night-900);
+  --color-bg-gradient:    linear-gradient(180deg, var(--night-800) 0%, var(--night-700) 55%, var(--night-500) 100%);
+  --color-surface:        rgba(255, 255, 255, 0.12);   /* kính mờ trên nền tối */
+  --color-surface-strong: rgba(11, 30, 63, 0.72);      /* kính tối, đặt trên nền sáng/hoạ tiết */
+  --color-surface-light:  var(--ice-50);               /* thẻ sáng */
+  --color-border:         rgba(255, 255, 255, 0.28);
+  --color-border-light:   var(--ice-200);
+
+  --color-text:           #FFFFFF;
+  --color-text-muted:     rgba(234, 242, 255, 0.72);
+  --color-text-on-light:  var(--night-800);
+  --color-text-on-light-muted: #4A6283;
+
+  --color-primary:        var(--orange-500);
+  --color-primary-top:    var(--orange-300);
+  --color-primary-edge:   var(--orange-700);           /* gờ nổi khối dưới nút */
+  --color-reward:         var(--gold-400);
+  --color-reward-edge:    var(--gold-700);
+  --color-danger:         var(--red-500);
+  --color-danger-edge:    var(--red-700);
+  --color-success:        var(--green-300);
+  --color-accent-1:       var(--aurora-teal);
+  --color-accent-2:       var(--aurora-violet);
+  --color-accent-3:       var(--aurora-pink);
+  --color-focus:          var(--aurora-teal);
+
+  --gradient-primary: linear-gradient(180deg, var(--orange-300), var(--orange-500));
+  --gradient-reward:  linear-gradient(180deg, var(--gold-300), var(--gold-400));
+  --gradient-danger:  linear-gradient(180deg, #FF7A93, var(--red-500));
+  --gradient-aurora:  linear-gradient(90deg, var(--aurora-teal), var(--aurora-violet), var(--aurora-pink));
+
+  /* ------------------------------------------------------------------
+     3. KIỂU CHỮ
+     ------------------------------------------------------------------ */
+  --font-display: "Baloo 2", "Nunito", "Segoe UI", system-ui, sans-serif;
+  --font-body:    "Baloo 2", "Nunito", "Segoe UI", system-ui, sans-serif;
+  --font-mono:    ui-monospace, "Cascadia Code", Consolas, monospace;
+
+  --weight-regular: 500;
+  --weight-medium:  600;
+  --weight-bold:    700;
+  --weight-black:   800;
+
+  /* Cỡ chữ — thang tỉ lệ ~1.25, gốc 16px */
+  --text-xs:   0.75rem;   /* 12px — nhãn phụ, chữ in hoa nhỏ */
+  --text-sm:   0.875rem;  /* 14px — chú thích */
+  --text-md:   1rem;      /* 16px — nội dung */
+  --text-lg:   1.25rem;   /* 20px — nội dung nhấn */
+  --text-xl:   1.5rem;    /* 24px — tiêu đề nhỏ, số liệu */
+  --text-2xl:  1.875rem;  /* 30px — tiêu đề mục */
+  --text-3xl:  2.25rem;   /* 36px — tiêu đề trang */
+  --text-4xl:  3rem;      /* 48px — tiêu đề lớn */
+  --text-5xl:  3.75rem;   /* 60px — con số nổi bật */
+
+  --leading-tight:  1.05;
+  --leading-snug:   1.25;
+  --leading-normal: 1.5;
+
+  --tracking-tight:  -0.01em;
+  --tracking-normal: 0;
+  --tracking-wide:   0.06em;   /* chữ in hoa nhỏ, nút */
+  --tracking-wider:  0.12em;   /* tiêu đề in hoa lớn */
+
+  /* Viền chữ cho tiêu đề lớn trên nền nhiều màu */
+  --text-stroke-display: 3px;
+  --text-shadow-display: 0 4px 0 var(--night-700);
+  --text-glow:           0 0 18px rgba(79, 240, 200, 0.6);
+
+  /* ------------------------------------------------------------------
+     4. KHOẢNG CÁCH — lưới 4px
+     ------------------------------------------------------------------ */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ------------------------------------------------------------------
+     5. BO GÓC — bo lớn, mềm mại
+     ------------------------------------------------------------------ */
+  --radius-xs:   6px;    /* thanh tiến độ */
+  --radius-sm:   10px;   /* ô nhỏ, dòng danh sách */
+  --radius-md:   16px;   /* ô nhập, nút nhỏ, viên thông tin */
+  --radius-lg:   22px;   /* nút chính, bảng */
+  --radius-xl:   30px;   /* thẻ lớn */
+  --radius-2xl:  44px;   /* khung lớn, hộp thoại toàn màn hình */
+  --radius-pill: 999px;  /* huy hiệu, nhãn */
+
+  /* ------------------------------------------------------------------
+     6. BÓNG, KÍNH MỜ, PHÁT SÁNG
+     ------------------------------------------------------------------ */
+  --blur-glass: 10px;
+  --shadow-sm:   0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md:   0 10px 24px rgba(0, 0, 0, 0.35);
+  --shadow-lg:   0 20px 40px rgba(0, 0, 0, 0.45);
+  --shadow-press-primary: 0 7px 0 var(--color-primary-edge), 0 14px 28px rgba(255, 138, 61, 0.45);
+  --shadow-press-reward:  0 7px 0 var(--color-reward-edge),  0 14px 28px rgba(255, 212, 71, 0.4);
+  --shadow-press-danger:  0 7px 0 var(--color-danger-edge),  0 14px 28px rgba(255, 77, 109, 0.4);
+  --glow-teal:   0 0 16px rgba(79, 240, 200, 0.55);
+  --glow-violet: 0 0 16px rgba(138, 124, 255, 0.55);
+  --glow-pink:   0 0 16px rgba(255, 138, 216, 0.55);
+  --glow-gold:   0 0 16px rgba(255, 212, 71, 0.65);
+  --ring-focus:  0 0 0 3px var(--night-800), 0 0 0 6px var(--color-focus);
+
+  /* ------------------------------------------------------------------
+     7. CHUYỂN ĐỘNG
+     ------------------------------------------------------------------ */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 400ms;
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ------------------------------------------------------------------
+     8. LOGO
+     ------------------------------------------------------------------ */
+  --logo-height-sm: 28px;
+  --logo-height-md: 40px;
+  --logo-height-lg: 56px;     /* file PNG hiện có rộng 220px — không phóng to hơn */
+  --logo-clearspace: var(--space-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
