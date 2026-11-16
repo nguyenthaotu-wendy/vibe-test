@@ -1,0 +1,12 @@
+name: dap-chim-canh-cut
+
+services:
+  app:
+    build: .
+    image: dap-chim-canh-cut:latest
+    container_name: dap-chim-canh-cut
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: "3000"
+    restart: unless-stopped
