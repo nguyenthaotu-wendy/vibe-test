@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0B1E3F">
+<title>Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- Nhân vật và núi băng, vẽ SVG (tự thiết kế, theo mau-giao-dien.html) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="gBody" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2E3F70"/><stop offset="1" stop-color="#141D38"/></linearGradient>
+    <linearGradient id="gGold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE98A"/><stop offset="1" stop-color="#F2A900"/></linearGradient>
+    <linearGradient id="gSeal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#B3BED2"/><stop offset="1" stop-color="#6C7A94"/></linearGradient>
+  </defs>
+  <symbol id="thuong" viewBox="0 0 100 120">
+    <ellipse cx="14" cy="76" rx="9" ry="22" transform="rotate(22 14 76)" fill="#141D38"/>
+    <ellipse cx="86" cy="76" rx="9" ry="22" transform="rotate(-22 86 76)" fill="#141D38"/>
+    <ellipse cx="50" cy="68" rx="38" ry="50" fill="url(#gBody)"/>
+    <path d="M50 40C30 40 24 60 26 76C28 100 39 114 50 114C61 114 72 100 74 76C76 60 70 40 50 40Z" fill="#F7FBFF"/>
+    <circle cx="38" cy="47" r="15" fill="#F7FBFF"/><circle cx="62" cy="47" r="15" fill="#F7FBFF"/>
+    <circle cx="39" cy="48" r="6.5" fill="#0B1E3F"/><circle cx="41.5" cy="45.5" r="2.2" fill="#fff"/>
+    <circle cx="61" cy="48" r="6.5" fill="#0B1E3F"/><circle cx="63.5" cy="45.5" r="2.2" fill="#fff"/>
+    <ellipse cx="29" cy="60" rx="6" ry="3.5" fill="#FF9EC4" opacity=".85"/><ellipse cx="71" cy="60" rx="6" ry="3.5" fill="#FF9EC4" opacity=".85"/>
+    <path d="M42 57Q50 52 58 57Q50 68 42 57Z" fill="#FF8A3D"/>
+  </symbol>
+  <symbol id="vang" viewBox="0 0 100 120">
+    <ellipse cx="14" cy="76" rx="9" ry="22" transform="rotate(22 14 76)" fill="#D99500"/>
+    <ellipse cx="86" cy="76" rx="9" ry="22" transform="rotate(-22 86 76)" fill="#D99500"/>
+    <ellipse cx="50" cy="68" rx="38" ry="50" fill="url(#gGold)"/>
+    <path d="M50 40C30 40 24 60 26 76C28 100 39 114 50 114C61 114 72 100 74 76C76 60 70 40 50 40Z" fill="#FFF7DA"/>
+    <circle cx="38" cy="47" r="15" fill="#FFF7DA"/><circle cx="62" cy="47" r="15" fill="#FFF7DA"/>
+    <circle cx="39" cy="48" r="6.5" fill="#5A3A00"/><circle cx="41.5" cy="45.5" r="2.2" fill="#fff"/>
+    <circle cx="61" cy="48" r="6.5" fill="#5A3A00"/><circle cx="63.5" cy="45.5" r="2.2" fill="#fff"/>
+    <ellipse cx="29" cy="60" rx="6" ry="3.5" fill="#FF9EC4" opacity=".85"/><ellipse cx="71" cy="60" rx="6" ry="3.5" fill="#FF9EC4" opacity=".85"/>
+    <path d="M42 57Q50 52 58 57Q50 68 42 57Z" fill="#FF8A3D"/>
+    <path d="M34 22L38 8L45 17L50 4L55 17L62 8L66 22Z" fill="#FFD447" stroke="#C98B00" stroke-width="2" stroke-linejoin="round"/>
+    <path d="M86 20l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#fff"/>
+    <path d="M12 34l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="#fff"/>
+  </symbol>
+  <symbol id="haiCau" viewBox="0 0 100 120">
+    <ellipse cx="18" cy="96" rx="10" ry="18" transform="rotate(35 18 96)" fill="#5D6A82"/>
+    <ellipse cx="82" cy="96" rx="10" ry="18" transform="rotate(-35 82 96)" fill="#5D6A82"/>
+    <ellipse cx="50" cy="70" rx="40" ry="48" fill="url(#gSeal)"/>
+    <circle cx="70" cy="90" r="4" fill="#5D6A82" opacity=".6"/><circle cx="28" cy="98" r="3" fill="#5D6A82" opacity=".6"/><circle cx="76" cy="40" r="3" fill="#5D6A82" opacity=".5"/>
+    <ellipse cx="50" cy="70" rx="19" ry="13" fill="#E3E8F1"/>
+    <path d="M28 36L42 42M72 36L58 42" stroke="#36405A" stroke-width="3.5" stroke-linecap="round"/>
+    <circle cx="37" cy="50" r="7.5" fill="#141D38"/><circle cx="39.5" cy="47.5" r="2.4" fill="#fff"/>
+    <circle cx="63" cy="50" r="7.5" fill="#141D38"/><circle cx="65.5" cy="47.5" r="2.4" fill="#fff"/>
+    <ellipse cx="50" cy="62" rx="6.5" ry="4.5" fill="#22283A"/>
+    <path d="M42 74Q50 80 60 72" stroke="#22283A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <path d="M33 66L18 62M33 70L17 71M67 66L82 62M67 70L83 71" stroke="#36405A" stroke-width="1.6" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="mtn" viewBox="0 0 360 150">
+    <path d="M0 150V78L46 42 80 64 132 18 190 70 238 32 292 66 332 44 360 58V150Z" fill="#4E7DB5" opacity=".75"/>
+    <path d="M132 18L118 34 128 32 136 40 146 30ZM238 32L226 44 236 42 244 48 250 41Z" fill="#E6F3FF" opacity=".9"/>
+    <path d="M0 150V104L60 66 112 98 170 58 230 102 290 74 360 98V150Z" fill="#87B6E3"/>
+    <path d="M170 58L158 70 168 68 176 76 184 67Z" fill="#F4FBFF"/>
+  </symbol>
+</svg>
+
+<div id="app">
+  <!-- Hình nền: 1 trời · 2 sao · 3 cực quang · 4 núi băng · 5 mặt băng (6 tuyết rơi vẽ trên canvas) -->
+  <div class="bg" aria-hidden="true">
+    <div class="bg-sky"></div>
+    <div class="bg-stars"></div>
+    <div class="bg-aurora" id="aurora"></div>
+    <svg class="bg-mtn" viewBox="0 0 360 150" preserveAspectRatio="none"><use href="#mtn"/></svg>
+    <div class="bg-ice"></div>
+  </div>
+
+  <div class="end-dim" id="end-dim" hidden></div>
+  <canvas id="snow" aria-hidden="true"></canvas>
+
+  <!-- ============ MH-01 Màn hình bắt đầu ============ -->
+  <section class="screen start" id="scr-start" aria-label="Màn hình bắt đầu">
+    <header class="start-top">
+      <img class="logo" src="../design/assets/logo-fpt-trang.png" alt="FPT">
+      <button class="btn btn-ghost btn-sound js-sound" type="button" aria-pressed="true">🔊 Âm thanh: Bật</button>
+    </header>
+    <div class="start-body">
+      <h1 class="title"><span class="l1">ĐẬP</span><span class="l2">CHIM CÁNH CỤT</span></h1>
+      <div class="hero" aria-hidden="true">
+        <div class="hole"></div>
+        <div class="pop"><svg viewBox="0 0 100 120"><use href="#thuong"/></svg></div>
+        <div class="ripple"></div>
+      </div>
+      <ul class="legend" aria-label="Luật chơi">
+        <li><svg class="ico" viewBox="0 0 100 120" aria-hidden="true"><use href="#thuong"/></svg>Chim cánh cụt<b class="pts plus">+1</b></li>
+        <li><svg class="ico" viewBox="0 0 100 120" aria-hidden="true"><use href="#vang"/></svg>Chim vàng (hiếm!)<b class="pts gold">+3</b></li>
+        <li><svg class="ico" viewBox="0 0 100 120" aria-hidden="true"><use href="#haiCau"/></svg>Hải cẩu · đừng đập!<b class="pts minus">−2</b></li>
+        <li><span class="ico" aria-hidden="true">🔥</span>Trúng 5 lần liên tiếp<b class="pts gold">×2</b></li>
+      </ul>
+      <p class="record" id="start-record">Chưa có kỷ lục</p>
+      <button class="btn btn-primary btn-lg pulse" id="btn-start" type="button">Bắt đầu</button>
+    </div>
+  </section>
+
+  <!-- ============ MH-03 Màn hình chơi (+ MH-02, MH-04, MH-05) ============ -->
+  <section class="screen play" id="scr-play" aria-label="Màn hình chơi" hidden>
+    <div class="hud-wrap">
+      <div class="hud-top">
+        <img class="logo logo-sm" src="../design/assets/logo-fpt-trang.png" alt="FPT">
+        <div class="hud-btns">
+          <button class="btn-icon" id="btn-pause" type="button" aria-label="Tạm dừng">⏸</button>
+          <button class="btn-icon js-sound" type="button" aria-label="Tắt âm thanh" aria-pressed="true">🔊</button>
+        </div>
+      </div>
+      <div class="hud">
+        <div class="pill"><small>Điểm</small><b id="v-score">0</b></div>
+        <div class="pill time" id="pill-time"><small>Còn</small><b id="v-time">30</b></div>
+        <div class="pill"><small>Combo</small><b id="v-combo">0</b></div>
+        <div class="pill"><small>Kỷ lục</small><b id="v-record">—</b></div>
+      </div>
+      <div class="timebar" id="timebar"><span id="v-bar"></span></div>
+      <div class="phases" id="phases"><span>Khởi động</span><span>Tăng tốc</span><span>❄ Bão tuyết</span></div>
+      <div class="slot">
+        <div class="combo" id="combo" hidden></div>
+        <div class="phase-toast" id="phase-toast" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <div class="board" id="board">
+      <div class="grid" id="grid"></div>
+
+      <!-- MH-02 Đếm ngược -->
+      <div class="ov ov-count" id="ov-count" hidden><span id="count-num">3</span></div>
+
+      <!-- MH-05 Tạm dừng -->
+      <div class="ov ov-pause" id="ov-pause" role="dialog" aria-modal="true" aria-labelledby="pause-title" hidden>
+        <h2 class="ov-title" id="pause-title">Tạm dừng</h2>
+        <button class="btn btn-primary" id="btn-resume" type="button">Tiếp tục</button>
+        <button class="btn btn-ghost" id="btn-pause-home" type="button">Trang chủ</button>
+        <p class="idle-hint js-idle" aria-live="polite"></p>
+      </div>
+
+      <div class="timeup" id="timeup" hidden>Hết giờ!</div>
+    </div>
+  </section>
+
+  <!-- ============ MH-06 Màn hình kết thúc ============ -->
+  <section class="screen end" id="scr-end" aria-label="Kết quả" hidden>
+    <img class="logo end-logo" src="../design/assets/logo-fpt-trang.png" alt="FPT">
+    <div class="card" role="dialog" aria-modal="true" aria-labelledby="end-title">
+      <div class="card-scroll">
+        <h2 class="end-title" id="end-title">Hết giờ!</h2>
+        <div class="stars-row" id="stars" aria-hidden="true"><span class="star">★</span><span class="star mid">★</span><span class="star">★</span></div>
+        <p class="star-msg" id="star-msg"></p>
+        <div class="score" aria-live="polite"><span id="end-score">0</span> <small>điểm</small></div>
+        <div class="ribbon" id="ribbon" hidden>🎉 Kỷ lục mới!</div>
+        <div class="stats">
+          <div class="stat">🐧 Chim thường<b id="st-thuong">0</b></div>
+          <div class="stat">✨ Chim vàng<b id="st-vang">0</b></div>
+          <div class="stat">🦭 Đập nhầm<b id="st-haicau">0</b></div>
+          <div class="stat">🎯 Tỉ lệ trúng<b id="st-tile">—</b></div>
+          <div class="stat wide">🔥 Combo dài nhất <b id="st-combo">0</b></div>
+        </div>
+        <div class="top5">
+          <h3>Top 5 điểm cao</h3>
+          <ol id="top5"></ol>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-primary" id="btn-replay" type="button" disabled>Chơi lại</button>
+        <button class="btn btn-ghost" id="btn-home" type="button" disabled>Trang chủ</button>
+      </div>
+      <p class="idle-hint js-idle" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <div class="debug" id="debug" hidden></div>
+</div>
+
+<script src="game.js"></script>
+</body>
+</html>
