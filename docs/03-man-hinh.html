@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03 Màn hình · Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="index.html"><img src="../design/assets/logo-fpt-trang.png" alt="FPT"><span class="divider"></span>
+    <span class="name">Đập Chim Cánh Cụt<small>Tài liệu thiết kế · v1.0</small></span></a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">01 Tổng quan</a>
+    <a href="02-chuc-nang.html">02 Chức năng</a>
+    <a href="03-man-hinh.html" aria-current="page">03 Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">04 Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">05 Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Tài liệu 03</p>
+    <h1 class="display">Màn <span class="hl">hình</span></h1>
+    <p class="lead">3 màn hình chính và 3 lớp phủ. Hình minh hoạ dưới đây là khung bố cục, chỉ để thể hiện vị trí và thứ bậc. Hình ảnh thật theo <a href="../mau-giao-dien.html">mau-giao-dien.html</a> và <a href="../design/design-system.html">design-system.html</a>.</p>
+    <nav class="toc" aria-label="Trong trang này">
+      <a href="#tong-quan">Bản đồ màn hình</a><a href="#mh-01">MH-01 Bắt đầu</a><a href="#mh-02">MH-02 Đếm ngược</a><a href="#mh-03">MH-03 Chơi</a>
+      <a href="#mh-04">MH-04 Giai đoạn</a><a href="#mh-05">MH-05 Tạm dừng</a><a href="#mh-06">MH-06 Kết thúc</a><a href="#bo-cuc">Bố cục theo cỡ màn hình</a><a href="#chung">Quy tắc chung</a>
+    </nav>
+  </div>
+
+  <section id="tong-quan">
+    <h2 class="sec">Bản đồ màn hình</h2>
+    <p class="sec-desc">Lớp phủ nằm đè lên màn hình chơi, không thay thế nó. Hình nền 6 lớp luôn chạy phía sau mọi màn hình.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Tên</th><th>Loại</th><th>Trạng thái game</th><th>Chức năng</th></tr></thead>
+      <tbody>
+        <tr><td class="id">MH-01</td><td>Màn hình bắt đầu</td><td>Màn hình</td><td>BAT_DAU</td><td>CN-01, CN-11, CN-12, CN-15</td></tr>
+        <tr><td class="id">MH-02</td><td>Đếm ngược</td><td>Lớp phủ trên MH-03</td><td>DEM_NGUOC</td><td>CN-02</td></tr>
+        <tr><td class="id">MH-03</td><td>Màn hình chơi</td><td>Màn hình</td><td>DANG_CHOI</td><td>CN-03…CN-09, CN-12, CN-15</td></tr>
+        <tr><td class="id">MH-04</td><td>Thông báo giai đoạn</td><td>Lớp phủ trên MH-03, không chặn bấm</td><td>DANG_CHOI</td><td>CN-08</td></tr>
+        <tr><td class="id">MH-05</td><td>Tạm dừng</td><td>Lớp phủ che lưới</td><td>TAM_DUNG</td><td>CN-13, CN-14</td></tr>
+        <tr><td class="id">MH-06</td><td>Màn hình kết thúc</td><td>Lớp phủ tối + thẻ kết quả</td><td>KET_THUC</td><td>CN-10, CN-11, CN-14, CN-15</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- MH-01 -->
+  <section id="mh-01">
+    <h2 class="sec"><span class="num">MH-01</span>Màn hình bắt đầu</h2>
+    <p class="sec-desc">Mục tiêu: trong 10 giây người chơi hiểu luật và bấm "Bắt đầu".</p>
+    <div class="mock-row">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <img class="s-logo" src="../design/assets/logo-fpt-trang.png" alt="">
+        <div style="font-size:34px;margin-top:4px">🐧</div>
+        <div class="s-title">Đập Chim<br>Cánh Cụt</div>
+        <div class="s-glass" style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:6px">
+          <span>🐧 <b>+1</b></span><span>✨ <b>+3</b></span><span>🦭 đừng đập <b>−2</b></span><span>🔥 5 liên tiếp <b>×2</b></span>
+        </div>
+        <div class="s-glass dark" style="text-align:center">🏆 Kỷ lục: <b>38</b></div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:10px">
+          <span class="s-btn" style="font-size:15px;padding:8px 28px">Bắt đầu</span>
+          <span class="s-btn ghost">🔊 Âm thanh</span>
+        </div>
+      </div></div>
+      <div>
+        <h3 class="sub">Thành phần (từ trên xuống)</h3>
+        <div class="table-wrap"><table class="compact">
+          <thead><tr><th>Thành phần</th><th>Mô tả</th></tr></thead>
+          <tbody>
+            <tr><td>Logo FPT</td><td>Góc trên trái, cao 40px (28px khi màn hình thấp hơn 640px).</td></tr>
+            <tr><td>Chim nhấp nhô</td><td>SVG chim cánh cụt, nhún lên xuống ~1,2 giây một nhịp.</td></tr>
+            <tr><td>Tên game</td><td>"Đập Chim Cánh Cụt", phông Baloo 2 800, viền chữ xanh đêm 3px, bóng đổ.</td></tr>
+            <tr><td>Bảng luật</td><td>Khung kính mờ, 4 ô có hình nhân vật thật (không chỉ emoji): 🐧 +1 · ✨ +3 · 🦭 đừng đập −2 · 🔥 5 lần liên tiếp ×2.</td></tr>
+            <tr><td>Kỷ lục</td><td>"🏆 Kỷ lục: 38" hoặc "Chưa có kỷ lục".</td></tr>
+            <tr><td>Nút "Bắt đầu"</td><td>Nút chính cam, chữ in hoa, cỡ lớn, phập phồng nhẹ. Được chọn sẵn (focus) để bấm <kbd>Enter</kbd>.</td></tr>
+            <tr><td>Nút âm thanh</td><td>Nút phụ kính mờ, "🔊 Âm thanh: Bật" / "🔇 Âm thanh: Tắt".</td></tr>
+          </tbody>
+        </table></div>
+        <div class="note"><span class="ic">💡</span><p>Không cần hiện bảng 5 điểm cao ở màn hình này, chỉ kỷ lục, để màn hình gọn và người chơi tập trung vào nút "Bắt đầu".</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MH-02 -->
+  <section id="mh-02">
+    <h2 class="sec"><span class="num">MH-02</span>Đếm ngược</h2>
+    <p class="sec-desc">Lớp phủ trên màn hình chơi. Người chơi nhìn thấy lưới trống để định vị trước.</p>
+    <div class="mock-row">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <div class="s-row"><img class="s-logo" src="../design/assets/logo-fpt-trang.png" alt="" style="height:12px"><span>⏸ 🔊</span></div>
+        <div class="s-hud"><div>Điểm<b>0</b></div><div>Giờ<b>30</b></div><div>Combo<b>0</b></div><div>Kỷ lục<b>38</b></div></div>
+        <div class="s-bar"><i style="width:100%;background:var(--aurora-teal)"></i></div>
+        <div class="s-grid"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="s-overlay" style="background:rgba(5,12,30,.35)"><div class="s-title" style="font-size:80px">3</div></div>
+      </div></div>
+      <div>
+        <h3 class="sub">Quy tắc</h3>
+        <ul class="list">
+          <li>Hiện lần lượt <b>3 → 2 → 1 → Đập!</b>, mỗi bước ~0,8 giây (tổng ~3,2 giây). Mỗi số phóng to rồi thu nhỏ, kèm tiếng "tích" ngắn; "Đập!" màu cam kèm tiếng cao hơn.</li>
+          <li>Đồng hồ hiện "30", thanh thời gian đầy, màu xanh ngọc.</li>
+          <li>Lưới hiện nhưng trống. Cú bấm vào lưới bị bỏ qua.</li>
+          <li>Nút tạm dừng vẫn bấm được. Tiếp tục thì đếm lại từ 3.</li>
+          <li>Giảm chuyển động: chỉ đổi số, không phóng to.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MH-03 -->
+  <section id="mh-03">
+    <h2 class="sec"><span class="num">MH-03</span>Màn hình chơi</h2>
+    <p class="sec-desc">Lưới là trung tâm. Mọi thứ khác nhỏ gọn ở phía trên để không chiếm chỗ của lưới.</p>
+    <div class="mock-row">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <div class="s-row"><img class="s-logo" src="../design/assets/logo-fpt-trang.png" alt="" style="height:12px"><span>⏸ 🔊</span></div>
+        <div class="s-hud"><div>Điểm<b>24</b></div><div>Giờ<b>12</b></div><div>Combo<b>6</b></div><div>Kỷ lục<b>38</b></div></div>
+        <div class="s-bar"><i></i></div>
+        <div class="s-phases"><span>Khởi động</span><span style="color:#fff;font-weight:700">Tăng tốc</span><span>Bão tuyết</span></div>
+        <span class="s-combo">Combo ×2 🔥</span>
+        <div class="s-grid"><span></span><span>🐧</span><span></span><span></span><span></span><span>🦭</span><span>✨</span><span></span><span></span></div>
+      </div></div>
+      <div>
+        <h3 class="sub">Thành phần</h3>
+        <div class="table-wrap"><table class="compact">
+          <thead><tr><th>Thành phần</th><th>Mô tả</th></tr></thead>
+          <tbody>
+            <tr><td>Hàng đầu</td><td>Logo FPT cao 28px bên trái. Nút tạm dừng ⏸ và nút âm thanh 🔊 bên phải, mỗi nút 44×44px trở lên.</td></tr>
+            <tr><td>4 ô thông tin</td><td>Điểm · Thời gian · Combo · Kỷ lục. Khung kính mờ, số đậm cỡ <code>--text-xl</code> trở lên, nhãn nhỏ phía trên.</td></tr>
+            <tr><td>Thanh thời gian</td><td>Co dần từ phải sang trái. Màu: xanh ngọc <code>--aurora-teal</code> → tím <code>--aurora-violet</code> → hồng đỏ <code>--aurora-pink</code>/<code>--red-500</code>. Dưới thanh ghi tên 3 giai đoạn, tên giai đoạn hiện tại đậm và sáng.</td></tr>
+            <tr><td>5 giây cuối</td><td>Ô thời gian chuyển đỏ <code>--red-500</code> và nhấp nháy theo nhịp tích tắc.</td></tr>
+            <tr><td>Huy hiệu combo</td><td>Viên thuốc cam hơi nghiêng, chỉ hiện khi combo ≥ 2: "Combo 3". Từ 5: "Combo ×2 🔥", to hơn và phát sáng. Nằm giữa thanh thời gian và lưới, không đè lên lưới.</td></tr>
+            <tr><td>Lưới 3×3</td><td>9 lỗ băng bằng nhau. Con vật trồi lên từ lỗ nước, phần thân dưới mặt nước bị che, có vòng gợn sóng trắng.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+    <h3 class="sub">Trạng thái của một ô</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Trạng thái</th><th>Hình ảnh</th><th>Bấm được?</th></tr></thead>
+      <tbody>
+        <tr><td>Trống</td><td>Lỗ nước xanh thẫm <code>#0F3A5C → #062238</code>, viền băng trắng.</td><td>Có, chỉ có mảnh băng văng.</td></tr>
+        <tr><td>Đang trồi lên</td><td>Con vật trượt lên ~0,15 giây, nảy nhẹ ở đỉnh.</td><td><b>Có</b>, tính là trúng.</td></tr>
+        <tr><td>Trên sân</td><td>Con vật đứng yên, nhún nhẹ.</td><td><b>Có</b>.</td></tr>
+        <tr><td>Bị đập</td><td>Bẹp xuống, tia ✦, chữ điểm bay lên, rồi lặn nhanh (~0,2 giây).</td><td>Không (0 điểm).</td></tr>
+        <tr><td>Lặn xuống (tự)</td><td>Trượt xuống ~0,15 giây.</td><td>Không (0 điểm).</td></tr>
+      </tbody>
+    </table></div>
+    <h3 class="sub">Phản hồi khi bấm</h3>
+    <div class="grid g-3">
+      <div class="card"><span class="badge orange">Trúng chim</span><p style="margin-top:var(--space-3)">Chim bẹp, ✦ toé ra, chữ <b style="color:var(--orange-300)">+1 / +2 / +3 / +6</b> màu cam bay lên 40px rồi mờ trong ~0,6 giây. Tiếng "bốp". Rung 20ms.</p></div>
+      <div class="card"><span class="badge red">Trúng hải cẩu</span><p style="margin-top:var(--space-3)">Màn hình rung ngang nhẹ ~0,25 giây, chữ <b style="color:var(--red-500)">−2</b> đỏ bay lên. Tiếng báo sai trầm. Rung 60ms. Huy hiệu combo biến mất.</p></div>
+      <div class="card"><span class="badge">Lỗ trống</span><p style="margin-top:var(--space-3)">3–5 mảnh băng nhỏ văng ra từ điểm chạm. Không âm thanh, không rung.</p></div>
+    </div>
+  </section>
+
+  <!-- MH-04 -->
+  <section id="mh-04">
+    <h2 class="sec"><span class="num">MH-04</span>Thông báo giai đoạn</h2>
+    <div class="mock-row">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <div class="s-row"><img class="s-logo" src="../design/assets/logo-fpt-trang.png" alt="" style="height:12px"><span>⏸ 🔊</span></div>
+        <div class="s-hud"><div>Điểm<b>31</b></div><div>Giờ<b>10</b></div><div>Combo<b>2</b></div><div>Kỷ lục<b>38</b></div></div>
+        <div class="s-bar"><i style="width:33%;background:var(--aurora-pink)"></i></div>
+        <div class="s-phases"><span>Khởi động</span><span>Tăng tốc</span><span style="color:#fff;font-weight:700">Bão tuyết</span></div>
+        <div class="s-title" style="font-size:30px;color:var(--aurora-pink);margin-top:8px">Bão tuyết!</div>
+        <div class="s-grid" style="margin-top:4px"><span>🐧</span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span>🐧</span></div>
+      </div></div>
+      <div>
+        <h3 class="sub">Quy tắc</h3>
+        <ul class="list">
+          <li>Giây 10: "Tăng tốc!" màu tím. Giây 20: "Bão tuyết!" màu hồng.</li>
+          <li>Chữ nằm <b>giữa thanh thời gian và lưới</b> (chỗ của huy hiệu combo, huy hiệu tạm ẩn trong 1 giây), hoặc nổi trên lưới với nền trong suốt. Không có lớp tối, không chặn bấm.</li>
+          <li>Hiệu ứng: phóng từ 60% lên 110% rồi mờ dần, tổng ~1 giây. Cực quang sáng lên trong lúc đó.</li>
+          <li>Bão tuyết: tuyết rơi nhanh và dày hơn đến hết lượt.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MH-05 -->
+  <section id="mh-05">
+    <h2 class="sec"><span class="num">MH-05</span>Tạm dừng</h2>
+    <div class="mock-row">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <div class="s-row"><img class="s-logo" src="../design/assets/logo-fpt-trang.png" alt="" style="height:12px"><span>▶ 🔊</span></div>
+        <div class="s-hud"><div>Điểm<b>17</b></div><div>Giờ<b>18</b></div><div>Combo<b>3</b></div><div>Kỷ lục<b>38</b></div></div>
+        <div class="s-bar"><i style="width:60%"></i></div>
+        <div class="s-overlay" style="top:30%;background:rgba(11,30,63,.92);backdrop-filter:blur(8px)">
+          <div class="s-title" style="font-size:24px">Tạm dừng</div>
+          <span class="s-btn">Tiếp tục</span>
+          <span class="s-btn ghost">Trang chủ</span>
+          <span class="s-small">Tự về trang chủ sau 8 giây</span>
+        </div>
+      </div></div>
+      <div>
+        <h3 class="sub">Quy tắc</h3>
+        <ul class="list">
+          <li>Lớp phủ <b>che kín lưới</b> (nền gần đặc, có làm mờ), không nhìn được con vật bên dưới. Thanh thông tin vẫn hiện để biết điểm và giờ còn lại.</li>
+          <li>Nút "Tiếp tục" (nút chính, được chọn sẵn) và "Trang chủ" (nút phụ).</li>
+          <li>"Trang chủ" từ đây sẽ huỷ lượt. Không cần hộp thoại xác nhận, vì lượt chỉ dài 30 giây.</li>
+          <li>Dòng "Tự về trang chủ sau N giây" chỉ hiện ở 10 giây cuối của 60 giây để yên.</li>
+          <li>Nút ⏸ trên thanh đầu đổi thành ▶ khi đang tạm dừng.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- MH-06 -->
+  <section id="mh-06">
+    <h2 class="sec"><span class="num">MH-06</span>Màn hình kết thúc</h2>
+    <div class="mock-row">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <img class="s-logo" src="../design/assets/logo-fpt-trang.png" alt="" style="z-index:2">
+        <div class="s-overlay" style="padding:28px 10px 10px">
+          <div class="s-card">
+            <div class="s-title" style="font-size:20px;margin:0">Hết giờ!</div>
+            <div class="s-stars">⭐⭐⭐</div>
+            <div class="s-big">47</div>
+            <span class="s-ribbon">Kỷ lục mới!</span>
+            <div class="s-list" style="grid-template-columns:1fr 1fr;display:grid;gap:3px">
+              <div>🐧 Thường<b>21</b></div><div>✨ Vàng<b>3</b></div><div>🦭 Nhầm<b>1</b></div><div>🎯 Trúng<b>84%</b></div><div style="grid-column:span 2">🔥 Combo dài nhất<b>11</b></div>
+            </div>
+            <div class="s-list">
+              <div class="me"><span>1. 47 ⭐⭐⭐</span><span>16/11</span></div>
+              <div><span>2. 38 ⭐⭐</span><span>16/11</span></div>
+              <div><span>3. 26 ⭐</span><span>15/11</span></div>
+            </div>
+            <div class="s-row" style="justify-content:center"><span class="s-btn">Chơi lại</span><span class="s-btn ghost">Trang chủ</span></div>
+          </div>
+        </div>
+      </div></div>
+      <div>
+        <h3 class="sub">Trình tự hiện</h3>
+        <ol class="list">
+          <li>0s: hết giờ, mọi con vật lặn xuống ngay. Chữ "Hết giờ!" lớn ở giữa.</li>
+          <li>~1s: lớp phủ tối phủ lên nền, thẻ kết quả trượt lên.</li>
+          <li>Ngôi sao hiện lần lượt, mỗi ngôi cách nhau ~0,35 giây, kèm tiếng "ting". Sao chưa đạt hiện mờ (viền), để người chơi thấy còn bao nhiêu sao.</li>
+          <li>Điểm đếm nhanh từ 0 lên điểm cuối (~0,6 giây).</li>
+          <li>Nếu là kỷ lục mới: ruy băng "Kỷ lục mới!" hồng tím, pháo hoa tuyết nhiều màu (vàng, xanh ngọc, hồng).</li>
+          <li>Thống kê, bảng 5 điểm cao (dòng vừa đạt tô cam), rồi hai nút bấm được.</li>
+        </ol>
+        <h3 class="sub">Thành phần</h3>
+        <ul class="list">
+          <li><b>Logo FPT</b> 40px góc trên trái, trên lớp phủ.</li>
+          <li><b>0 sao:</b> hiện 3 sao mờ và dòng "Thử lại nhé!".</li>
+          <li><b>Thống kê:</b> 🐧 chim thường · ✨ chim vàng · 🦭 đập nhầm · 🎯 tỉ lệ trúng % · 🔥 combo dài nhất.</li>
+          <li><b>Bảng 5 điểm cao:</b> hạng, điểm, sao, ngày (dd/mm). Bảng trống thì hiện "Chưa có lượt nào".</li>
+          <li><b>Nút:</b> "Chơi lại" (chính, được chọn sẵn) · "Trang chủ" (phụ).</li>
+          <li>Thẻ quá cao so với màn hình thấp thì cuộn được trong thẻ, hai nút luôn hiện ở đáy thẻ.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="bo-cuc">
+    <h2 class="sec">Bố cục theo cỡ màn hình</h2>
+    <p class="sec-desc">Lưới luôn vuông, lấy theo cạnh nhỏ hơn của vùng còn trống, để vừa màn hình cả khi cầm dọc lẫn ngang.</p>
+    <pre><code>cạnh lưới = min(chiều rộng khả dụng, chiều cao khả dụng, 560px)
+chiều cao khả dụng = chiều cao màn hình − thanh đầu − thanh thời gian − lề
+ô = (cạnh lưới − 2 × khoảng cách ô) / 3      → phải ≥ 64px</code></pre>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cỡ màn hình</th><th>Bố cục màn hình chơi</th><th>Ví dụ kích thước ô</th></tr></thead>
+      <tbody>
+        <tr><td>Điện thoại dọc 360×640</td><td>Thanh thông tin ở trên, lưới bên dưới, lề 16px.</td><td class="num">~100px</td></tr>
+        <tr><td>Điện thoại ngang 640×360</td><td>Thanh thông tin chuyển sang <b>cột bên trái</b> (4 ô xếp dọc), lưới bên phải lấy hết chiều cao.</td><td class="num">~100px</td></tr>
+        <tr><td>Máy tính bảng 768×1024</td><td>Như điện thoại dọc, chữ và ô to hơn.</td><td class="num">~170px</td></tr>
+        <tr><td>Máy tính 1366×768 trở lên</td><td>Nội dung căn giữa, lưới tối đa 560px, hình nền phủ toàn màn hình.</td><td class="num">~175px</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><span class="ic">⚠️</span><p>Chuyển sang bố cục ngang khi tỉ lệ rộng/cao &gt; 1,2. Xoay máy giữa lượt không được làm mất trạng thái hay làm đồng hồ chạy sai.</p></div>
+  </section>
+
+  <section id="chung">
+    <h2 class="sec">Quy tắc chung</h2>
+    <div class="grid g-2">
+      <div class="card">
+        <h3>Giao diện</h3>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>Chỉ dùng biến trong <code>tokens.css</code>, không ghi mã màu trực tiếp.</li>
+          <li>Khung thông tin: kính mờ <code>--color-surface</code>, viền <code>--color-border</code>, bo <code>--radius-lg</code>/<code>--radius-xl</code>.</li>
+          <li>Nút chính: <code>--gradient-primary</code>, gờ <code>--shadow-press-primary</code>, chữ in hoa trắng.</li>
+          <li>Tiêu đề lớn: Baloo 2 800, viền <code>--text-stroke-display</code>, bóng <code>--text-shadow-display</code>.</li>
+          <li>Toàn bộ chữ bằng tiếng Việt, có dấu đầy đủ.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Dễ dùng</h3>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>Chữ trên màn hình chơi luôn sáng trên nền tối hoặc có viền chữ.</li>
+          <li>Ô bấm ≥ 64×64px, nút phụ ≥ 44×44px.</li>
+          <li>Nút đều dùng được bằng bàn phím, có vòng focus <code>--ring-focus</code>.</li>
+          <li>Không phân biệt con vật chỉ bằng màu: hải cẩu khác cả dáng (tròn, xám, đốm, ria).</li>
+          <li>Điểm và giờ có <code>aria-live="polite"</code> ở thẻ kết quả để trình đọc màn hình đọc được.</li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="sub">Thứ tự lớp (từ dưới lên)</h3>
+    <div class="flow">
+      <span class="step">Nền 1–5</span><span class="arrow">→</span><span class="step">Lưới &amp; con vật</span><span class="arrow">→</span>
+      <span class="step">Tuyết rơi</span><span class="arrow">→</span><span class="step">Thanh thông tin</span><span class="arrow">→</span>
+      <span class="step">Chữ điểm bay, thông báo giai đoạn</span><span class="arrow">→</span><span class="step hl">Lớp phủ đếm ngược / tạm dừng / kết thúc</span>
+    </div>
+    <p class="muted" style="margin-top:var(--space-3)">Tuyết rơi nằm trên lưới nhưng <code>pointer-events: none</code> để không chặn cú bấm.</p>
+  </section>
+
+  <nav class="pager" aria-label="Chuyển trang">
+    <a href="02-chuc-nang.html"><small>← Trước</small><b>02 Chức năng</b></a>
+    <a class="next" href="04-quy-tac-du-lieu.html"><small>Tiếp →</small><b>04 Quy tắc &amp; dữ liệu</b></a>
+  </nav>
+</main>
+<footer class="foot"><div class="wrap">Đập Chim Cánh Cụt · Tài liệu thiết kế v1.0 · 03 Màn hình</div></footer>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>05 Kế hoạch test · Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="assets/docs.css">
+<style>
+  .tc-group{margin-top:var(--space-8)}
+  .tc-group h3{font-size:var(--text-xl);font-weight:var(--weight-black);margin-bottom:var(--space-2)}
+  .tc-table td:first-child{width:40px}
+  .tc-table tr.done td{opacity:.6}
+  .tc-table tr.done td:first-child{opacity:1}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="index.html"><img src="../design/assets/logo-fpt-trang.png" alt="FPT"><span class="divider"></span>
+    <span class="name">Đập Chim Cánh Cụt<small>Tài liệu thiết kế · v1.0</small></span></a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">01 Tổng quan</a>
+    <a href="02-chuc-nang.html">02 Chức năng</a>
+    <a href="03-man-hinh.html">03 Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">04 Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html" aria-current="page">05 Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Tài liệu 05</p>
+    <h1 class="display">Kế hoạch <span class="hl">test</span></h1>
+    <p class="lead">Cách kiểm tra game trước khi mang ra sự kiện: kiểm tra gì, trên thiết bị nào, ca kiểm thử nào ứng với chức năng nào, và khi nào thì coi là đạt.</p>
+    <nav class="toc" aria-label="Trong trang này">
+      <a href="#pham-vi">1. Phạm vi</a><a href="#moi-truong">2. Môi trường</a><a href="#cach-test">3. Cách test</a>
+      <a href="#ca-kiem-thu">4. Ca kiểm thử</a><a href="#choi-thu">5. Chơi thử cân bằng</a><a href="#loi">6. Mức độ lỗi</a><a href="#dat">7. Tiêu chí đạt</a><a href="#lich">8. Trình tự</a>
+    </nav>
+  </div>
+
+  <section id="pham-vi">
+    <h2 class="sec"><span class="num">1.</span>Phạm vi</h2>
+    <div class="grid g-2">
+      <div class="card"><span class="badge teal">Kiểm tra</span>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>Toàn bộ 16 chức năng CN-01…CN-16 và quy tắc QT-01…QT-11.</li>
+          <li>Mọi tiêu chí ở mục 6 của YEU-CAU.md.</li>
+          <li>Kịch bản sự kiện: chạy liên tục nhiều giờ, người chơi bỏ đi giữa chừng.</li>
+          <li>Cân bằng độ khó qua chơi thử với người thật.</li>
+        </ul></div>
+      <div class="card"><span class="badge red">Không kiểm tra</span>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>Thu thập thông tin người chơi (ngoài phạm vi v1).</li>
+          <li>Trình duyệt cũ (IE, bản Chrome/Safari đã quá 2 phiên bản).</li>
+          <li>Kiểm thử tự động: v1 là 1 file HTML, test thủ công kết hợp chế độ <code>?debug=1</code> và <code>?seed=</code>.</li>
+        </ul></div>
+    </div>
+  </section>
+
+  <section id="moi-truong">
+    <h2 class="sec"><span class="num">2.</span>Môi trường test</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Thiết bị</th><th>Trình duyệt</th><th>Màn hình</th><th>Dùng cho</th></tr></thead>
+      <tbody>
+        <tr><td class="id">MT-1</td><td>Laptop Windows</td><td>Chrome, Edge, Firefox bản mới nhất</td><td>1366×768, 1920×1080</td><td>Chuột, bàn phím, DevTools</td></tr>
+        <tr><td class="id">MT-2</td><td>MacBook hoặc iMac</td><td>Safari bản mới nhất</td><td>1440×900</td><td>Safari máy tính</td></tr>
+        <tr><td class="id">MT-3</td><td>iPhone (iOS mới nhất)</td><td>Safari</td><td>~390×844</td><td>Âm thanh iOS, khoá máy, chạm</td></tr>
+        <tr><td class="id">MT-4</td><td>Android tầm trung (≈ 4GB RAM)</td><td>Chrome</td><td>~360×800</td><td>Hiệu năng, rung, chạm nhiều ngón</td></tr>
+        <tr><td class="id">MT-5</td><td>Máy tính bảng (iPad hoặc Android)</td><td>Safari / Chrome</td><td>768×1024 trở lên</td><td>Thiết bị đặt tại quầy sự kiện</td></tr>
+        <tr><td class="id">MT-6</td><td>Chrome DevTools giả lập</td><td>Chrome</td><td>360×640, 640×360</td><td>Bố cục nhỏ nhất, xoay ngang</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="cach-test">
+    <h2 class="sec"><span class="num">3.</span>Cách test</h2>
+    <div class="grid g-3">
+      <div class="card"><h3>Thủ công theo ca</h3><p>Làm theo từng ca TC-xx ở mục 4, tích ô khi đạt. Ghi lỗi theo mẫu ở mục 6.</p></div>
+      <div class="card"><h3>Chế độ debug</h3><p><code>?debug=1</code> hiện thời gian đã chơi, giai đoạn, FPS, số con trên sân, và cho gọi các hàm tính sao, xếp bảng trong Console để thử giá trị biên.</p></div>
+      <div class="card"><h3>Lặp lại bằng seed</h3><p><code>?seed=123</code> cho ra đúng một chuỗi con vật. Dùng để tái hiện lỗi và so sánh trước/sau khi sửa.</p></div>
+      <div class="card"><h3>Đo bằng quay màn hình</h3><p>Quay màn hình 60fps để đo độ dài lượt, đếm số lần đập khi đối chiếu thống kê, kiểm tra độ trễ phản hồi.</p></div>
+      <div class="card"><h3>Hiệu năng</h3><p>DevTools → Performance (Android qua remote debugging), đo FPS ở giai đoạn Bão tuyết và bộ nhớ sau nhiều lượt.</p></div>
+      <div class="card"><h3>Người chơi thử</h3><p>5–10 người chưa từng xem game, có cả trẻ em, để kiểm tra độ dễ hiểu và cân bằng (mục 5).</p></div>
+    </div>
+  </section>
+
+  <section id="ca-kiem-thu">
+    <h2 class="sec"><span class="num">4.</span>Ca kiểm thử</h2>
+    <p class="sec-desc">Tích ô khi ca đạt. Trạng thái chỉ lưu trên trình duyệt đang xem trang này, dùng cho một lần test.</p>
+    <div class="progress">
+      <div class="bar"><i id="pg-bar"></i></div>
+      <b id="pg-text">0 / 0</b>
+      <button class="btn-ghost" type="button" id="pg-reset">Xoá dấu tích</button>
+    </div>
+    <noscript><div class="note warn"><span class="ic">⚠️</span><p>Cần bật JavaScript để hiện danh sách ca kiểm thử.</p></div></noscript>
+    <div id="tc-root"></div>
+  </section>
+
+  <section id="choi-thu">
+    <h2 class="sec"><span class="num">5.</span>Chơi thử cân bằng</h2>
+    <p class="sec-desc">Mục đích: chỉnh các thông số <span class="badge gold">chỉnh được</span> ở tài liệu 04 trước khi khoá bản phát hành.</p>
+    <div class="grid g-2">
+      <div class="card">
+        <h3>Cách làm</h3>
+        <ol class="list" style="margin-top:var(--space-3)">
+          <li>Mời 5–10 người, ít nhất 2 trẻ em (6–12 tuổi) và 2 người trên 40 tuổi.</li>
+          <li>Không giải thích luật, chỉ đưa máy đang ở màn hình bắt đầu.</li>
+          <li>Mỗi người chơi 3 lượt liên tiếp.</li>
+          <li>Ghi lại: điểm, số sao, số lần đập nhầm hải cẩu từng lượt, câu hỏi hoặc lúng túng.</li>
+          <li>Hỏi sau khi chơi: con nào không được đập? Có muốn chơi tiếp không?</li>
+        </ol>
+      </div>
+      <div class="card">
+        <h3>Mục tiêu</h3>
+        <div class="table-wrap" style="margin-top:var(--space-3)"><table class="compact">
+          <thead><tr><th>Chỉ số</th><th>Mục tiêu</th><th>Nếu lệch</th></tr></thead>
+          <tbody>
+            <tr><td>Người mới đạt ≥ 1 sao trong 2 lượt đầu</td><td>≥ 80%</td><td>Hạ mốc 1 sao hoặc tăng thời gian trên sân GĐ1</td></tr>
+            <tr><td>Đạt 3 sao</td><td>≤ 20% người chơi</td><td>Tăng mốc 3 sao</td></tr>
+            <tr><td>Trả lời đúng "con không được đập"</td><td>100%</td><td>Sửa hình hải cẩu cho khác hơn</td></tr>
+            <tr><td>Đập nhầm hải cẩu trung bình / lượt</td><td>≤ 1,5</td><td>Tăng thời gian trên sân của hải cẩu</td></tr>
+            <tr><td>Bắt đầu lượt mà không cần hỏi</td><td>≤ 10 giây</td><td>Làm nút "Bắt đầu" và bảng luật rõ hơn</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="loi">
+    <h2 class="sec"><span class="num">6.</span>Mức độ lỗi và cách báo</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mức</th><th>Định nghĩa</th><th>Ví dụ</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge red">Nghiêm trọng</span></td><td>Không chơi được, treo, mất dữ liệu, sai luật cốt lõi.</td><td>Hết 30s mà game không dừng. Điểm âm. Bảng điểm mất sau khi tải lại.</td></tr>
+        <tr><td><span class="badge orange">Cao</span></td><td>Sai một quy tắc hoặc tiêu chí "Phải có", có cách tránh.</td><td>Hải cẩu xuất hiện lúc 8s. Combo không về 0 khi chim lặn mất.</td></tr>
+        <tr><td><span class="badge violet">Trung bình</span></td><td>Lỗi hiển thị hoặc trải nghiệm rõ rệt, không sai luật.</td><td>Chữ bị cắt ở 360px. Âm thanh trễ trên Android.</td></tr>
+        <tr><td><span class="badge">Thấp</span></td><td>Lỗi nhỏ, thẩm mỹ.</td><td>Lệch 2px. Hiệu ứng mảnh băng hơi thưa.</td></tr>
+      </tbody>
+    </table></div>
+    <h3 class="sub">Mẫu báo lỗi</h3>
+<pre><code>Mã ca:       TC-17
+Mức:         Cao
+Môi trường:  MT-4 · Android Chrome 131 · 360×800
+Seed:        ?seed=4821  (nếu có)
+Các bước:    1. ... 2. ... 3. ...
+Mong đợi:    Điểm về 0
+Thực tế:     Điểm hiện -1
+Bằng chứng:  ảnh chụp / video / lỗi trong Console</code></pre>
+  </section>
+
+  <section id="dat">
+    <h2 class="sec"><span class="num">7.</span>Tiêu chí đạt để phát hành</h2>
+    <ul class="list">
+      <li>Mọi ca TC-xx gắn với chức năng <b>Phải có</b> đều đạt trên MT-1, MT-3, MT-4 và MT-5.</li>
+      <li>Không còn lỗi <b>Nghiêm trọng</b> hoặc <b>Cao</b> đang mở.</li>
+      <li>Lỗi Trung bình còn lại đã được ghi nhận và chấp nhận.</li>
+      <li>Chơi thử cân bằng đạt mục tiêu ở mục 5, thông số cuối cùng được cập nhật vào tài liệu 04.</li>
+      <li>Chạy liên tục ≥ 2 giờ trên máy đặt tại quầy (TC-47) không lỗi.</li>
+    </ul>
+  </section>
+
+  <section id="lich">
+    <h2 class="sec"><span class="num">8.</span>Trình tự test</h2>
+    <div class="flow">
+      <span class="step">1 · Tự test khi viết code (nhóm A–C)</span><span class="arrow">→</span>
+      <span class="step">2 · Test đủ ca trên MT-1, MT-6</span><span class="arrow">→</span>
+      <span class="step">3 · Thiết bị thật MT-2…MT-5</span><span class="arrow">→</span>
+      <span class="step">4 · Chơi thử cân bằng</span><span class="arrow">→</span>
+      <span class="step">5 · Chỉnh thông số, test lại A–C</span><span class="arrow">→</span>
+      <span class="step hl">6 · Chạy thử 2 giờ trên máy quầy</span>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="Chuyển trang">
+    <a href="04-quy-tac-du-lieu.html"><small>← Trước</small><b>04 Quy tắc &amp; dữ liệu</b></a>
+    <a class="next" href="index.html"><small>Về →</small><b>Mục lục</b></a>
+  </nav>
+</main>
+<footer class="foot"><div class="wrap">Đập Chim Cánh Cụt · Tài liệu thiết kế v1.0 · 05 Kế hoạch test</div></footer>
+
+<script>
+(function () {
+  // [mã, chức năng/quy tắc, các bước, kết quả mong đợi, môi trường]
+  var NHOM = [
+    { ten: "A · Luồng chơi", ca: [
+      ["TC-01","CN-16 · QT-11","Tắt mạng, mở file game. Mở DevTools → Network, chơi 1 lượt.","Chơi được bình thường. Không có yêu cầu mạng nào.","MT-1"],
+      ["TC-02","CN-01","Xoá localStorage, mở game.","Đủ tên game, chim nhấp nhô, 4 hướng dẫn, \"Chưa có kỷ lục\", nút Bắt đầu, nút âm thanh, logo.","MT-1, MT-4"],
+      ["TC-03","CN-02","Bấm Bắt đầu. Trong lúc đếm ngược, bấm liên tục vào lưới.","Hiện 3 → 2 → 1 → Đập!. Lưới trống, cú bấm không có tác dụng. Đồng hồ vẫn 30.","MT-1"],
+      ["TC-04","CN-03","Quay màn hình 3 lượt, đo từ chữ \"Đập!\" đến \"Hết giờ!\".","Mỗi lượt 30 giây ± 0,5 giây.","MT-1, MT-4"],
+      ["TC-05","CN-03","Quan sát 5 giây cuối, âm thanh bật.","Ô thời gian đỏ, nhấp nháy. Có đúng 5 tiếng tích tắc (5, 4, 3, 2, 1).","MT-1"],
+      ["TC-06","CN-03","Dùng ?debug=1, quan sát thanh thời gian ở giây 10 và 20.","Thanh đổi xanh ngọc → tím → hồng đỏ đúng mốc. Tên giai đoạn hiện tại được tô đậm.","MT-1"],
+      ["TC-07","CN-04 · CN-06","Ở giây 29, bấm liên tục vào mọi ô tới sau khi hết giờ 3 giây.","Lúc hết giờ mọi con biến mất. Điểm không đổi sau mốc 30s. Không con nào xuất hiện thêm.","MT-1, MT-4"],
+      ["TC-08","CN-10","Ở màn hình kết thúc, bấm Chơi lại; lượt sau bấm Trang chủ.","Chơi lại vào đếm ngược ngay. Trang chủ về MH-01, kỷ lục đã cập nhật.","MT-1"]
+    ]},
+    { ten: "B · Lưới và con vật", ca: [
+      ["TC-09","CN-04","Mở ở 360×640, 640×360, 768×1024, 1920×1080.","Đúng 9 ô vuông bằng nhau, không bị cắt, không cuộn trang, mỗi ô ≥ 64px.","MT-6, MT-5"],
+      ["TC-10","CN-04 · QT-03","?debug=1, chơi 5 lượt, theo dõi số con trên sân.","GĐ1–2 không bao giờ quá 1 con. GĐ3 không quá 2 con, không bao giờ trùng lỗ.","MT-1"],
+      ["TC-11","QT-02","Chơi 10 lượt (seed khác nhau), quan sát 10 giây đầu.","Không có hải cẩu nào trước giây 10.","MT-1"],
+      ["TC-12","QT-03","?seed=1&debug=1, quan sát 1 lượt.","Con mới không trồi lên ở lỗ vừa trống gần nhất.","MT-1"],
+      ["TC-13","QT-02","Chơi 10 lượt, đếm số lần xuất hiện mỗi loại.","Thấy đủ 3 loại. Chim vàng ít hơn chim thường rõ rệt (~1 chim vàng / 10 chim thường).","MT-1"],
+      ["TC-14","CN-08 · QT-01","?debug=1, quan sát thời gian trên sân và thông báo.","Thời gian trên sân giảm qua 3 giai đoạn. \"Tăng tốc!\" ở 10s, \"Bão tuyết!\" ở 20s, mỗi cái đúng 1 lần, kể cả khi tạm dừng rồi tiếp tục ngay lúc đó.","MT-1"],
+      ["TC-15","CN-08","Đập chim ngay lúc thông báo giai đoạn đang hiện.","Cú đập được tính bình thường, thông báo không chặn.","MT-1, MT-4"]
+    ]},
+    { ten: "C · Điểm, combo, bảng điểm", ca: [
+      ["TC-16","CN-06 · QT-05","Đập lần lượt chim thường, chim vàng, hải cẩu (combo < 5).","+1, +3, −2. Điểm cập nhật ngay, chữ bay đúng giá trị.","MT-1"],
+      ["TC-17","CN-06","Đang 0 điểm và đang 1 điểm, đập hải cẩu.","Điểm về 0, không âm. Chữ \"−2\" vẫn hiện.","MT-1"],
+      ["TC-18","CN-05 · QT-04","Đập một chim 2 lần thật nhanh. Bấm vào con đang lặn xuống.","Chỉ được tính 1 lần. Con đang lặn không cộng điểm.","MT-1, MT-4"],
+      ["TC-19","CN-07 · QT-06","Tạo combo 3 → bấm lỗ trống → để 1 hải cẩu tự lặn → để 1 chim tự lặn. Lần khác: combo 3 → đập hải cẩu.","Lỗ trống và hải cẩu tự lặn: combo giữ nguyên. Chim tự lặn hoặc đập hải cẩu: combo về 0.","MT-1"],
+      ["TC-20","CN-07","Đập 6 chim liên tiếp, con thứ 6 là chim vàng, rồi đập hải cẩu.","Huy hiệu hiện từ combo 2. Cú thứ 5: +2, \"Combo ×2 🔥\". Chim vàng: +6. Hải cẩu: −2.","MT-1"],
+      ["TC-21","CN-10 · QT-07","?debug=1, gọi hàm tính sao với 0, 14, 15, 29, 30, 44, 45, 60.","0, 0, 1, 1, 2, 2, 3, 3 sao. 0 sao có dòng \"Thử lại nhé!\".","MT-1"],
+      ["TC-22","CN-10 · QT-09","Quay màn hình 1 lượt, đếm tay số lần bấm, đập từng loại, combo dài nhất.","Thống kê ở MH-06 khớp số đếm tay. Tỉ lệ trúng đúng công thức QT-09.","MT-1"],
+      ["TC-23","CN-11 · QT-10","Chơi 7 lượt có điểm khác nhau, 1 lượt 0 điểm và 2 lượt bằng điểm. Tải lại trang.","Bảng giữ 5 điểm cao nhất, giảm dần. Bằng điểm thì lượt cũ đứng trên. Lượt 0 điểm không có trong bảng. Dòng vừa đạt được tô nổi bật.","MT-1, MT-3"],
+      ["TC-24","CN-11","Chơi được điểm bằng kỷ lục, rồi một lượt hơn kỷ lục 1 điểm.","Bằng kỷ lục: không có \"Kỷ lục mới!\". Hơn 1 điểm: có ruy băng và pháo hoa.","MT-1"],
+      ["TC-25","QT-10","Sửa tay khoá bangDiem thành chuỗi sai JSON, rồi thành mảng có dòng điểm âm. Tải lại.","Không lỗi Console. Bảng trống hoặc bỏ dòng sai. Lượt sau ghi đè bình thường.","MT-1"],
+      ["TC-26","QT-10","Mở game ở chế độ ẩn danh Safari, hoặc chặn lưu trữ trang.","Chơi được, không hiện lỗi. Bảng điểm có trong phiên.","MT-2, MT-3"]
+    ]},
+    { ten: "D · Tạm dừng và tự về trang chủ", ca: [
+      ["TC-27","CN-13","?debug=1, tạm dừng ở 17,3s, chờ 20 giây, tiếp tục.","Lưới bị che. Đồng hồ đứng yên. Tiếp tục ở đúng 17,3s (± 0,1s), con vật trên sân giữ thời gian còn lại.","MT-1"],
+      ["TC-28","CN-13 · QT-08","Đang chơi, chuyển sang tab khác 10 giây rồi quay lại.","Game đang tạm dừng, thời gian còn lại không đổi.","MT-1"],
+      ["TC-29","CN-13","Đang chơi trên điện thoại, bấm nút nguồn khoá máy, mở lại.","Game đang tạm dừng. Không có âm thanh khi máy khoá.","MT-3, MT-4"],
+      ["TC-30","CN-02 · QT-08","Chuyển tab lúc đếm ngược đang ở \"2\", quay lại, bấm Tiếp tục.","Đếm lại từ 3.","MT-1"],
+      ["TC-31","CN-14","Tạm dừng rồi không chạm gì 60 giây.","Ở 10 giây cuối hiện \"Tự về trang chủ sau N giây\". Hết 60 giây về MH-01. Lượt không có trong bảng điểm.","MT-5"],
+      ["TC-32","CN-14","Ở màn hình kết thúc, chạm vào màn hình ở giây 55, rồi để yên.","Bộ đếm đặt lại: về trang chủ sau 60 giây kể từ cú chạm. Điểm lượt đó đã có trong bảng.","MT-5"],
+      ["TC-33","CN-13","Trên máy tính, bấm Esc rồi P trong lúc chơi.","Esc tạm dừng, P (hoặc Esc) tiếp tục.","MT-1"]
+    ]},
+    { ten: "E · Âm thanh và hình ảnh", ca: [
+      ["TC-34","CN-12","Tắt âm thanh, chơi 1 lượt trên điện thoại, tải lại trang.","Không có tiếng nào, không rung. Sau khi tải lại vẫn ở trạng thái tắt.","MT-4"],
+      ["TC-35","CN-12","Mở mới trên iPhone, bấm Bắt đầu.","Nghe được tiếng đếm ngược và tiếng bốp.","MT-3"],
+      ["TC-36","CN-15","Xem cả 3 màn hình ở 360px và 1920px.","Logo hiện trên cả 3 màn hình, không méo, đúng chiều cao, nằm trên nền tối. Thanh thông tin ở 360px không xuống dòng.","MT-6, MT-1"],
+      ["TC-37","CN-16","Đặt cạnh mau-giao-dien.html, so sánh.","Đủ 6 lớp nền, đúng bảng màu và phông Baloo 2 (kể cả khi offline).","MT-1"],
+      ["TC-38","CN-16","Bật giảm chuyển động (Windows: Hiệu ứng hoạt ảnh tắt; iOS: Giảm chuyển động), chơi 1 lượt.","Cực quang, sao, tuyết đứng yên. Không rung màn hình, không nhấp nháy. Vẫn có phản hồi khi bấm.","MT-1, MT-3"],
+      ["TC-39","CN-04","Cho 5 người chưa xem hướng dẫn nhìn 3 nhân vật trong 1 giây.","Cả 5 phân biệt được chim thường, chim vàng, hải cẩu.","MT-5"],
+      ["TC-40","CN-03 · CN-16","Xem màn hình chơi ở giai đoạn Bão tuyết, độ sáng màn hình 50%.","Mọi chữ và số đọc rõ.","MT-4"]
+    ]},
+    { ten: "F · Tương thích và hiệu năng", ca: [
+      ["TC-41","Tất cả","Chơi 1 lượt trọn vẹn trên Chrome, Edge, Firefox, Safari.","Không khác biệt về luật. Hiển thị đúng.","MT-1, MT-2"],
+      ["TC-42","CN-05","Chạm thật nhanh nhiều lần, chạm đúp, 2 ngón vào 2 ô cùng lúc ở GĐ3.","Không phóng to, không cuộn, không bôi đen. Hai con ở 2 ô đều được tính.","MT-3, MT-4"],
+      ["TC-43","CN-16","?debug=1, đo FPS suốt giai đoạn Bão tuyết.","FPS trung bình ≥ 55, không có khựng thấy được.","MT-4"],
+      ["TC-44","CN-09","Quay video chậm lúc đập chim.","Phản hồi hình xuất hiện trong khung hình kế tiếp sau lúc chạm (cảm nhận không trễ).","MT-4"],
+      ["TC-45","Tất cả","Mở Console, chơi 3 lượt liên tiếp, có tạm dừng và tắt/bật âm.","Không có lỗi hay cảnh báo nào trong Console.","MT-1"],
+      ["TC-46","CN-03","Xoay điện thoại dọc ↔ ngang 3 lần trong lúc chơi.","Bố cục đổi đúng. Điểm, thời gian, con vật không bị mất hay chạy sai.","MT-4"],
+      ["TC-47","Tất cả","Để máy chạy 2 giờ trên máy quầy: chơi ≥ 20 lượt xen kẽ bỏ dở và tự về trang chủ.","Không chậm dần, không tăng bộ nhớ liên tục, không lỗi. Bảng điểm đúng.","MT-5"]
+    ]}
+  ];
+
+  var KEY = "dapChimCanhCut.docs.test.v1";
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  var root = document.getElementById("tc-root");
+  var total = 0;
+  NHOM.forEach(function (g) {
+    var wrap = document.createElement("div");
+    wrap.className = "tc-group";
+    var h = document.createElement("h3"); h.textContent = g.ten; wrap.appendChild(h);
+    var tw = document.createElement("div"); tw.className = "table-wrap";
+    var t = document.createElement("table"); t.className = "tc-table";
+    t.innerHTML = "<thead><tr><th>Đạt</th><th>Mã</th><th>Gắn với</th><th>Các bước</th><th>Kết quả mong đợi</th><th>Môi trường</th></tr></thead>";
+    var tb = document.createElement("tbody");
+    g.ca.forEach(function (c) {
+      total++;
+      var tr = document.createElement("tr");
+      var td0 = document.createElement("td");
+      var cb = document.createElement("input");
+      cb.type = "checkbox"; cb.id = "cb-" + c[0]; cb.checked = !!state[c[0]];
+      cb.setAttribute("aria-label", "Đánh dấu " + c[0] + " đạt");
+      cb.style.cssText = "width:18px;height:18px;accent-color:var(--aurora-teal)";
+      cb.addEventListener("change", function () { state[c[0]] = cb.checked; tr.classList.toggle("done", cb.checked); save(); update(); });
+      td0.appendChild(cb); tr.appendChild(td0);
+      [c[0], c[1], c[2], c[3], c[4]].forEach(function (v, i) {
+        var td = document.createElement("td"); td.textContent = v;
+        if (i === 0) td.className = "id";
+        tr.appendChild(td);
+      });
+      if (cb.checked) tr.classList.add("done");
+      tb.appendChild(tr);
+    });
+    t.appendChild(tb); tw.appendChild(t); wrap.appendChild(tw); root.appendChild(wrap);
+  });
+
+  function update() {
+    var n = 0; for (var k in state) if (state[k]) n++;
+    document.getElementById("pg-text").textContent = n + " / " + total + " ca đạt";
+    document.getElementById("pg-bar").style.width = (total ? n / total * 100 : 0) + "%";
+  }
+  document.getElementById("pg-reset").addEventListener("click", function () {
+    state = {}; save();
+    root.querySelectorAll("input[type=checkbox]").forEach(function (cb) { cb.checked = false; cb.closest("tr").classList.remove("done"); });
+    update();
+  });
+  update();
+})();
+</script>
+</body>
+</html>

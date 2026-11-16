@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mục lục tài liệu · Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="index.html"><img src="../design/assets/logo-fpt-trang.png" alt="FPT"><span class="divider"></span>
+    <span class="name">Đập Chim Cánh Cụt<small>Tài liệu thiết kế · v1.0</small></span></a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html" aria-current="page">Mục lục</a>
+    <a href="01-tong-quan.html">01 Tổng quan</a>
+    <a href="02-chuc-nang.html">02 Chức năng</a>
+    <a href="03-man-hinh.html">03 Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">04 Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">05 Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Bộ tài liệu thiết kế · chưa viết code</p>
+    <h1 class="display">Đập Chim <span class="hl">Cánh Cụt</span></h1>
+    <p class="lead">Mini game phản xạ 30 giây trên trình duyệt, chủ đề "Đêm cực quang Bắc Cực", dùng tại các sự kiện có thương hiệu FPT. Bộ tài liệu này cụ thể hoá <code>YEU-CAU.md</code> bản 2.1 cùng 5 câu phỏng vấn làm rõ, để có thể bắt tay vào viết code.</p>
+    <div class="meta-row">
+      <span class="badge teal">Tài liệu v1.0</span>
+      <span class="badge">Ngày 16/11/2026</span>
+      <span class="badge violet">Nguồn: YÊU CẦU 2.1</span>
+      <span class="badge orange">Trạng thái: chờ duyệt</span>
+    </div>
+  </div>
+
+  <section id="muc-luc">
+    <h2 class="sec">Mục lục</h2>
+    <p class="sec-desc">Nên đọc theo thứ tự. Mỗi tài liệu dùng mã riêng (CN-, MH-, QT-, TC-) để các tài liệu tham chiếu chéo được với nhau.</p>
+    <div class="grid g-3">
+      <a class="card doc-card" href="01-tong-quan.html">
+        <span class="n">01</span><h3>Tổng quan</h3>
+        <p>Mục tiêu, bối cảnh sự kiện, đối tượng, phạm vi, các quyết định đã chốt, thuật ngữ và rủi ro.</p>
+        <span class="go">Đọc →</span></a>
+      <a class="card doc-card" href="02-chuc-nang.html">
+        <span class="n">02</span><h3>Chức năng</h3>
+        <p>Danh sách chức năng CN-01…CN-16 có mức ưu tiên, sơ đồ trạng thái của game và tiêu chí chấp nhận.</p>
+        <span class="go">Đọc →</span></a>
+      <a class="card doc-card" href="03-man-hinh.html">
+        <span class="n">03</span><h3>Màn hình</h3>
+        <p>3 màn hình chính và 3 lớp phủ: bố cục, thành phần, vị trí logo, trạng thái và quy tắc hiển thị theo cỡ màn hình.</p>
+        <span class="go">Đọc →</span></a>
+      <a class="card doc-card" href="04-quy-tac-du-lieu.html">
+        <span class="n">04</span><h3>Quy tắc &amp; dữ liệu</h3>
+        <p>Thông số giai đoạn, thuật toán sinh con vật, tính điểm và combo, thống kê, cấu trúc dữ liệu localStorage.</p>
+        <span class="go">Đọc →</span></a>
+      <a class="card doc-card" href="05-ke-hoach-test.html">
+        <span class="n">05</span><h3>Kế hoạch test</h3>
+        <p>Phạm vi, môi trường, ca kiểm thử TC-xx theo từng chức năng, tiêu chí đạt và cách báo lỗi.</p>
+        <span class="go">Đọc →</span></a>
+      <div class="card light">
+        <h3>Tài liệu gốc</h3>
+        <p><code>YEU-CAU.md</code>: yêu cầu bản 2.1<br>
+        <a href="../mau-giao-dien.html" style="color:var(--night-600)">mau-giao-dien.html</a>: trang mẫu giao diện<br>
+        <a href="../design/design-system.html" style="color:var(--night-600)">design-system.html</a>: design system</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="chot">
+    <h2 class="sec">Kết quả phỏng vấn làm rõ</h2>
+    <p class="sec-desc">Những điểm YEU-CAU.md chưa nói rõ, đã chốt qua phỏng vấn. Nội dung chi tiết nằm ở các tài liệu bên dưới.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>Câu hỏi</th><th>Đã chốt</th><th>Ảnh hưởng tới</th></tr></thead>
+      <tbody>
+        <tr><td class="id">Q1</td><td>Game dùng vào mục đích gì?</td><td>Game dùng tại <b>sự kiện</b> mang thương hiệu FPT.</td><td>01 · bối cảnh</td></tr>
+        <tr><td class="id">Q2</td><td>Có thu thập thông tin người chơi (lead) không?</td><td><b>Chưa làm ở phiên bản này.</b> Sẽ có yêu cầu riêng khi cần thu thập thông tin.</td><td>01 · ngoài phạm vi</td></tr>
+        <tr><td class="id">Q3</td><td>Logo FPT hiện ở đâu?</td><td>Trên <b>cả 3 màn hình</b>. Ở màn hình chơi, logo nhỏ nằm trên thanh trên cùng.</td><td>CN-15 · 03</td></tr>
+        <tr><td class="id">Q4</td><td>Người chơi bỏ đi giữa chừng thì sao?</td><td>Ẩn tab hoặc khoá máy thì <b>tự tạm dừng</b>. Màn hình kết thúc hoặc tạm dừng để yên <b>60 giây</b> thì <b>tự về màn hình bắt đầu</b>.</td><td>CN-13, CN-14 · QT-08</td></tr>
+        <tr><td class="id">Q5</td><td>Âm thanh và đóng gói?</td><td>Âm thanh <b>tự tạo bằng Web Audio</b>, nhân vật vẽ <b>SVG</b>, toàn bộ game nằm trong <b>1 file HTML</b>.</td><td>01 · CN-12 · QT-11</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="tom-tat">
+    <h2 class="sec">Tóm tắt nhanh</h2>
+    <div class="grid g-3" style="margin-top:var(--space-4)">
+      <div class="card"><div class="big">30s</div><p>mỗi lượt, đếm ngược 3-2-1 trước khi chơi, chia 3 giai đoạn tăng tốc.</p></div>
+      <div class="card"><div class="big">3×3</div><p>lưới 9 lỗ băng, ô bấm tối thiểu 64×64px, chơi được từ màn hình 360px.</p></div>
+      <div class="card"><div class="big">+1 · +3 · −2</div><p>chim thường, chim vàng, hải cẩu. Combo từ 5 thì điểm chim ×2.</p></div>
+      <div class="card"><div class="big">0–3 ⭐</div><p>xếp hạng cuối lượt, lưu bảng 5 điểm cao nhất trên trình duyệt.</p></div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot"><div class="wrap">Đập Chim Cánh Cụt · Tài liệu thiết kế v1.0 · Giao diện theo <code>design/tokens.css</code></div></footer>
+</body>
+</html>

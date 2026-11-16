@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04 Quy tắc &amp; dữ liệu · Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="assets/docs.css">
+<style>section[id^="qt-"]{scroll-margin-top:96px}</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="index.html"><img src="../design/assets/logo-fpt-trang.png" alt="FPT"><span class="divider"></span>
+    <span class="name">Đập Chim Cánh Cụt<small>Tài liệu thiết kế · v1.0</small></span></a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">01 Tổng quan</a>
+    <a href="02-chuc-nang.html">02 Chức năng</a>
+    <a href="03-man-hinh.html">03 Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html" aria-current="page">04 Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">05 Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Tài liệu 04</p>
+    <h1 class="display">Quy tắc <span class="hl">&amp; dữ liệu</span></h1>
+    <p class="lead">Thông số, thuật toán và công thức đủ chi tiết để hai người viết code độc lập ra cùng một kết quả. Mọi con số đánh dấu <span class="badge gold">chỉnh được</span> là đề xuất, sẽ chỉnh sau khi chơi thử.</p>
+    <nav class="toc" aria-label="Trong trang này">
+      <a href="#qt-01">QT-01 Giai đoạn</a><a href="#qt-02">QT-02 Tỉ lệ</a><a href="#qt-03">QT-03 Sinh con vật</a><a href="#qt-04">QT-04 Vòng đời</a>
+      <a href="#qt-05">QT-05 Điểm</a><a href="#qt-06">QT-06 Combo</a><a href="#qt-07">QT-07 Sao</a><a href="#qt-08">QT-08 Tạm dừng &amp; tự về</a>
+      <a href="#qt-09">QT-09 Thống kê</a><a href="#qt-10">QT-10 Lưu trữ</a><a href="#qt-11">QT-11 Kỹ thuật</a>
+    </nav>
+  </div>
+
+  <section id="qt-01">
+    <h2 class="sec"><span class="num">QT-01</span>Thông số giai đoạn</h2>
+    <p class="sec-desc">Giai đoạn tính theo <b>thời gian đã chơi</b> (không tính lúc đếm ngược và tạm dừng). Mọi thông số nằm trong một bảng cấu hình duy nhất ở đầu file game.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Giai đoạn</th><th>Thời gian đã chơi</th><th class="num">Số kênh (con tối đa)</th><th>Trên sân (chim thường, hải cẩu)</th><th>Trên sân (chim vàng = 60%)</th><th>Nghỉ</th><th>Màu thanh</th></tr></thead>
+      <tbody>
+        <tr><td><b>1 · Khởi động</b></td><td>0 ≤ t &lt; 10s</td><td class="num">1</td><td>1,0–1,4s</td><td>0,60–0,84s</td><td>0,4–0,6s</td><td><span class="badge teal">xanh ngọc</span></td></tr>
+        <tr><td><b>2 · Tăng tốc</b></td><td>10 ≤ t &lt; 20s</td><td class="num">1</td><td>0,8–1,1s</td><td>0,48–0,66s</td><td>0,3–0,5s</td><td><span class="badge violet">tím</span></td></tr>
+        <tr><td><b>3 · Bão tuyết</b></td><td>20 ≤ t ≤ 30s</td><td class="num">2</td><td>0,6–0,9s</td><td>0,36–0,54s</td><td>0,2–0,4s</td><td><span class="badge pink">hồng đỏ</span></td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Giá trị trong khoảng (ví dụ 1,0–1,4s) được chọn ngẫu nhiên đều mỗi lần con vật xuất hiện.</p>
+    <h3 class="sub">Bảng cấu hình đề xuất <span class="badge gold">chỉnh được</span></h3>
+<pre><code>CAU_HINH = {
+  thoiGianLuot: 30,            // giây
+  demNguoc: [3, 2, 1, "Đập!"], buocDemNguoc: 0.8,
+  giaiDoan: [
+    { ten: "Khởi động", tu: 0,  kenh: 1, trenSan: [1.0, 1.4], nghi: [0.4, 0.6] },
+    { ten: "Tăng tốc",  tu: 10, kenh: 1, trenSan: [0.8, 1.1], nghi: [0.3, 0.5] },
+    { ten: "Bão tuyết", tu: 20, kenh: 2, trenSan: [0.6, 0.9], nghi: [0.2, 0.4] }
+  ],
+  heSoChimVang: 0.6,
+  tiLe: { truoc10s: { thuong: 0.92, vang: 0.08 },
+          tu10s:    { thuong: 0.80, vang: 0.08, haiCau: 0.12 } },
+  haiCauTuGiay: 10,
+  diem: { thuong: 1, vang: 3, haiCau: -2 },
+  comboNhan: 5, heSoCombo: 2,
+  mocSao: [15, 30, 45],
+  tuVeTrangChu: 60, nhacTuVe: 10,   // giây
+  khongSinhKhiConDuoi: 0.4          // giây còn lại
+}</code></pre>
+    <h3 class="sub">Ước lượng số con vật mỗi lượt</h3>
+    <div class="table-wrap"><table class="compact">
+      <thead><tr><th>Giai đoạn</th><th class="num">Chu kỳ trung bình (trên sân + nghỉ)</th><th class="num">Số lần xuất hiện ~</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td class="num">1,2 + 0,5 = 1,7s</td><td class="num">6</td></tr>
+        <tr><td>2</td><td class="num">0,95 + 0,4 = 1,35s</td><td class="num">7</td></tr>
+        <tr><td>3 (2 kênh)</td><td class="num">0,75 + 0,3 = 1,05s × 2</td><td class="num">19</td></tr>
+        <tr><td><b>Tổng</b></td><td></td><td class="num"><b>~32</b> (trong đó ~2–3 chim vàng, ~3 hải cẩu)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Người chơi đập trúng mọi chim và giữ combo được khoảng 26 chim thường và 2–3 chim vàng ≈ 60 điểm. Mốc 3 sao ở 45 là hợp lý cho người chơi giỏi.</p>
+  </section>
+
+  <section id="qt-02">
+    <h2 class="sec"><span class="num">QT-02</span>Tỉ lệ con vật <span class="badge gold">chỉnh được</span></h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Thời điểm sinh</th><th class="num">🐧 Chim thường</th><th class="num">✨ Chim vàng</th><th class="num">🦭 Hải cẩu</th></tr></thead>
+      <tbody>
+        <tr><td>Thời gian đã chơi &lt; 10s</td><td class="num">92%</td><td class="num">8%</td><td class="num">0%</td></tr>
+        <tr><td>Thời gian đã chơi ≥ 10s</td><td class="num">80%</td><td class="num">8%</td><td class="num">12%</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="list">
+      <li>Loại con vật được bốc ngẫu nhiên theo tỉ lệ ngay lúc sinh.</li>
+      <li><b>Chống xui:</b> không sinh quá <b>2 hải cẩu liên tiếp</b>. Nếu bốc trúng con thứ 3 thì đổi thành chim thường.</li>
+      <li>Ở giai đoạn 3, nếu đang có 1 hải cẩu trên sân thì con mới không được là hải cẩu (tránh cả sân toàn hải cẩu). Bốc lại giữa chim thường và chim vàng theo tỉ lệ 80 : 8.</li>
+    </ul>
+  </section>
+
+  <section id="qt-03">
+    <h2 class="sec"><span class="num">QT-03</span>Thuật toán sinh con vật</h2>
+    <ol class="list">
+      <li><b>Kênh.</b> Kênh 1 chạy suốt lượt. Kênh 2 chỉ bật từ giây 20, lần sinh đầu tiên sau một khoảng nghỉ ngẫu nhiên của giai đoạn 3, để hai kênh lệch nhịp nhau.</li>
+      <li><b>Lần sinh đầu tiên</b> của lượt: 0,3 giây sau chữ "Đập!".</li>
+      <li><b>Mỗi kênh</b> lặp: sinh con vật → chờ con đó hết bấm được (bị đập hoặc bắt đầu lặn) → nghỉ ngẫu nhiên → sinh tiếp.</li>
+      <li><b>Thông số</b> (giai đoạn, thời gian trên sân, tỉ lệ) lấy theo thời gian đã chơi <b>tại lúc sinh</b>. Con sinh lúc 9,9s dùng thông số giai đoạn 1 suốt đời nó.</li>
+      <li><b>Chọn lỗ:</b> lỗ hợp lệ = 9 lỗ, trừ lỗ đang có con vật (kể cả đang lặn), trừ lỗ vừa trống gần nhất. Chọn ngẫu nhiên đều trong các lỗ hợp lệ.</li>
+      <li><b>Không sinh</b> khi thời gian còn lại &lt; 0,4 giây, khi đang tạm dừng, hoặc sau khi hết giờ.</li>
+    </ol>
+    <div class="note"><span class="ic">💡</span><p>Luôn có ít nhất 6 lỗ hợp lệ (9 − 2 con trên sân − 1 lỗ vừa trống), nên việc chọn lỗ không bao giờ thất bại.</p></div>
+  </section>
+
+  <section id="qt-04">
+    <h2 class="sec"><span class="num">QT-04</span>Vòng đời một lần xuất hiện</h2>
+    <div class="flow" style="margin:var(--space-4) 0">
+      <span class="step">TRỒI LÊN · 0,15s</span><span class="arrow">→</span><span class="step hl">TRÊN SÂN</span><span class="arrow">→</span>
+      <span class="step">BỊ ĐẬP · 0,2s</span><span class="muted">hoặc</span><span class="step">LẶN XUỐNG · 0,15s</span><span class="arrow">→</span><span class="step">HẾT (lỗ trống)</span>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Trường</th><th>Kiểu</th><th>Ý nghĩa</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>số</td><td>Tăng dần trong lượt, để không tính điểm 2 lần.</td></tr>
+        <tr><td><code>loai</code></td><td><code>"thuong" | "vang" | "haiCau"</code></td><td>Loại con vật.</td></tr>
+        <tr><td><code>lo</code></td><td>0–8</td><td>Chỉ số lỗ, đánh số từ trái sang phải, trên xuống dưới.</td></tr>
+        <tr><td><code>kenh</code></td><td>1 | 2</td><td>Kênh sinh ra nó.</td></tr>
+        <tr><td><code>batDau</code></td><td>giây (thời gian đã chơi)</td><td>Lúc bắt đầu trồi lên.</td></tr>
+        <tr><td><code>trenSan</code></td><td>giây</td><td>Thời gian bấm được, <b>tính cả 0,15s trồi lên</b>.</td></tr>
+        <tr><td><code>trangThai</code></td><td><code>"troiLen" | "trenSan" | "biDap" | "lanXuong" | "het"</code></td><td>Trạng thái hiện tại.</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="list">
+      <li><b>Bấm được</b> khi <code>trangThai</code> là <code>troiLen</code> hoặc <code>trenSan</code>, và <code>batDau ≤ thời điểm bấm &lt; batDau + trenSan</code>.</li>
+      <li>Hết <code>trenSan</code> mà chưa bị đập thì chuyển sang <code>lanXuong</code>. Nếu là chim (thường hoặc vàng) thì <b>combo về 0</b>. Hải cẩu thì không có gì xảy ra.</li>
+      <li>Hết giờ: mọi con đang trên sân chuyển sang <code>het</code> ngay. Không tính là chim "trốn mất", không đổi combo hay thống kê.</li>
+      <li>Thời điểm dùng để so sánh là thời gian đã chơi tại lúc nhận sự kiện bấm, không phải lúc vẽ khung hình kế tiếp.</li>
+    </ul>
+  </section>
+
+  <section id="qt-05">
+    <h2 class="sec"><span class="num">QT-05</span>Tính điểm</h2>
+<pre><code>khi đập trúng chim (thường hoặc vàng):
+    combo = combo + 1
+    heSo  = (combo ≥ 5) ? 2 : 1
+    cong  = diemGoc[loai] × heSo          // thường 1, vàng 3
+    diem  = diem + cong
+
+khi đập trúng hải cẩu:
+    combo = 0
+    diem  = max(0, diem − 2)              // không nhân hệ số, không âm
+
+bấm lỗ trống / con đã bị đập / đang lặn / ngoài trạng thái DANG_CHOI:
+    không đổi gì</code></pre>
+    <div class="table-wrap"><table class="compact">
+      <thead><tr><th>Trường hợp</th><th class="num">Điểm trước</th><th class="num">Thay đổi</th><th class="num">Điểm sau</th><th>Chữ bay lên</th></tr></thead>
+      <tbody>
+        <tr><td>Đập chim thường, combo mới = 3</td><td class="num">10</td><td class="num">+1</td><td class="num">11</td><td>+1</td></tr>
+        <tr><td>Đập chim vàng, combo mới = 6</td><td class="num">20</td><td class="num">+6</td><td class="num">26</td><td>+6</td></tr>
+        <tr><td>Đập hải cẩu</td><td class="num">26</td><td class="num">−2</td><td class="num">24</td><td>−2</td></tr>
+        <tr><td>Đập hải cẩu khi đang 1 điểm</td><td class="num">1</td><td class="num">−1</td><td class="num">0</td><td>−2 (vẫn hiện đúng luật)</td></tr>
+        <tr><td>Bấm lỗ trống</td><td class="num">24</td><td class="num">0</td><td class="num">24</td><td>— (chỉ mảnh băng)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="qt-06">
+    <h2 class="sec"><span class="num">QT-06</span>Combo</h2>
+    <div class="table-wrap"><table class="compact">
+      <thead><tr><th>Sự kiện</th><th>Combo</th></tr></thead>
+      <tbody>
+        <tr><td>Đập trúng chim thường hoặc vàng</td><td><b>+1</b></td></tr>
+        <tr><td>Một chim (thường hoặc vàng) tự lặn xuống mà không bị đập</td><td><b>về 0</b></td></tr>
+        <tr><td>Đập trúng hải cẩu</td><td><b>về 0</b></td></tr>
+        <tr><td>Bấm lỗ trống, bấm con đang lặn, hải cẩu tự lặn</td><td>giữ nguyên</td></tr>
+        <tr><td>Hết giờ, tạm dừng</td><td>giữ nguyên (không có chim nào "trốn")</td></tr>
+      </tbody>
+    </table></div>
+    <h3 class="sub">Ví dụ một chuỗi</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>Sự kiện</th><th class="num">Combo</th><th class="num">Hệ số</th><th class="num">Cộng</th><th class="num">Điểm</th><th>Huy hiệu</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>🐧 trúng</td><td class="num">1</td><td class="num">×1</td><td class="num">+1</td><td class="num">1</td><td>—</td></tr>
+        <tr><td>2</td><td>🐧 trúng</td><td class="num">2</td><td class="num">×1</td><td class="num">+1</td><td class="num">2</td><td>Combo 2</td></tr>
+        <tr><td>3</td><td>bấm lỗ trống</td><td class="num">2</td><td class="num">—</td><td class="num">0</td><td class="num">2</td><td>Combo 2</td></tr>
+        <tr><td>4</td><td>✨ trúng</td><td class="num">3</td><td class="num">×1</td><td class="num">+3</td><td class="num">5</td><td>Combo 3</td></tr>
+        <tr><td>5</td><td>🐧 trúng</td><td class="num">4</td><td class="num">×1</td><td class="num">+1</td><td class="num">6</td><td>Combo 4</td></tr>
+        <tr><td>6</td><td>🐧 trúng</td><td class="num">5</td><td class="num">×2</td><td class="num">+2</td><td class="num">8</td><td><b>Combo ×2 🔥</b></td></tr>
+        <tr><td>7</td><td>✨ trúng</td><td class="num">6</td><td class="num">×2</td><td class="num">+6</td><td class="num">14</td><td><b>Combo ×2 🔥</b></td></tr>
+        <tr><td>8</td><td>🦭 trúng</td><td class="num">0</td><td class="num">—</td><td class="num">−2</td><td class="num">12</td><td>ẩn</td></tr>
+        <tr><td>9</td><td>🐧 trúng</td><td class="num">1</td><td class="num">×1</td><td class="num">+1</td><td class="num">13</td><td>—</td></tr>
+        <tr><td>10</td><td>🐧 tự lặn mất</td><td class="num">0</td><td class="num">—</td><td class="num">0</td><td class="num">13</td><td>ẩn</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Combo dài nhất của chuỗi trên là 6.</p>
+  </section>
+
+  <section id="qt-07">
+    <h2 class="sec"><span class="num">QT-07</span>Xếp hạng sao <span class="badge gold">chỉnh được</span></h2>
+    <div class="table-wrap"><table class="compact">
+      <thead><tr><th>Điểm cuối lượt</th><th>Sao</th><th>Lời nhắn</th></tr></thead>
+      <tbody>
+        <tr><td>0–14</td><td>0</td><td>"Thử lại nhé!"</td></tr>
+        <tr><td>15–29</td><td>⭐</td><td>"Khá lắm!"</td></tr>
+        <tr><td>30–44</td><td>⭐⭐</td><td>"Tuyệt vời!"</td></tr>
+        <tr><td>≥ 45</td><td>⭐⭐⭐</td><td>"Vua đập chim!"</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Lời nhắn cho 1–3 sao là đề xuất bổ sung. Mục tiêu khi chơi thử: người mới đạt ít nhất 1 sao, chỉ người chơi giỏi đạt 3 sao.</p>
+  </section>
+
+  <section id="qt-08">
+    <h2 class="sec"><span class="num">QT-08</span>Tạm dừng và tự về trang chủ</h2>
+    <h3 class="sub">Khi nào tạm dừng</h3>
+    <div class="table-wrap"><table class="compact">
+      <thead><tr><th>Nguồn</th><th>Áp dụng ở trạng thái</th></tr></thead>
+      <tbody>
+        <tr><td>Bấm nút ⏸, phím <kbd>Esc</kbd> hoặc <kbd>P</kbd></td><td>DEM_NGUOC, DANG_CHOI</td></tr>
+        <tr><td><code>visibilitychange</code> → hidden (chuyển tab, thu nhỏ, khoá máy, chuyển ứng dụng)</td><td>DEM_NGUOC, DANG_CHOI</td></tr>
+        <tr><td><code>pagehide</code></td><td>DEM_NGUOC, DANG_CHOI</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Không dùng sự kiện <code>blur</code> của cửa sổ, vì bấm sang cửa sổ khác trên máy tính chưa chắc là người chơi đã bỏ đi.</p>
+    <h3 class="sub">Khi tạm dừng</h3>
+    <ul class="list">
+      <li>Đóng băng thời gian đã chơi. Mọi mốc (con vật, nghỉ, thông báo giai đoạn) tính theo thời gian đã chơi nên tự đứng yên theo.</li>
+      <li>Dừng âm thanh (<code>AudioContext.suspend()</code>) và hoạt ảnh của con vật. Hình nền có thể vẫn chạy.</li>
+      <li>Quay lại tab: game vẫn ở trạng thái tạm dừng, chờ người chơi bấm "Tiếp tục".</li>
+      <li>Tạm dừng lúc đang đếm ngược: khi tiếp tục thì đếm lại từ đầu (3).</li>
+    </ul>
+    <h3 class="sub">Tự về trang chủ</h3>
+    <ul class="list">
+      <li>Bộ đếm "để yên" chỉ chạy ở <b>TAM_DUNG</b> và <b>KET_THUC</b>. Mốc tính bằng đồng hồ thật (<code>Date.now()</code>), nên vẫn đúng khi tab bị ẩn.</li>
+      <li>Mỗi lần <code>pointerdown</code> hoặc <code>keydown</code> trên trang: đặt lại về 60 giây.</li>
+      <li>Còn 10 giây: hiện "Tự về trang chủ sau N giây".</li>
+      <li>Hết 60 giây: về BAT_DAU. Từ TAM_DUNG thì lượt bị huỷ, không lưu. Từ KET_THUC thì điểm đã lưu từ lúc vào KET_THUC.</li>
+      <li>Quay lại tab sau hơn 60 giây ở hai trạng thái này: hiện ngay màn hình bắt đầu.</li>
+    </ul>
+  </section>
+
+  <section id="qt-09">
+    <h2 class="sec"><span class="num">QT-09</span>Thống kê cuối lượt</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Chỉ số</th><th>Biến</th><th>Cách tính</th></tr></thead>
+      <tbody>
+        <tr><td>🐧 Chim thường đã đập</td><td><code>soThuong</code></td><td>Số lần đập trúng chim thường.</td></tr>
+        <tr><td>✨ Chim vàng đã đập</td><td><code>soVang</code></td><td>Số lần đập trúng chim vàng.</td></tr>
+        <tr><td>🦭 Đập nhầm hải cẩu</td><td><code>soHaiCau</code></td><td>Số lần đập trúng hải cẩu.</td></tr>
+        <tr><td>🎯 Tỉ lệ trúng</td><td><code>tiLeTrung</code></td><td><code>round((soThuong + soVang) / soLanBam × 100)</code> %. <code>soLanBam</code> = mọi cú bấm vào lưới trong DANG_CHOI (gồm lỗ trống, hải cẩu, con đang lặn). Nếu <code>soLanBam = 0</code> thì hiện "—".</td></tr>
+        <tr><td>🔥 Combo dài nhất</td><td><code>comboDaiNhat</code></td><td>Giá trị lớn nhất của <code>combo</code> trong lượt.</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Ví dụ: 21 chim thường + 3 chim vàng, 1 hải cẩu, 4 lần bấm lỗ trống → 24 / 29 = 83%.</p>
+  </section>
+
+  <section id="qt-10">
+    <h2 class="sec"><span class="num">QT-10</span>Lưu trữ (localStorage)</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Khoá</th><th>Giá trị</th><th>Mặc định</th></tr></thead>
+      <tbody>
+        <tr><td><code>dapChimCanhCut.bangDiem.v1</code></td><td>JSON, bảng 5 điểm cao nhất (xem dưới)</td><td>bảng trống</td></tr>
+        <tr><td><code>dapChimCanhCut.amThanh.v1</code></td><td><code>"bat"</code> hoặc <code>"tat"</code></td><td><code>"bat"</code></td></tr>
+      </tbody>
+    </table></div>
+<pre><code>{
+  "phienBan": 1,
+  "ds": [
+    { "diem": 47, "sao": 3, "ngay": "2026-11-16T09:30:12.000Z" },
+    { "diem": 38, "sao": 2, "ngay": "2026-11-16T09:12:40.000Z" }
+  ]
+}</code></pre>
+    <h3 class="sub">Quy tắc ghi</h3>
+    <ol class="list">
+      <li>Ghi <b>một lần</b>, ngay khi vào KET_THUC, trước khi hiện thẻ kết quả.</li>
+      <li>Chỉ ghi lượt có <b>điểm &gt; 0</b>. Lượt bị huỷ không ghi.</li>
+      <li><code>kyLucCu</code> = điểm dòng đầu của bảng trước khi ghi (bảng trống thì là 0). <b>Kỷ lục mới</b> khi <code>diem &gt; kyLucCu</code>.</li>
+      <li>Chèn lượt mới, sắp xếp điểm giảm dần. <b>Bằng điểm thì lượt cũ đứng trên.</b> Giữ 5 dòng đầu.</li>
+      <li>Lượt mới "lọt bảng" nếu còn trong 5 dòng sau khi cắt. Dòng đó được tô nổi bật ở MH-06.</li>
+      <li><code>sao</code> lưu theo mốc tại lúc chơi. Đổi mốc sao sau này không tính lại dòng cũ.</li>
+      <li><code>ngay</code> lưu ISO 8601 (UTC), hiện ra dạng <code>dd/mm</code> theo giờ của máy.</li>
+    </ol>
+    <h3 class="sub">Quy tắc đọc</h3>
+    <ul class="list">
+      <li>Đọc khi mở trang. Không đọc được JSON, sai <code>phienBan</code>, hoặc <code>ds</code> không phải mảng: coi như bảng trống. Lần ghi sau sẽ ghi đè.</li>
+      <li>Bỏ từng dòng không hợp lệ: <code>diem</code> không phải số nguyên 1–999, <code>sao</code> ngoài 0–3, <code>ngay</code> không đọc được.</li>
+      <li>localStorage bị chặn hoặc lỗi (ẩn danh, đầy bộ nhớ): game vẫn chơi bình thường, bảng điểm giữ trong bộ nhớ cho tới khi đóng trang. Không hiện lỗi cho người chơi.</li>
+      <li>Không lưu bất kỳ thông tin cá nhân nào.</li>
+    </ul>
+  </section>
+
+  <section id="qt-11">
+    <h2 class="sec"><span class="num">QT-11</span>Quy tắc kỹ thuật</h2>
+    <div class="grid g-2">
+      <div class="card">
+        <h3>Thời gian</h3>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>Dùng <code>performance.now()</code> trong <code>requestAnimationFrame</code>. Thời gian đã chơi = tổng các đoạn đang chạy, không cộng dồn bằng <code>setInterval</code>.</li>
+          <li>Hết giờ xác định bằng phép so sánh thời gian (≥ 30s), không phụ thuộc số khung hình.</li>
+          <li>Thời điểm của cú bấm lấy từ <code>event.timeStamp</code>, đổi sang thời gian đã chơi.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Nhập liệu</h3>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>Dùng <code>pointerdown</code> (chuột, chạm, bút), xử lý từng <code>pointerId</code> riêng cho chạm nhiều ngón.</li>
+          <li>Vùng chơi: <code>touch-action: none</code>, <code>user-select: none</code>, chặn <code>contextmenu</code>, chặn chạm đúp phóng to.</li>
+          <li>Meta viewport: <code>width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no</code>.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Đóng gói</h3>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>1 file <code>dap-chim-canh-cut.html</code>: CSS và JS viết thẳng trong file, không có thư viện ngoài.</li>
+          <li>Logo PNG nhúng base64 (~10–20KB). Phông Baloo 2 nhúng dạng woff2, chỉ bộ chữ con Latin + tiếng Việt.</li>
+          <li>Không gửi bất kỳ yêu cầu mạng nào khi chơi.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Hỗ trợ kiểm thử <span class="badge violet">Nên có</span></h3>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li><code>?seed=123</code>: dùng bộ sinh số ngẫu nhiên có hạt giống để lặp lại đúng một lượt.</li>
+          <li><code>?debug=1</code>: hiện góc nhỏ ghi thời gian đã chơi, giai đoạn, FPS, số con trên sân, và cho gọi các hàm tính sao, xếp bảng điểm trong Console để thử giá trị biên.</li>
+          <li>Không bật hai tham số này thì game chạy như bình thường.</li>
+        </ul>
+      </div>
+    </div>
+    <h3 class="sub">Âm thanh tự tạo (Web Audio) <span class="badge gold">chỉnh được</span></h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Âm</th><th>Khi nào</th><th>Gợi ý tạo</th></tr></thead>
+      <tbody>
+        <tr><td>Bốp</td><td>Đập trúng chim thường</td><td>Sóng sine trượt 600 → 180Hz trong ~80ms, tắt nhanh.</td></tr>
+        <tr><td>Bốp vàng</td><td>Đập trúng chim vàng</td><td>Như bốp, thêm 2 nốt triangle 1320 / 1760Hz ngắn kiểu lấp lánh.</td></tr>
+        <tr><td>Báo sai</td><td>Đập trúng hải cẩu</td><td>Sóng square 220 → 110Hz ~220ms, âm lượng thấp hơn để không chói.</td></tr>
+        <tr><td>Tích</td><td>Đếm ngược, 5 giây cuối</td><td>Nhịp 1000Hz ~30ms. "Đập!" và giây cuối dùng 1500Hz.</td></tr>
+        <tr><td>Ting</td><td>Mỗi ngôi sao</td><td>Sine 1320Hz, tắt dần ~300ms, ngôi sau cao hơn ngôi trước một quãng.</td></tr>
+        <tr><td>Pháo hoa</td><td>Kỷ lục mới</td><td>Tiếng ồn trắng qua bộ lọc thông dải, 3 tiếng nổ nhỏ lệch nhau.</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="list">
+      <li>Tạo <code>AudioContext</code> trong cú bấm "Bắt đầu" đầu tiên (yêu cầu của Safari/iOS). Âm thanh tắt thì không phát và không rung.</li>
+      <li>Âm lượng chung ~0,4. Không có nhạc nền ở phiên bản này.</li>
+    </ul>
+  </section>
+
+  <nav class="pager" aria-label="Chuyển trang">
+    <a href="03-man-hinh.html"><small>← Trước</small><b>03 Màn hình</b></a>
+    <a class="next" href="05-ke-hoach-test.html"><small>Tiếp →</small><b>05 Kế hoạch test</b></a>
+  </nav>
+</main>
+<footer class="foot"><div class="wrap">Đập Chim Cánh Cụt · Tài liệu thiết kế v1.0 · 04 Quy tắc &amp; dữ liệu</div></footer>
+</body>
+</html>

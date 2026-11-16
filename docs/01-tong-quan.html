@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 Tổng quan · Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="assets/docs.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="index.html"><img src="../design/assets/logo-fpt-trang.png" alt="FPT"><span class="divider"></span>
+    <span class="name">Đập Chim Cánh Cụt<small>Tài liệu thiết kế · v1.0</small></span></a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html" aria-current="page">01 Tổng quan</a>
+    <a href="02-chuc-nang.html">02 Chức năng</a>
+    <a href="03-man-hinh.html">03 Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">04 Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">05 Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Tài liệu 01</p>
+    <h1 class="display">Tổng <span class="hl">quan</span></h1>
+    <p class="lead">Game là gì, dùng ở đâu, cho ai, làm gì ở phiên bản này và để lại gì cho sau.</p>
+    <nav class="toc" aria-label="Trong trang này">
+      <a href="#muc-tieu">1. Mục tiêu</a><a href="#boi-canh">2. Bối cảnh sự kiện</a><a href="#nguoi-choi">3. Người chơi</a>
+      <a href="#vong-choi">4. Vòng chơi</a><a href="#pham-vi">5. Phạm vi</a><a href="#ky-thuat">6. Ràng buộc kỹ thuật</a>
+      <a href="#quyet-dinh">7. Quyết định đã chốt</a><a href="#thuat-ngu">8. Thuật ngữ</a><a href="#rui-ro">9. Rủi ro</a>
+    </nav>
+  </div>
+
+  <section id="muc-tieu">
+    <h2 class="sec"><span class="num">1.</span>Mục tiêu</h2>
+    <div class="prose">
+      <p><b>Đập Chim Cánh Cụt</b> là mini game phản xạ chạy trên trình duyệt. Chim cánh cụt trồi lên từ các lỗ băng trên lưới 3×3, người chơi bấm hoặc chạm để đập và ghi điểm trong 30 giây. Game có chim vàng hiếm điểm cao, hải cẩu gây nhiễu bị trừ điểm, combo nhân điểm và 3 giai đoạn tăng tốc.</p>
+      <p>Game dùng tại các <b>sự kiện mang thương hiệu FPT</b> để thu hút khách ghé quầy, tạo tương tác vui và ngắn, khuyến khích chơi lại để phá kỷ lục.</p>
+    </div>
+    <h3 class="sub">Thước đo thành công</h3>
+    <div class="grid g-3">
+      <div class="card"><h3>Hiểu ngay</h3><p>Người chơi lần đầu bắt đầu được lượt chơi trong vòng <b>10 giây</b> mà không cần nhân viên giải thích.</p></div>
+      <div class="card"><h3>Muốn chơi lại</h3><p>Lượt ngắn 30 giây, có sao và kỷ lục để phấn đấu. Người mới đạt được ít nhất 1 sao.</p></div>
+      <div class="card"><h3>Chạy ổn định</h3><p>Chơi liên tục cả buổi sự kiện trên một máy, không lỗi, không cần tải lại trang, không cần mạng.</p></div>
+    </div>
+  </section>
+
+  <section id="boi-canh">
+    <h2 class="sec"><span class="num">2.</span>Bối cảnh sự kiện</h2>
+    <p class="sec-desc">Kịch bản sử dụng chính, dùng để quyết định các chi tiết như tự tạm dừng và tự về trang chủ.</p>
+    <ul class="list">
+      <li>Máy tính bảng, điện thoại hoặc laptop đặt tại quầy, mở sẵn game trên trình duyệt. Khách lần lượt đến chơi.</li>
+      <li>Mạng tại sự kiện không ổn định, nên game phải <b>chạy được khi không có mạng</b> sau khi đã mở file.</li>
+      <li>Khách có thể bỏ đi giữa lượt hoặc để máy ở màn hình kết thúc. Game phải tự đưa về <b>màn hình bắt đầu</b> sẵn cho người kế tiếp (xem <a href="04-quy-tac-du-lieu.html#qt-08">QT-08</a>).</li>
+      <li>Logo FPT hiện trên cả 3 màn hình để nhận diện thương hiệu (xem <a href="02-chuc-nang.html#cn-15">CN-15</a>).</li>
+      <li>Bảng 5 điểm cao nhất được lưu trên chính máy tại quầy, tạo không khí thi đua giữa các khách trong buổi.</li>
+    </ul>
+    <div class="note warn"><span class="ic">⚠️</span><p><b>Không thu thập thông tin người chơi</b> ở phiên bản này. Bảng điểm cao chỉ ghi điểm, số sao và ngày chơi, không có tên hay số điện thoại. Khi cần thu thập thông tin, sẽ có yêu cầu riêng.</p></div>
+  </section>
+
+  <section id="nguoi-choi">
+    <h2 class="sec"><span class="num">3.</span>Người chơi</h2>
+    <div class="grid g-3">
+      <div class="card"><span class="badge teal">Chính</span><h3 style="margin-top:var(--space-3)">Khách tham quan</h3><p>Mọi lứa tuổi, từ trẻ em đến người lớn. Chơi 1–3 lượt rồi đi. Không đọc hướng dẫn dài, hiểu luật qua hình.</p></div>
+      <div class="card"><span class="badge violet">Phụ</span><h3 style="margin-top:var(--space-3)">Trẻ nhỏ</h3><p>Bấm nhiều, bấm trượt nhiều. Vì vậy bấm lỗ trống không bị phạt và không mất combo.</p></div>
+      <div class="card"><span class="badge orange">Vận hành</span><h3 style="margin-top:var(--space-3)">Nhân viên quầy</h3><p>Mở file, để máy chạy. Không cần thao tác gì thêm trong buổi. Có thể tắt âm thanh nếu khu vực ồn hoặc cần yên tĩnh.</p></div>
+    </div>
+  </section>
+
+  <section id="vong-choi">
+    <h2 class="sec"><span class="num">4.</span>Vòng chơi</h2>
+    <p class="sec-desc">Một lượt chơi trọn vẹn, khoảng 40 giây từ lúc bấm "Bắt đầu" đến màn hình kết quả.</p>
+    <div class="flow" role="list">
+      <span class="step" role="listitem">Màn hình bắt đầu</span><span class="arrow">→</span>
+      <span class="step" role="listitem">3 – 2 – 1 – Đập!</span><span class="arrow">→</span>
+      <span class="step hl" role="listitem">Khởi động 0–10s</span><span class="arrow">→</span>
+      <span class="step hl" role="listitem">Tăng tốc 10–20s</span><span class="arrow">→</span>
+      <span class="step hl" role="listitem">Bão tuyết 20–30s</span><span class="arrow">→</span>
+      <span class="step" role="listitem">Hết giờ! · sao · thống kê</span><span class="arrow">→</span>
+      <span class="step" role="listitem">Chơi lại / Trang chủ</span>
+    </div>
+    <h3 class="sub">Điều làm game hấp dẫn</h3>
+    <ul class="list">
+      <li><b>Nhịp nhanh dần:</b> con vật ở trên sân ngắn dần, giai đoạn cuối có 2 con cùng lúc.</li>
+      <li><b>Phải phân biệt:</b> hải cẩu xuất hiện từ giây 10, đập nhầm bị −2 và mất combo.</li>
+      <li><b>Phần thưởng liên tiếp:</b> combo từ 5 thì điểm chim ×2, chim vàng +3 (×2 là +6).</li>
+      <li><b>Mục tiêu rõ ràng:</b> 0–3 sao, bảng 5 điểm cao nhất, "Kỷ lục mới!" kèm pháo hoa tuyết.</li>
+    </ul>
+  </section>
+
+  <section id="pham-vi">
+    <h2 class="sec"><span class="num">5.</span>Phạm vi</h2>
+    <div class="grid g-2">
+      <div class="card">
+        <span class="badge teal">Trong phạm vi v1</span>
+        <ul class="list" style="margin-top:var(--space-4)">
+          <li>1 người chơi, offline, không tài khoản, không server.</li>
+          <li>3 màn hình: bắt đầu, chơi, kết thúc, cùng các lớp phủ đếm ngược, thông báo giai đoạn và tạm dừng.</li>
+          <li>3 loại con vật, 3 giai đoạn, combo, xếp hạng sao.</li>
+          <li>Bảng 5 điểm cao nhất và tuỳ chọn âm thanh, lưu bằng localStorage.</li>
+          <li>Tự tạm dừng khi ẩn tab, tự về trang chủ sau 60 giây để yên.</li>
+          <li>Logo FPT trên cả 3 màn hình.</li>
+          <li>Hình nền 6 lớp chủ đề cực quang, hiệu ứng, âm thanh tự tạo.</li>
+          <li>Hỗ trợ chế độ giảm chuyển động.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge red">Ngoài phạm vi v1</span>
+        <ul class="list" style="margin-top:var(--space-4)">
+          <li>Thu thập thông tin người chơi (tên, số điện thoại…), sẽ có yêu cầu riêng sau.</li>
+          <li>Chọn mức độ khó (dễ / thường / khó).</li>
+          <li>Vật phẩm đặc biệt: thêm giờ, đóng băng thời gian, búa lớn.</li>
+          <li>Bảng xếp hạng online, đăng nhập, chơi nhiều người.</li>
+          <li>Ghi tên người chơi vào bảng điểm cao.</li>
+          <li>Màn hình quản trị cho nhân viên (xoá bảng điểm…).</li>
+          <li>Đa ngôn ngữ: toàn bộ chữ trong game bằng tiếng Việt.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="ky-thuat">
+    <h2 class="sec"><span class="num">6.</span>Ràng buộc kỹ thuật</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Hạng mục</th><th>Ràng buộc</th></tr></thead>
+      <tbody>
+        <tr><td>Đóng gói</td><td><b>1 file HTML</b> duy nhất chứa HTML, CSS, JS, hình SVG và logo (nhúng dạng data URI). Mở file là chơi, không cần cài đặt, không cần build.</td></tr>
+        <tr><td>Hình ảnh</td><td>Nhân vật và hình nền vẽ bằng <b>SVG/CSS</b> tự thiết kế, không dùng ảnh bên ngoài (ngoài logo FPT).</td></tr>
+        <tr><td>Âm thanh</td><td>Tự tạo bằng <b>Web Audio API</b> (bốp, sai, tích tắc, ting, pháo hoa), không có file âm thanh, không có vấn đề bản quyền.</td></tr>
+        <tr><td>Phông chữ</td><td>Baloo 2. Để chạy offline đúng phông, nhúng bộ chữ con (Latin + tiếng Việt) vào file. Nếu không nhúng được thì dùng Nunito hoặc phông hệ thống làm dự phòng.</td></tr>
+        <tr><td>Trình duyệt</td><td>Chrome, Edge, Firefox, Safari bản mới nhất, trên máy tính và điện thoại.</td></tr>
+        <tr><td>Màn hình</td><td>Từ 360px, cầm dọc hoặc ngang.</td></tr>
+        <tr><td>Hiệu năng</td><td>Khoảng 60 khung hình/giây trên điện thoại tầm trung, kể cả giai đoạn Bão tuyết.</td></tr>
+        <tr><td>Lưu trữ</td><td>localStorage. Nếu trình duyệt chặn (chế độ ẩn danh) thì game vẫn chơi được, chỉ không lưu.</td></tr>
+        <tr><td>Giao diện</td><td>Dùng biến trong <code>design/tokens.css</code>, khớp <code>mau-giao-dien.html</code>. Khi đóng gói 1 file thì chép các token vào thẻ <code>&lt;style&gt;</code>.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="quyet-dinh">
+    <h2 class="sec"><span class="num">7.</span>Quyết định đã chốt</h2>
+    <p class="sec-desc">Kết quả phỏng vấn ngày 16/11/2026, bổ sung cho YEU-CAU.md 2.1.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Quyết định</th><th>Lý do</th></tr></thead>
+      <tbody>
+        <tr><td class="id">QĐ-01</td><td>Game dùng cho sự kiện thương hiệu FPT.</td><td>Mục đích sử dụng thực tế.</td></tr>
+        <tr><td class="id">QĐ-02</td><td>Không thu thập thông tin người chơi ở v1.</td><td>Giữ đúng phạm vi YEU-CAU.md. Sẽ có yêu cầu riêng khi cần.</td></tr>
+        <tr><td class="id">QĐ-03</td><td>Logo FPT trên cả 3 màn hình, nhỏ gọn ở màn hình chơi.</td><td>Nhận diện thương hiệu suốt lượt chơi.</td></tr>
+        <tr><td class="id">QĐ-04</td><td>Ẩn tab hoặc khoá máy thì tự tạm dừng. Để yên 60 giây ở màn hình tạm dừng hoặc kết thúc thì tự về trang chủ.</td><td>Máy đặt tại quầy, người chơi đến và đi liên tục.</td></tr>
+        <tr><td class="id">QĐ-05</td><td>Âm thanh Web Audio, nhân vật SVG, 1 file HTML.</td><td>Chạy offline, dễ chép sang máy khác, không lo bản quyền tài nguyên.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="thuat-ngu">
+    <h2 class="sec"><span class="num">8.</span>Thuật ngữ</h2>
+    <dl class="defs">
+      <dt>Lượt</dt><dd>Một lần chơi 30 giây, tính từ lúc đếm ngược xong đến khi hết giờ.</dd>
+      <dt>Lần xuất hiện</dt><dd>Một lần một con vật trồi lên ở một lỗ cho đến khi lặn xuống. Mỗi lần xuất hiện được tính điểm tối đa 1 lần.</dd>
+      <dt>Thời gian trên sân</dt><dd>Khoảng thời gian con vật nằm trên mặt băng và có thể bị đập.</dd>
+      <dt>Nghỉ</dt><dd>Khoảng chờ giữa lúc một con lặn xuống và lúc con tiếp theo trồi lên (trên cùng một kênh).</dd>
+      <dt>Kênh</dt><dd>Một "suất" con vật trên sân. Giai đoạn 1–2 có 1 kênh, giai đoạn 3 có 2 kênh chạy song song.</dd>
+      <dt>Giai đoạn</dt><dd>Khởi động (0–10s), Tăng tốc (10–20s), Bão tuyết (20–30s), tính theo thời gian đã chơi.</dd>
+      <dt>Combo</dt><dd>Số lần đập trúng chim cánh cụt (thường hoặc vàng) liên tiếp.</dd>
+      <dt>Kỷ lục</dt><dd>Điểm cao nhất trong bảng 5 điểm cao nhất lưu trên máy.</dd>
+      <dt>Để yên</dt><dd>Không có thao tác bấm, chạm hay phím nào trên trang.</dd>
+    </dl>
+  </section>
+
+  <section id="rui-ro">
+    <h2 class="sec"><span class="num">9.</span>Rủi ro và cách giảm</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Rủi ro</th><th>Mức</th><th>Cách giảm</th></tr></thead>
+      <tbody>
+        <tr><td>Thông số chưa cân bằng: quá khó cho trẻ nhỏ hoặc quá dễ, 3 sao quá nhiều.</td><td><span class="badge orange">Trung bình</span></td><td>Gom mọi thông số vào một bảng cấu hình duy nhất (QT-01). Chơi thử với 5–10 người trước sự kiện rồi chỉnh.</td></tr>
+        <tr><td>Âm thanh không phát trên iOS/Safari khi chưa có thao tác.</td><td><span class="badge orange">Trung bình</span></td><td>Khởi tạo AudioContext trong sự kiện bấm "Bắt đầu" đầu tiên.</td></tr>
+        <tr><td>Giật hình ở giai đoạn Bão tuyết trên máy yếu.</td><td><span class="badge orange">Trung bình</span></td><td>Tuyết vẽ bằng canvas hoặc transform/opacity, giới hạn số hạt và giảm số hạt khi FPS thấp.</td></tr>
+        <tr><td>Chạm nhanh làm phóng to hoặc cuộn trang trên điện thoại.</td><td><span class="badge teal">Thấp</span></td><td><code>touch-action: none</code>, <code>user-scalable=no</code> trên vùng chơi, dùng pointerdown.</td></tr>
+        <tr><td>Phông chữ không tải được khi offline.</td><td><span class="badge teal">Thấp</span></td><td>Nhúng phông vào file, hoặc có phông dự phòng.</td></tr>
+        <tr><td>Dữ liệu localStorage hỏng hoặc bị xoá.</td><td><span class="badge teal">Thấp</span></td><td>Đọc có kiểm tra. Dữ liệu sai thì coi như bảng trống, không làm game lỗi (QT-10).</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <nav class="pager" aria-label="Chuyển trang">
+    <a href="index.html"><small>← Trước</small><b>Mục lục</b></a>
+    <a class="next" href="02-chuc-nang.html"><small>Tiếp →</small><b>02 Chức năng</b></a>
+  </nav>
+</main>
+<footer class="foot"><div class="wrap">Đập Chim Cánh Cụt · Tài liệu thiết kế v1.0 · 01 Tổng quan</div></footer>
+</body>
+</html>

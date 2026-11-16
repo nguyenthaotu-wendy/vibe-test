@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02 Chức năng · Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="../design/tokens.css">
+<link rel="stylesheet" href="assets/docs.css">
+<style>
+  .fn{scroll-margin-top:96px}
+  .fn-head{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2)}
+  .fn-head .code{font-family:var(--font-mono);font-size:var(--text-sm);color:var(--color-accent-1)}
+  .fn-head h3{margin:0}
+  .fn .ac{margin-top:var(--space-3);font-size:var(--text-sm)}
+  .fn .ac b{display:block;font-size:var(--text-xs);text-transform:uppercase;letter-spacing:var(--tracking-wide);color:var(--color-text-muted);margin-bottom:var(--space-1)}
+  .fn .ac ul{padding-left:var(--space-5);display:grid;gap:4px;color:var(--ice-100)}
+  .fn .refs{margin-top:var(--space-3);font-size:var(--text-xs);color:var(--color-text-muted)}
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <a class="brand" href="index.html"><img src="../design/assets/logo-fpt-trang.png" alt="FPT"><span class="divider"></span>
+    <span class="name">Đập Chim Cánh Cụt<small>Tài liệu thiết kế · v1.0</small></span></a>
+  <nav aria-label="Tài liệu">
+    <a href="index.html">Mục lục</a>
+    <a href="01-tong-quan.html">01 Tổng quan</a>
+    <a href="02-chuc-nang.html" aria-current="page">02 Chức năng</a>
+    <a href="03-man-hinh.html">03 Màn hình</a>
+    <a href="04-quy-tac-du-lieu.html">04 Quy tắc &amp; dữ liệu</a>
+    <a href="05-ke-hoach-test.html">05 Kế hoạch test</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Tài liệu 02</p>
+    <h1 class="display">Chức <span class="hl">năng</span></h1>
+    <p class="lead">16 chức năng của phiên bản 1, sơ đồ trạng thái của game, và tiêu chí chấp nhận cho từng chức năng. Thông số và công thức chi tiết nằm ở <a href="04-quy-tac-du-lieu.html">04 Quy tắc &amp; dữ liệu</a>.</p>
+    <nav class="toc" aria-label="Trong trang này">
+      <a href="#trang-thai">1. Sơ đồ trạng thái</a><a href="#danh-sach">2. Danh sách chức năng</a><a href="#chi-tiet">3. Chi tiết và tiêu chí chấp nhận</a>
+    </nav>
+  </div>
+
+  <section id="trang-thai">
+    <h2 class="sec"><span class="num">1.</span>Sơ đồ trạng thái</h2>
+    <p class="sec-desc">Game luôn ở đúng một trong 5 trạng thái. Mọi hành động của người chơi và mọi bộ đếm giờ chỉ có tác dụng trong trạng thái phù hợp.</p>
+    <div class="diagram">
+      <svg viewBox="0 0 900 340" role="img" aria-labelledby="sd-title">
+        <title id="sd-title">Sơ đồ chuyển trạng thái: Bắt đầu, Đếm ngược, Đang chơi, Tạm dừng, Kết thúc</title>
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="var(--aurora-teal)"/>
+          </marker>
+        </defs>
+        <style>
+          .bx{fill:rgba(255,255,255,.1);stroke:rgba(255,255,255,.4);stroke-width:1.5}
+          .bx.hl{fill:rgba(255,138,61,.3);stroke:var(--orange-300)}
+          .bt{fill:#fff;font:700 15px var(--font-body);text-anchor:middle}
+          .bs{fill:rgba(234,242,255,.65);font:500 11px var(--font-mono);text-anchor:middle}
+          .ed{fill:none;stroke:var(--aurora-teal);stroke-width:1.6;marker-end:url(#ar)}
+          .lb{fill:var(--ice-200);font:600 12px var(--font-body)}
+        </style>
+        <!-- Hộp -->
+        <rect class="bx" x="20" y="60" width="150" height="56" rx="16"/><text class="bt" x="95" y="86">Màn bắt đầu</text><text class="bs" x="95" y="104">BAT_DAU</text>
+        <rect class="bx" x="250" y="60" width="150" height="56" rx="16"/><text class="bt" x="325" y="86">Đếm ngược</text><text class="bs" x="325" y="104">DEM_NGUOC</text>
+        <rect class="bx hl" x="480" y="60" width="150" height="56" rx="16"/><text class="bt" x="555" y="86">Đang chơi</text><text class="bs" x="555" y="104">DANG_CHOI</text>
+        <rect class="bx" x="720" y="60" width="150" height="56" rx="16"/><text class="bt" x="795" y="86">Kết thúc</text><text class="bs" x="795" y="104">KET_THUC</text>
+        <rect class="bx" x="480" y="230" width="150" height="56" rx="16"/><text class="bt" x="555" y="256">Tạm dừng</text><text class="bs" x="555" y="274">TAM_DUNG</text>
+        <!-- Cạnh -->
+        <path class="ed" d="M170 88 H248"/><text class="lb" x="209" y="80" text-anchor="middle">Bắt đầu</text>
+        <path class="ed" d="M400 88 H478"/><text class="lb" x="439" y="80" text-anchor="middle">đếm xong</text>
+        <path class="ed" d="M630 88 H718"/><text class="lb" x="674" y="80" text-anchor="middle">hết 30s</text>
+        <path class="ed" d="M795 60 V30 H325 V58"/><text class="lb" x="560" y="24" text-anchor="middle">Chơi lại</text>
+        <path class="ed" d="M535 116 V228"/><text class="lb" x="527" y="170" text-anchor="end">Tạm dừng / ẩn tab</text>
+        <path class="ed" d="M575 230 V118"/><text class="lb" x="583" y="170">Tiếp tục</text>
+        <path class="ed" d="M325 116 V246 H478"/><text class="lb" x="333" y="200">ẩn tab</text>
+        <path class="ed" d="M480 270 H95 V118"/><text class="lb" x="290" y="264" text-anchor="middle">Trang chủ / để yên 60s</text>
+        <path class="ed" d="M795 116 V320 H60 V118"/><text class="lb" x="430" y="314" text-anchor="middle">Trang chủ / để yên 60s</text>
+      </svg>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Từ</th><th>Sự kiện</th><th>Đến</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td>Bắt đầu</td><td>Bấm "Bắt đầu"</td><td>Đếm ngược</td><td>Khởi tạo âm thanh tại cú bấm này (yêu cầu của trình duyệt).</td></tr>
+        <tr><td>Đếm ngược</td><td>Đếm xong "Đập!"</td><td>Đang chơi</td><td>Đồng hồ 30 giây bắt đầu chạy.</td></tr>
+        <tr><td>Đếm ngược</td><td>Ẩn tab / khoá máy</td><td>Tạm dừng</td><td>Khi tiếp tục thì <b>đếm lại từ 3</b>.</td></tr>
+        <tr><td>Đang chơi</td><td>Bấm nút tạm dừng, phím <kbd>Esc</kbd>/<kbd>P</kbd>, ẩn tab, khoá máy</td><td>Tạm dừng</td><td>Đồng hồ và con vật đứng yên, lưới bị che.</td></tr>
+        <tr><td>Đang chơi</td><td>Hết 30 giây</td><td>Kết thúc</td><td>Mọi con vật biến mất, không nhận cú bấm nào nữa.</td></tr>
+        <tr><td>Tạm dừng</td><td>Bấm "Tiếp tục"</td><td>Đang chơi</td><td>Chạy tiếp từ đúng chỗ đã dừng. Nếu dừng lúc đang đếm ngược thì quay về Đếm ngược.</td></tr>
+        <tr><td>Tạm dừng</td><td>Bấm "Trang chủ" hoặc để yên 60 giây</td><td>Bắt đầu</td><td>Lượt bị <b>huỷ</b>: không lưu điểm, không vào bảng điểm cao.</td></tr>
+        <tr><td>Kết thúc</td><td>Bấm "Chơi lại"</td><td>Đếm ngược</td><td>Bắt đầu lượt mới ngay.</td></tr>
+        <tr><td>Kết thúc</td><td>Bấm "Trang chủ" hoặc để yên 60 giây</td><td>Bắt đầu</td><td>Điểm đã được lưu từ lúc vào Kết thúc.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="danh-sach">
+    <h2 class="sec"><span class="num">2.</span>Danh sách chức năng</h2>
+    <p class="sec-desc"><span class="badge red">Phải có</span> là điều kiện để phát hành. <span class="badge violet">Nên có</span> làm nếu kịp, có thể giảm bớt mà không ảnh hưởng luật chơi.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Chức năng</th><th>Ưu tiên</th><th>Màn hình</th><th>Quy tắc</th></tr></thead>
+      <tbody>
+        <tr><td class="id"><a href="#cn-01">CN-01</a></td><td>Màn hình bắt đầu: tên game, hướng dẫn bằng hình, kỷ lục</td><td><span class="badge red">Phải có</span></td><td>MH-01</td><td>QT-10</td></tr>
+        <tr><td class="id"><a href="#cn-02">CN-02</a></td><td>Đếm ngược 3 – 2 – 1 – Đập!</td><td><span class="badge red">Phải có</span></td><td>MH-02</td><td>QT-11</td></tr>
+        <tr><td class="id"><a href="#cn-03">CN-03</a></td><td>Đồng hồ 30 giây và thanh thời gian theo giai đoạn</td><td><span class="badge red">Phải có</span></td><td>MH-03</td><td>QT-01, QT-11</td></tr>
+        <tr><td class="id"><a href="#cn-04">CN-04</a></td><td>Sinh con vật theo 3 giai đoạn</td><td><span class="badge red">Phải có</span></td><td>MH-03</td><td>QT-01…QT-04</td></tr>
+        <tr><td class="id"><a href="#cn-05">CN-05</a></td><td>Bấm/chạm và nhận biết trúng</td><td><span class="badge red">Phải có</span></td><td>MH-03</td><td>QT-04, QT-11</td></tr>
+        <tr><td class="id"><a href="#cn-06">CN-06</a></td><td>Tính điểm</td><td><span class="badge red">Phải có</span></td><td>MH-03</td><td>QT-05</td></tr>
+        <tr><td class="id"><a href="#cn-07">CN-07</a></td><td>Combo và nhân điểm ×2</td><td><span class="badge red">Phải có</span></td><td>MH-03</td><td>QT-06</td></tr>
+        <tr><td class="id"><a href="#cn-08">CN-08</a></td><td>Thông báo chuyển giai đoạn</td><td><span class="badge red">Phải có</span></td><td>MH-04</td><td>QT-01</td></tr>
+        <tr><td class="id"><a href="#cn-09">CN-09</a></td><td>Phản hồi khi bấm: hiệu ứng, chữ điểm bay, rung máy</td><td><span class="badge red">Phải có</span> · rung: <span class="badge violet">Nên có</span></td><td>MH-03</td><td>—</td></tr>
+        <tr><td class="id"><a href="#cn-10">CN-10</a></td><td>Kết thúc lượt: sao, điểm, thống kê</td><td><span class="badge red">Phải có</span></td><td>MH-06</td><td>QT-07, QT-09</td></tr>
+        <tr><td class="id"><a href="#cn-11">CN-11</a></td><td>Bảng 5 điểm cao nhất và kỷ lục</td><td><span class="badge red">Phải có</span> · pháo hoa: <span class="badge violet">Nên có</span></td><td>MH-01, MH-06</td><td>QT-10</td></tr>
+        <tr><td class="id"><a href="#cn-12">CN-12</a></td><td>Âm thanh tự tạo và nút bật/tắt</td><td><span class="badge red">Phải có</span></td><td>MH-01, MH-03</td><td>QT-10, QT-11</td></tr>
+        <tr><td class="id"><a href="#cn-13">CN-13</a></td><td>Tạm dừng / tiếp tục, tự tạm dừng khi ẩn tab</td><td><span class="badge red">Phải có</span></td><td>MH-05</td><td>QT-08</td></tr>
+        <tr><td class="id"><a href="#cn-14">CN-14</a></td><td>Tự về màn hình bắt đầu sau 60 giây để yên</td><td><span class="badge red">Phải có</span></td><td>MH-05, MH-06</td><td>QT-08</td></tr>
+        <tr><td class="id"><a href="#cn-15">CN-15</a></td><td>Logo FPT trên cả 3 màn hình</td><td><span class="badge red">Phải có</span></td><td>MH-01, MH-03, MH-06</td><td>—</td></tr>
+        <tr><td class="id"><a href="#cn-16">CN-16</a></td><td>Hình nền 6 lớp và chế độ giảm chuyển động</td><td><span class="badge red">Phải có</span></td><td>Mọi màn hình</td><td>QT-11</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="chi-tiet">
+    <h2 class="sec"><span class="num">3.</span>Chi tiết và tiêu chí chấp nhận</h2>
+    <p class="sec-desc">Mỗi tiêu chí là một điều kiểm tra được, có ca kiểm thử tương ứng trong <a href="05-ke-hoach-test.html">05 Kế hoạch test</a>.</p>
+
+    <div class="grid g-2">
+      <article class="card fn" id="cn-01">
+        <div class="fn-head"><span class="code">CN-01</span><span class="badge red">Phải có</span></div>
+        <h3>Màn hình bắt đầu</h3>
+        <p>Màn hình mở đầu và là nơi game quay về. Có tên game kèm chim cánh cụt nhấp nhô, hướng dẫn bằng hình, kỷ lục hiện tại, nút "Bắt đầu" phập phồng, nút âm thanh.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Hiện đủ 4 hướng dẫn: 🐧 +1, ✨ +3, 🦭 đừng đập (−2), 5 lần liên tiếp thì ×2.</li>
+          <li>Có kỷ lục thì hiện số điểm. Chưa có thì hiện "Chưa có kỷ lục".</li>
+          <li>Bấm "Bắt đầu" (chuột, chạm, <kbd>Enter</kbd>/<kbd>Space</kbd> khi nút được chọn) thì chuyển sang đếm ngược.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-01 · Quy tắc QT-10</p>
+      </article>
+
+      <article class="card fn" id="cn-02">
+        <div class="fn-head"><span class="code">CN-02</span><span class="badge red">Phải có</span></div>
+        <h3>Đếm ngược 3-2-1</h3>
+        <p>Trước mỗi lượt, hiện lần lượt "3", "2", "1", "Đập!" ở giữa màn hình, mỗi số khoảng 0,8 giây. Lưới đã hiện nhưng trống, chưa bấm được.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Có đếm ngược trước mọi lượt, kể cả khi bấm "Chơi lại".</li>
+          <li>Đồng hồ 30 giây chỉ chạy sau chữ "Đập!".</li>
+          <li>Bấm vào lưới trong lúc đếm ngược không có tác dụng.</li>
+          <li>Ẩn tab lúc đang đếm thì tạm dừng. Khi tiếp tục thì đếm lại từ 3.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-02 · Quy tắc QT-11</p>
+      </article>
+
+      <article class="card fn" id="cn-03">
+        <div class="fn-head"><span class="code">CN-03</span><span class="badge red">Phải có</span></div>
+        <h3>Đồng hồ và thanh thời gian</h3>
+        <p>Đồng hồ đếm lùi từ 30. Thanh ngang co dần và đổi màu theo giai đoạn: xanh ngọc → tím → hồng đỏ. 5 giây cuối, đồng hồ chuyển đỏ, nhấp nháy, kèm tiếng tích tắc mỗi giây.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Một lượt dài 30 giây, sai lệch không quá ±0,5 giây (đo bằng đồng hồ thật).</li>
+          <li>Số giây hiển thị là số nguyên làm tròn lên (29,2s còn lại hiện "30"… 0,4s hiện "1"), về "0" khi hết giờ.</li>
+          <li>Màu thanh đổi đúng ở giây 10 và 20.</li>
+          <li>Tích tắc ở các mốc còn 5, 4, 3, 2, 1 giây.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-03 · Quy tắc QT-01, QT-11</p>
+      </article>
+
+      <article class="card fn" id="cn-04">
+        <div class="fn-head"><span class="code">CN-04</span><span class="badge red">Phải có</span></div>
+        <h3>Sinh con vật theo giai đoạn</h3>
+        <p>Con vật trồi lên ở lỗ ngẫu nhiên, ở trên sân một lúc rồi lặn xuống. Loại con vật, thời gian trên sân, thời gian nghỉ và số con cùng lúc tuỳ theo giai đoạn.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Giai đoạn 1–2 có tối đa 1 con trên sân, giai đoạn 3 tối đa 2 con.</li>
+          <li>Hai con không bao giờ ở cùng một lỗ. Con mới không trồi lên ở lỗ vừa có con rời đi.</li>
+          <li>Không có hải cẩu trong 10 giây đầu.</li>
+          <li>Chim vàng ở trên sân ngắn hơn: 60% thời gian của chim thường cùng giai đoạn.</li>
+          <li>Hết giờ thì không sinh thêm con nào.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-03 · Quy tắc QT-01, QT-02, QT-03, QT-04</p>
+      </article>
+
+      <article class="card fn" id="cn-05">
+        <div class="fn-head"><span class="code">CN-05</span><span class="badge red">Phải có</span></div>
+        <h3>Bấm/chạm và nhận biết trúng</h3>
+        <p>Nhận cú bấm ngay lúc nhấn xuống (pointerdown), cho cả chuột, chạm và bút. Vùng bấm là cả ô lỗ băng, không chỉ hình con vật.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Bấm ô đang có con vật ở trạng thái "trên sân" (kể cả lúc đang trồi lên) là trúng.</li>
+          <li>Bấm con đã bị đập hoặc đang lặn xuống: không tính.</li>
+          <li>Chạm nhiều ngón cùng lúc vào 2 ô ở giai đoạn 3: mỗi ô được xử lý riêng.</li>
+          <li>Chạm nhanh liên tục không làm phóng to, cuộn trang hay bôi đen chữ.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-03 · Quy tắc QT-04, QT-11</p>
+      </article>
+
+      <article class="card fn" id="cn-06">
+        <div class="fn-head"><span class="code">CN-06</span><span class="badge red">Phải có</span></div>
+        <h3>Tính điểm</h3>
+        <p>Chim thường +1, chim vàng +3, hải cẩu −2. Bấm trượt, lỗ trống, con đã bị đập, sau khi hết giờ: 0 điểm. Điểm không bao giờ âm.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Mỗi lần xuất hiện chỉ được tính điểm tối đa 1 lần.</li>
+          <li>Đang 1 điểm mà đập hải cẩu thì về 0, không thành −1.</li>
+          <li>Điểm trên thanh trên cùng cập nhật ngay lúc bấm.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-03 · Quy tắc QT-05</p>
+      </article>
+
+      <article class="card fn" id="cn-07">
+        <div class="fn-head"><span class="code">CN-07</span><span class="badge red">Phải có</span></div>
+        <h3>Combo và nhân điểm</h3>
+        <p>Combo đếm số chim đập trúng liên tiếp. Từ cú đập thứ 5 trở đi, điểm chim ×2. Huy hiệu combo hiện từ 2, nổi bật "Combo ×2 🔥" từ 5.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Combo +1 khi đập trúng chim thường hoặc vàng.</li>
+          <li>Combo về 0 khi một chim lặn xuống mà không bị đập, hoặc khi đập trúng hải cẩu.</li>
+          <li>Bấm lỗ trống, hải cẩu tự lặn: combo giữ nguyên.</li>
+          <li>Cú đập thứ 5 liên tiếp được ×2 (chim thường +2, vàng +6). Điểm trừ hải cẩu luôn là −2.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-03 · Quy tắc QT-06</p>
+      </article>
+
+      <article class="card fn" id="cn-08">
+        <div class="fn-head"><span class="code">CN-08</span><span class="badge red">Phải có</span></div>
+        <h3>Thông báo chuyển giai đoạn</h3>
+        <p>Ở giây 10 hiện "Tăng tốc!", ở giây 20 hiện "Bão tuyết!". Chữ phóng to rồi mờ đi trong khoảng 1 giây, cực quang sáng lên trong giây lát. Từ giây 20, tuyết rơi nhanh và dày hơn.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Thông báo không che lưới và không chặn cú bấm (pointer-events: none).</li>
+          <li>Mỗi thông báo chỉ hiện 1 lần mỗi lượt, kể cả khi tạm dừng rồi tiếp tục.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-04 · Quy tắc QT-01</p>
+      </article>
+
+      <article class="card fn" id="cn-09">
+        <div class="fn-head"><span class="code">CN-09</span><span class="badge red">Phải có</span></div>
+        <h3>Phản hồi khi bấm</h3>
+        <p>Trúng chim: chim bẹp, tia ✦ toé ra, chữ điểm màu cam bay lên, tiếng "bốp". Trúng hải cẩu: màn hình rung nhẹ, "−2" đỏ, tiếng báo sai. Lỗ trống: vài mảnh băng văng, không có tiếng.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Phản hồi xuất hiện trong khung hình kế tiếp sau cú bấm (cảm nhận không trễ).</li>
+          <li>Chữ điểm hiện đúng giá trị thực được cộng: +1, +2, +3, +6, −2 (đang 0 điểm mà đập hải cẩu vẫn hiện "−2").</li>
+          <li><span class="badge violet">Nên có</span> Trên điện thoại hỗ trợ rung (<code>navigator.vibrate</code>): rung ~20ms khi trúng chim, ~60ms khi trúng hải cẩu. Tắt âm thanh thì cũng không rung.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-03</p>
+      </article>
+
+      <article class="card fn" id="cn-10">
+        <div class="fn-head"><span class="code">CN-10</span><span class="badge red">Phải có</span></div>
+        <h3>Kết thúc lượt</h3>
+        <p>Hiện "Hết giờ!" khoảng 1 giây, rồi thẻ kết quả: các ngôi sao hiện lần lượt kèm tiếng "ting", điểm, thống kê, bảng 5 điểm cao nhất, nút "Chơi lại" và "Trang chủ".</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Số sao khớp bảng mốc (QT-07). 0 sao thì hiện "Thử lại nhé!".</li>
+          <li>Thống kê khớp lượt vừa chơi: số chim thường, chim vàng, hải cẩu bị đập nhầm, tỉ lệ trúng, combo dài nhất (QT-09).</li>
+          <li>Hai nút chỉ bấm được sau khi sao hiện xong (khoảng 1,5 giây), tránh bấm nhầm do còn đang đập.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-06 · Quy tắc QT-07, QT-09</p>
+      </article>
+
+      <article class="card fn" id="cn-11">
+        <div class="fn-head"><span class="code">CN-11</span><span class="badge red">Phải có</span></div>
+        <h3>Bảng điểm cao và kỷ lục</h3>
+        <p>Lưu 5 lượt điểm cao nhất trên máy. Mỗi dòng có điểm, số sao, ngày chơi. Dòng đầu là kỷ lục. Vượt kỷ lục thì có ruy băng "Kỷ lục mới!" và pháo hoa tuyết.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Tải lại trang, bảng và kỷ lục vẫn giữ nguyên.</li>
+          <li>"Kỷ lục mới!" chỉ hiện khi điểm <b>lớn hơn</b> kỷ lục cũ (bằng thì không), hoặc khi chưa có kỷ lục và điểm lớn hơn 0.</li>
+          <li>Dòng vừa đạt được làm nổi bật nếu lọt vào bảng.</li>
+          <li>Lượt bị huỷ (về trang chủ từ màn hình tạm dừng) không được lưu.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-01, MH-06 · Quy tắc QT-10</p>
+      </article>
+
+      <article class="card fn" id="cn-12">
+        <div class="fn-head"><span class="code">CN-12</span><span class="badge red">Phải có</span></div>
+        <h3>Âm thanh</h3>
+        <p>5 loại âm thanh tự tạo bằng Web Audio: bốp (trúng chim, chim vàng cao giọng hơn), báo sai (hải cẩu), tích tắc (5 giây cuối), ting (từng ngôi sao), pháo hoa (kỷ lục mới). Mặc định bật.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Nút bật/tắt có ở màn hình bắt đầu và màn hình chơi, biểu tượng 🔊/🔇 phản ánh đúng trạng thái.</li>
+          <li>Tắt thì không phát bất kỳ tiếng nào. Lựa chọn được nhớ sau khi tải lại trang.</li>
+          <li>Âm thanh phát được trên Safari iOS sau cú bấm "Bắt đầu" đầu tiên.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-01, MH-03 · Quy tắc QT-10, QT-11</p>
+      </article>
+
+      <article class="card fn" id="cn-13">
+        <div class="fn-head"><span class="code">CN-13</span><span class="badge red">Phải có</span></div>
+        <h3>Tạm dừng và tiếp tục</h3>
+        <p>Nút tạm dừng trên thanh trên cùng. Khi tạm dừng: đồng hồ, con vật và mọi bộ đếm đứng yên, lưới bị che bằng lớp phủ có nút "Tiếp tục" và "Trang chủ". Game <b>tự tạm dừng</b> khi tab bị ẩn, chuyển ứng dụng hoặc khoá máy.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Tiếp tục thì thời gian còn lại đúng bằng lúc dừng (sai lệch ≤ 0,1 giây).</li>
+          <li>Con vật đang trên sân giữ nguyên thời gian còn lại của nó.</li>
+          <li>Lúc tạm dừng không nhìn thấy được lưới bên dưới.</li>
+          <li>Ẩn tab rồi quay lại: game đang ở trạng thái tạm dừng, không tự chạy tiếp.</li>
+          <li>Phím <kbd>Esc</kbd> hoặc <kbd>P</kbd> bật/tắt tạm dừng trên máy tính.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-05 · Quy tắc QT-08</p>
+      </article>
+
+      <article class="card fn" id="cn-14">
+        <div class="fn-head"><span class="code">CN-14</span><span class="badge red">Phải có</span></div>
+        <h3>Tự về màn hình bắt đầu</h3>
+        <p>Ở màn hình tạm dừng hoặc kết thúc, nếu để yên 60 giây thì game tự về màn hình bắt đầu, sẵn sàng cho người chơi tiếp theo.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Mọi thao tác bấm, chạm, phím trên trang đặt lại bộ đếm 60 giây.</li>
+          <li>10 giây cuối hiện dòng nhỏ "Tự về trang chủ sau N giây".</li>
+          <li>Từ tạm dừng thì lượt bị huỷ. Từ kết thúc thì điểm đã lưu từ trước.</li>
+          <li>Màn hình bắt đầu và màn hình đang chơi không bao giờ tự chuyển.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-05, MH-06 · Quy tắc QT-08</p>
+      </article>
+
+      <article class="card fn" id="cn-15">
+        <div class="fn-head"><span class="code">CN-15</span><span class="badge red">Phải có</span></div>
+        <h3>Logo FPT</h3>
+        <p>Logo trắng (<code>design/assets/logo-fpt-trang.png</code>) nhúng vào file game. Màn hình bắt đầu và kết thúc: logo cao 40px ở góc trên trái. Màn hình chơi: logo cao 28px ở đầu thanh trên cùng.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Logo hiện trên cả 3 màn hình, luôn đặt trên nền tối, không bị kéo méo, không phóng quá 56px chiều cao.</li>
+          <li>Giữ khoảng trống quanh logo tối thiểu 16px.</li>
+          <li>Ở màn hình 360px, logo không đẩy các ô thông tin trên màn hình chơi xuống dòng thứ hai.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-01, MH-03, MH-06</p>
+      </article>
+
+      <article class="card fn" id="cn-16">
+        <div class="fn-head"><span class="code">CN-16</span><span class="badge red">Phải có</span></div>
+        <h3>Hình nền và giảm chuyển động</h3>
+        <p>6 lớp nền: trời, sao nhấp nháy, cực quang trôi (~9 giây một nhịp), núi băng, mặt băng, tuyết rơi. Khi máy bật giảm chuyển động thì tắt cực quang trôi, sao nhấp nháy, tuyết, rung màn hình và nhấp nháy đồng hồ.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Đủ 6 lớp, đúng bảng màu và phông chữ trong mục 5 của YEU-CAU.md.</li>
+          <li>Ở chế độ giảm chuyển động: nền đứng yên. Vẫn có phản hồi khi bấm (đổi màu, chữ điểm) nhưng không bay hay rung.</li>
+          <li>Khoảng 60 khung hình/giây trên điện thoại tầm trung ở giai đoạn Bão tuyết.</li>
+        </ul></div>
+        <p class="refs">Mọi màn hình · Quy tắc QT-11</p>
+      </article>
+    </div>
+  </section>
+
+  <nav class="pager" aria-label="Chuyển trang">
+    <a href="01-tong-quan.html"><small>← Trước</small><b>01 Tổng quan</b></a>
+    <a class="next" href="03-man-hinh.html"><small>Tiếp →</small><b>03 Màn hình</b></a>
+  </nav>
+</main>
+<footer class="foot"><div class="wrap">Đập Chim Cánh Cụt · Tài liệu thiết kế v1.0 · 02 Chức năng</div></footer>
+</body>
+</html>
