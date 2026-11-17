@@ -201,6 +201,31 @@ dl.defs dd{color:var(--color-text-muted)}
 .pager .next{text-align:right;grid-column:2}
 footer.foot{border-top:1px solid rgba(255,255,255,.08);padding:var(--space-6) 0 var(--space-10);color:var(--color-text-muted);font-size:var(--text-sm)}
 
+/* ---------- Bổ sung v1.1: đăng ký người chơi & admin ---------- */
+section.v11{border-top:2px solid rgba(255,181,71,.45)}
+.list .badge,.meta-row .badge,td .badge.orange{white-space:normal;text-align:left}
+.v11-tag{display:inline-flex;align-items:center;gap:6px;margin-bottom:var(--space-2)}
+.browser{width:100%;border-radius:var(--radius-lg);overflow:hidden;border:1px solid var(--color-border);background:var(--ice-50);color:var(--color-text-on-light);box-shadow:var(--shadow-md);font-size:12px;line-height:1.35}
+.browser .bar{display:flex;align-items:center;gap:6px;padding:6px 10px;background:#dfe9f5;border-bottom:1px solid var(--ice-200)}
+.browser .bar i{width:9px;height:9px;border-radius:50%;background:#c3d2e4;display:inline-block}
+.browser .bar span{margin-left:8px;flex:1;background:#fff;border-radius:6px;padding:2px 8px;color:#4A6283;font-family:var(--font-mono);font-size:11px}
+.browser .page{padding:12px 14px;display:grid;gap:8px;overflow-x:auto}
+.browser .page table{min-width:640px}
+.browser .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.browser .in{flex:1;min-width:120px;border:1px solid var(--ice-300);border-radius:8px;padding:5px 8px;background:#fff;color:#4A6283}
+.browser .b{border-radius:8px;padding:5px 10px;font-weight:700;background:var(--gradient-primary);color:#fff;white-space:nowrap}
+.browser .b.g{background:#fff;color:var(--night-800);border:1px solid var(--ice-300)}
+.browser .b.r{background:var(--red-500)}
+.browser table{min-width:0;font-size:11px}
+.browser th,.browser td{padding:5px 8px;border-bottom:1px solid var(--ice-200);color:var(--night-800)}
+.browser th{background:var(--ice-100);color:#4A6283}
+.browser .h{font-weight:800;font-size:15px;color:var(--night-800)}
+.browser .muted2{color:#4A6283}
+.screen .s-field{width:100%;background:#fff;color:#4A6283;border-radius:8px;padding:4px 8px;font-size:10px;border:1px solid var(--ice-300);text-align:left}
+.screen .s-field.err{border-color:var(--red-500);color:var(--red-700)}
+.screen .s-check{display:flex;gap:5px;align-items:flex-start;font-size:9px;color:#fff;text-align:left}
+.screen .s-check b{width:10px;height:10px;border:1px solid #fff;border-radius:2px;flex:0 0 10px;margin-top:1px}
+
 @media print{
   body{background:#fff;color:#000}
   body::before,.topbar,.pager{display:none}

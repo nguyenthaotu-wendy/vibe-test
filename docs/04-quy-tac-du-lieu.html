@@ -31,6 +31,7 @@
       <a href="#qt-01">QT-01 Giai đoạn</a><a href="#qt-02">QT-02 Tỉ lệ</a><a href="#qt-03">QT-03 Sinh con vật</a><a href="#qt-04">QT-04 Vòng đời</a>
       <a href="#qt-05">QT-05 Điểm</a><a href="#qt-06">QT-06 Combo</a><a href="#qt-07">QT-07 Sao</a><a href="#qt-08">QT-08 Tạm dừng &amp; tự về</a>
       <a href="#qt-09">QT-09 Thống kê</a><a href="#qt-10">QT-10 Lưu trữ</a><a href="#qt-11">QT-11 Kỹ thuật</a>
+      <a href="#v11-quy-tac">Bổ sung v1.1: QT-12…QT-23</a>
     </nav>
   </div>
 
@@ -335,6 +336,219 @@ bấm lỗ trống / con đã bị đập / đang lặn / ngoài trạng thái D
       <li>Tạo <code>AudioContext</code> trong cú bấm "Bắt đầu" đầu tiên (yêu cầu của Safari/iOS). Âm thanh tắt thì không phát và không rung.</li>
       <li>Âm lượng chung ~0,4. Không có nhạc nền ở phiên bản này.</li>
     </ul>
+  </section>
+
+  <!-- ===================== BỔ SUNG v1.1 ===================== -->
+  <section id="v11-quy-tac" class="v11">
+    <div class="v11-tag"><span class="badge orange">Bổ sung v1.1 · 17/11/2026</span></div>
+    <h2 class="sec">Quy tắc cho đăng ký người chơi &amp; admin</h2>
+    <p class="sec-desc">Áp dụng cho bản chạy server (Docker). Bản GitHub Pages giữ nguyên quy tắc v1. QT-10 (bảng 5 điểm cao trên trình duyệt) vẫn giữ: bảng đó chỉ có điểm, không có thông tin cá nhân.</p>
+    <nav class="toc" aria-label="Quy tắc v1.1">
+      <a href="#qt-12">QT-12 Kiểm tra form</a><a href="#qt-13">QT-13 Đồng ý</a><a href="#qt-14">QT-14 Trùng người chơi</a><a href="#qt-15">QT-15 Database</a>
+      <a href="#qt-16">QT-16 API</a><a href="#qt-17">QT-17 Phiên người chơi</a><a href="#qt-18">QT-18 Xác thực admin</a><a href="#qt-19">QT-19 Danh sách</a>
+      <a href="#qt-20">QT-20 Xoá</a><a href="#qt-21">QT-21 CSV</a><a href="#qt-22">QT-22 Bảo vệ dữ liệu</a><a href="#qt-23">QT-23 Lỗi kết nối</a>
+    </nav>
+  </section>
+
+  <section id="qt-12" class="v11">
+    <h2 class="sec"><span class="num">QT-12</span>Kiểm tra dữ liệu form <span class="badge gold">chỉnh được</span></h2>
+    <p class="sec-desc">Trình duyệt kiểm tra để báo lỗi nhanh. Server <b>kiểm tra lại đúng các quy tắc này</b> và là nơi quyết định cuối cùng. Dữ liệu được chuẩn hoá trước khi kiểm tra và lưu.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Trường</th><th>Chuẩn hoá</th><th>Hợp lệ khi</th><th>Thông báo lỗi</th></tr></thead>
+      <tbody>
+        <tr><td><b>Họ và tên</b></td><td>Bỏ khoảng trắng đầu/cuối, gộp nhiều khoảng trắng thành một, chuẩn Unicode NFC.</td><td>2–60 ký tự. Chỉ gồm chữ cái (có dấu tiếng Việt), khoảng trắng, dấu nháy đơn, dấu gạch ngang.</td><td>"Vui lòng nhập họ tên" · "Họ tên cần từ 2 đến 60 ký tự" · "Họ tên chỉ gồm chữ cái"</td></tr>
+        <tr><td><b>Email</b></td><td>Bỏ khoảng trắng, đổi thành chữ thường.</td><td>Tối đa 100 ký tự, đúng dạng <code>ten@ten-mien.duoi</code> (có <code>@</code>, phần sau có dấu chấm, không có khoảng trắng).</td><td>"Vui lòng nhập email" · "Email chưa đúng định dạng"</td></tr>
+        <tr><td><b>Số điện thoại</b></td><td>Bỏ khoảng trắng, dấu chấm, gạch ngang, ngoặc. <code>+84</code> hoặc <code>84</code> ở đầu (khi đủ 11 số) đổi thành <code>0</code>.</td><td>Số di động Việt Nam: đúng <b>10 chữ số</b>, bắt đầu bằng <code>03</code>, <code>05</code>, <code>07</code>, <code>08</code> hoặc <code>09</code>.</td><td>"Vui lòng nhập số điện thoại" · "Số điện thoại cần đủ 10 chữ số" · "Số điện thoại di động không hợp lệ"</td></tr>
+        <tr><td><b>Đồng ý</b></td><td>—</td><td>Đã tích.</td><td>"Vui lòng đồng ý với điều khoản để tham gia"</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Ví dụ chuẩn hoá: <code>+84 912.345.678</code> → <code>0912345678</code>; <code>  nguyễn   văn  an </code> → <code>nguyễn văn an</code> (giữ nguyên hoa thường người chơi gõ); <code>An.Nguyen@ViDu.com</code> → <code>an.nguyen@vidu.com</code>.</p>
+  </section>
+
+  <section id="qt-13" class="v11">
+    <h2 class="sec"><span class="num">QT-13</span>Đồng ý xử lý dữ liệu cá nhân</h2>
+    <ul class="list">
+      <li>Ô đồng ý <b>không tích sẵn</b>. Không đồng ý thì không đăng ký được và không chơi được ở bản này.</li>
+      <li>Lưu kèm người chơi: <code>dong_y_luc</code> (thời điểm đồng ý) và <code>phien_ban_dieu_khoan</code> (vd. <code>"2026-11-v1"</code>). Khi đổi nội dung điều khoản thì tăng phiên bản.</li>
+      <li>Nội dung điều khoản tối thiểu phải nêu: <b>ai</b> thu thập (ban tổ chức), <b>dữ liệu gì</b> (họ tên, email, số điện thoại, kết quả chơi), <b>mục đích</b>, <b>thời hạn lưu</b>, <b>cách yêu cầu xoá</b> (liên hệ ban tổ chức → admin xoá theo QT-20).</li>
+    </ul>
+    <div class="note warn"><span class="ic">⚠️</span><p><b>Nội dung giữ chỗ, cần thay trước khi dùng thật:</b> "Tôi đồng ý cho [Ban tổ chức] thu thập họ tên, email, số điện thoại và kết quả chơi để [mục đích]. Dữ liệu được lưu tối đa [N] ngày sau sự kiện. Tôi có thể yêu cầu xoá bằng cách liên hệ [kênh liên hệ]." Các phần trong ngoặc vuông do ban tổ chức/pháp chế cung cấp.</p></div>
+  </section>
+
+  <section id="qt-14" class="v11">
+    <h2 class="sec"><span class="num">QT-14</span>Trùng người chơi</h2>
+    <ol class="list">
+      <li>Khoá duy nhất là <b>số điện thoại đã chuẩn hoá</b> (QT-12).</li>
+      <li>Số chưa có: tạo người chơi mới.</li>
+      <li>Số đã có: <b>dùng lại người chơi cũ</b>, không ghi đè họ tên, email. Cập nhật <code>dong_y_luc</code> và <code>phien_ban_dieu_khoan</code> theo lần đồng ý mới nhất.</li>
+      <li>Cả hai trường hợp trả về <b>cùng một phản hồi</b> (cùng mã trạng thái, cùng nội dung), để không dò được số nào đã đăng ký.</li>
+      <li>Email <b>không</b> cần duy nhất: hai số điện thoại khác nhau có thể dùng chung một email.</li>
+    </ol>
+  </section>
+
+  <section id="qt-15" class="v11">
+    <h2 class="sec"><span class="num">QT-15</span>Database (SQLite)</h2>
+    <div class="table-wrap"><table class="compact">
+      <thead><tr><th>Hạng mục</th><th>Quy định</th></tr></thead>
+      <tbody>
+        <tr><td>Vị trí file</td><td><code>/data/dap-chim-canh-cut.db</code> trong container, gắn với volume Docker <code>du-lieu</code> → dữ liệu còn khi xoá/tạo lại container.</td></tr>
+        <tr><td>Chế độ</td><td><code>PRAGMA journal_mode=WAL</code>, <code>foreign_keys=ON</code>, <code>busy_timeout=5000</code>.</td></tr>
+        <tr><td>Tạo bảng</td><td>Server tự tạo bảng khi khởi động nếu chưa có. Lưu <code>PRAGMA user_version</code> để nâng cấp cấu trúc sau này.</td></tr>
+        <tr><td>Thời gian</td><td>Lưu dạng ISO 8601 UTC. Hiển thị và xuất CSV theo giờ Việt Nam (UTC+7).</td></tr>
+        <tr><td>Truy vấn</td><td>Luôn dùng câu lệnh có tham số (<code>?</code>), không ghép chuỗi SQL từ dữ liệu người dùng.</td></tr>
+        <tr><td>Sao lưu</td><td>Sao lưu file database ra ngoài volume trước khi nâng cấp; xem lệnh mẫu trong README khi làm code.</td></tr>
+      </tbody>
+    </table></div>
+    <h3 class="sub">Bảng <code>nguoi_choi</code></h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cột</th><th>Kiểu</th><th>Ràng buộc</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>INTEGER</td><td>PRIMARY KEY</td><td>Tự tăng</td></tr>
+        <tr><td><code>ho_ten</code></td><td>TEXT</td><td>NOT NULL</td><td>Đã chuẩn hoá</td></tr>
+        <tr><td><code>ho_ten_tim</code></td><td>TEXT</td><td>NOT NULL</td><td>Họ tên bỏ dấu, chữ thường, để tìm kiếm (QT-19)</td></tr>
+        <tr><td><code>email</code></td><td>TEXT</td><td>NOT NULL</td><td>Chữ thường</td></tr>
+        <tr><td><code>so_dien_thoai</code></td><td>TEXT</td><td>NOT NULL UNIQUE</td><td>10 chữ số, lưu dạng chuỗi để giữ số 0</td></tr>
+        <tr><td><code>dong_y_luc</code></td><td>TEXT</td><td>NOT NULL</td><td>ISO 8601 UTC</td></tr>
+        <tr><td><code>phien_ban_dieu_khoan</code></td><td>TEXT</td><td>NOT NULL</td><td>QT-13</td></tr>
+        <tr><td><code>tao_luc</code></td><td>TEXT</td><td>NOT NULL</td><td>Thời điểm đăng ký lần đầu</td></tr>
+      </tbody>
+    </table></div>
+    <h3 class="sub">Bảng <code>luot_choi</code></h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Cột</th><th>Kiểu</th><th>Ràng buộc</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>INTEGER</td><td>PRIMARY KEY</td><td></td></tr>
+        <tr><td><code>ma_luot</code></td><td>TEXT</td><td>NOT NULL UNIQUE</td><td>UUID do trình duyệt tạo khi bắt đầu lượt, chống gửi trùng</td></tr>
+        <tr><td><code>nguoi_choi_id</code></td><td>INTEGER</td><td>NOT NULL, FK → <code>nguoi_choi.id</code> <b>ON DELETE CASCADE</b></td><td>Xoá người chơi thì xoá luôn lượt</td></tr>
+        <tr><td><code>diem</code></td><td>INTEGER</td><td>NOT NULL, 0–999</td><td></td></tr>
+        <tr><td><code>sao</code></td><td>INTEGER</td><td>NOT NULL, 0–3</td><td>Server tính lại từ <code>diem</code> theo QT-07</td></tr>
+        <tr><td><code>so_thuong</code>, <code>so_vang</code>, <code>so_hai_cau</code>, <code>so_lan_bam</code>, <code>combo_dai_nhat</code></td><td>INTEGER</td><td>NOT NULL, ≥ 0</td><td>Thống kê QT-09</td></tr>
+        <tr><td><code>ket_thuc_luc</code></td><td>TEXT</td><td>NOT NULL</td><td>Thời điểm server nhận</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">Chỉ mục: <code>luot_choi(nguoi_choi_id)</code>, <code>nguoi_choi(tao_luc)</code>. Số lượt, điểm cao nhất, lượt gần nhất của MH-09 tính bằng truy vấn gộp, không lưu trùng.</p>
+  </section>
+
+  <section id="qt-16" class="v11">
+    <h2 class="sec"><span class="num">QT-16</span>API</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Phương thức · đường dẫn</th><th>Ai gọi</th><th>Gửi</th><th>Trả về</th></tr></thead>
+      <tbody>
+        <tr><td><code>POST /api/dang-ky</code></td><td>Game</td><td>JSON: <code>ho_ten</code>, <code>email</code>, <code>so_dien_thoai</code>, <code>dong_y: true</code></td><td><b>201</b> <code>{ phien }</code> · <b>422</b> lỗi từng trường · <b>429</b> quá tần suất</td></tr>
+        <tr><td><code>POST /api/luot-choi</code></td><td>Game</td><td>Header <code>Authorization: Bearer &lt;phien&gt;</code>; JSON: <code>ma_luot</code>, <code>diem</code>, thống kê QT-09</td><td><b>201</b> mới · <b>200</b> đã có (gửi trùng) · <b>401</b> phiên sai/hết hạn quá 10 phút · <b>422</b> dữ liệu sai</td></tr>
+        <tr><td><code>POST /admin/dang-nhap</code></td><td>Admin</td><td>Form: <code>ten</code>, <code>mat_khau</code></td><td>Đặt cookie phiên, chuyển về <code>/admin</code> · <b>401</b> · <b>429</b> đang khoá</td></tr>
+        <tr><td><code>POST /admin/dang-xuat</code></td><td>Admin</td><td>—</td><td>Xoá phiên, chuyển về MH-08</td></tr>
+        <tr><td><code>GET /api/admin/nguoi-choi?q=&amp;trang=&amp;sap_xep=</code></td><td>Admin</td><td>—</td><td><b>200</b> <code>{ tong, tong_luot, trang, ds: [...] }</code></td></tr>
+        <tr><td><code>DELETE /api/admin/nguoi-choi/:id</code></td><td>Admin</td><td>—</td><td><b>204</b> · <b>404</b> không có</td></tr>
+        <tr><td><code>GET /api/admin/nguoi-choi.csv?q=&amp;sap_xep=</code></td><td>Admin</td><td>—</td><td><b>200</b> file CSV (QT-21)</td></tr>
+      </tbody>
+    </table></div>
+    <h3 class="sub">Server kiểm tra kết quả lượt (chống dữ liệu vô lý)</h3>
+    <ul class="list">
+      <li>Mọi số là số nguyên ≥ 0. <code>diem</code> ≤ 999, <code>so_lan_bam</code> ≤ 600, <code>combo_dai_nhat</code> ≤ <code>so_thuong + so_vang</code>.</li>
+      <li><code>so_thuong + so_vang + so_hai_cau</code> ≤ <code>so_lan_bam</code>.</li>
+      <li><code>diem</code> không lớn hơn mức tối đa có thể: <code>(so_thuong + 3 × so_vang) × 2</code>.</li>
+      <li>Một phiên gửi tối đa 1 lượt mỗi 30 giây.</li>
+    </ul>
+    <p class="muted">Điểm vẫn do trình duyệt tính, nên người rành kỹ thuật có thể gửi điểm giả trong giới hạn trên. Chấp nhận được với game sự kiện. Nếu sau này điểm dùng để trao giải giá trị cao thì cần cơ chế chống gian lận riêng.</p>
+  </section>
+
+  <section id="qt-17" class="v11">
+    <h2 class="sec"><span class="num">QT-17</span>Phiên người chơi</h2>
+    <ul class="list">
+      <li><code>phien</code> là chuỗi ngẫu nhiên 32 byte do server tạo, gắn với <code>nguoi_choi_id</code>, hết hạn sau <b>2 giờ</b>. Server chỉ lưu bản băm SHA-256 của phiên.</li>
+      <li>Trình duyệt giữ <code>phien</code> <b>trong bộ nhớ</b> (biến JavaScript), không ghi vào localStorage hay cookie → tải lại trang là hết phiên.</li>
+      <li>Về MH-01 (bấm "Trang chủ" hoặc tự về sau 60 giây) thì xoá <code>phien</code> khỏi bộ nhớ.</li>
+      <li>Phiên hết hạn khi lượt đang dở: server vẫn nhận kết quả lượt đó nếu gửi trong vòng 10 phút sau khi hết hạn.</li>
+      <li>Xoá người chơi (QT-20) thì xoá luôn mọi phiên của họ.</li>
+    </ul>
+  </section>
+
+  <section id="qt-18" class="v11">
+    <h2 class="sec"><span class="num">QT-18</span>Xác thực admin</h2>
+    <div class="table-wrap"><table class="compact">
+      <thead><tr><th>Hạng mục</th><th>Quy định</th></tr></thead>
+      <tbody>
+        <tr><td>Tài khoản</td><td>Biến môi trường <code>ADMIN_USER</code> và <code>ADMIN_PASSWORD</code>, nạp từ file <code>.env</code> qua <code>env_file</code> trong compose.yaml. Repo có <code>.env.example</code> (không chứa mật khẩu thật). <code>.env</code> đã nằm trong .gitignore và .dockerignore.</td></tr>
+        <tr><td>Khởi động</td><td>Thiếu <code>ADMIN_USER</code>/<code>ADMIN_PASSWORD</code>, hoặc mật khẩu dưới 12 ký tự → server in lỗi rõ ràng và dừng.</td></tr>
+        <tr><td>So sánh mật khẩu</td><td>So sánh thời gian cố định (<code>crypto.timingSafeEqual</code> trên bản băm), không so sánh chuỗi trực tiếp.</td></tr>
+        <tr><td>Cookie phiên</td><td>Giá trị ngẫu nhiên 32 byte, <code>HttpOnly</code>, <code>SameSite=Strict</code>, <code>Path=/</code>, <code>Secure</code> khi chạy qua HTTPS. Hết hạn sau <b>8 giờ</b>. Phiên lưu trong bộ nhớ server: khởi động lại server thì phải đăng nhập lại.</td></tr>
+        <tr><td>Khoá đăng nhập</td><td>Sai <b>5 lần</b> liên tiếp từ cùng một địa chỉ IP → khoá IP đó <b>15 phút</b>. Đăng nhập đúng thì đặt lại bộ đếm.</td></tr>
+        <tr><td>Chống CSRF</td><td>Mọi yêu cầu thay đổi (POST, DELETE) của admin phải có header <code>Origin</code> trùng với máy chủ, cộng với cookie <code>SameSite=Strict</code>.</td></tr>
+        <tr><td>Phạm vi bảo vệ</td><td>Mọi đường dẫn <code>/admin*</code> và <code>/api/admin/*</code>, trừ trang đăng nhập.</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="qt-19" class="v11">
+    <h2 class="sec"><span class="num">QT-19</span>Danh sách, tìm kiếm, sắp xếp</h2>
+    <ul class="list">
+      <li><b>Từ khoá</b> <code>q</code>: bỏ khoảng trắng đầu/cuối, tối đa 100 ký tự. Rỗng thì hiện tất cả.</li>
+      <li><b>So khớp</b> (chứa, không phân biệt hoa thường), đạt nếu khớp bất kỳ:
+        <ul style="padding-left:var(--space-5);margin-top:4px">
+          <li>Họ tên: so <code>q</code> đã bỏ dấu, chữ thường với cột <code>ho_ten_tim</code>.</li>
+          <li>Email: so <code>q</code> chữ thường với <code>email</code>.</li>
+          <li>Số điện thoại: chỉ khi <code>q</code> có ít nhất 3 chữ số; lấy riêng các chữ số (đổi <code>84</code> đầu thành <code>0</code>) rồi so với <code>so_dien_thoai</code>.</li>
+        </ul></li>
+      <li>Ký tự <code>%</code> và <code>_</code> trong từ khoá được hiểu theo nghĩa đen (escape trong <code>LIKE</code>).</li>
+      <li><b>Sắp xếp</b> <code>sap_xep</code>: <code>moi_nhat</code> (mặc định), <code>cu_nhat</code>, <code>nhieu_luot</code>, <code>diem_cao</code>. Bằng nhau thì theo <code>id</code> giảm dần. Giá trị lạ → dùng mặc định.</li>
+      <li><b>Phân trang</b>: 20 dòng/trang, <code>trang</code> bắt đầu từ 1. Trang vượt quá → trả trang cuối.</li>
+    </ul>
+  </section>
+
+  <section id="qt-20" class="v11">
+    <h2 class="sec"><span class="num">QT-20</span>Xoá người chơi</h2>
+    <ul class="list">
+      <li><b>Xoá hẳn</b> dòng <code>nguoi_choi</code>. Các dòng <code>luot_choi</code> bị xoá theo (<code>ON DELETE CASCADE</code>). Xoá mọi phiên người chơi của họ (QT-17).</li>
+      <li>Không có thùng rác, không khôi phục. Sau khi xoá, chạy <code>PRAGMA wal_checkpoint</code> để dữ liệu không còn trong file nhật ký.</li>
+      <li>Log server chỉ ghi: thời điểm, <code>id</code> đã xoá, số lượt bị xoá. Không ghi họ tên, email, số điện thoại.</li>
+      <li>Xoá một <code>id</code> không tồn tại (đã bị xoá ở tab khác) → 404, giao diện báo "Người chơi này đã bị xoá trước đó" và tải lại danh sách.</li>
+    </ul>
+  </section>
+
+  <section id="qt-21" class="v11">
+    <h2 class="sec"><span class="num">QT-21</span>Xuất CSV</h2>
+    <div class="table-wrap"><table class="compact">
+      <thead><tr><th>Hạng mục</th><th>Quy định</th></tr></thead>
+      <tbody>
+        <tr><td>Phạm vi</td><td>Mọi người chơi khớp <code>q</code> hiện tại, theo thứ tự <code>sap_xep</code> hiện tại, không phân trang.</td></tr>
+        <tr><td>Mã hoá</td><td>UTF-8 <b>có BOM</b> (để Excel Windows hiện đúng tiếng Việt), xuống dòng CRLF, phân cách bằng dấu phẩy.</td></tr>
+        <tr><td>Cột</td><td><code>STT, Họ và tên, Email, Số điện thoại, Ngày đăng ký, Số lượt chơi, Điểm cao nhất, Sao cao nhất, Lượt gần nhất, Đồng ý điều khoản lúc, Phiên bản điều khoản</code></td></tr>
+        <tr><td>Định dạng</td><td>Ngày giờ <code>dd/mm/yyyy HH:mm</code> giờ Việt Nam. Số điện thoại xuất dạng <code>="0912345678"</code> để Excel giữ số 0 ở đầu.</td></tr>
+        <tr><td>Thoát ký tự</td><td>Ô chứa dấu phẩy, dấu nháy kép hoặc xuống dòng được bọc trong <code>"…"</code>, nháy kép bên trong viết thành <code>""</code>.</td></tr>
+        <tr><td>Chống chèn công thức</td><td>Ô văn bản bắt đầu bằng <code>=</code> <code>+</code> <code>-</code> <code>@</code>, tab hoặc CR được thêm dấu nháy đơn <code>'</code> ở đầu.</td></tr>
+        <tr><td>Tải về</td><td><code>Content-Disposition: attachment; filename="nguoi-choi-YYYYMMDD-HHmm.csv"</code>, <code>Cache-Control: no-store</code>.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note"><span class="ic">💡</span><p>File CSV chứa dữ liệu cá nhân. Người tải về chịu trách nhiệm lưu giữ an toàn và xoá khi hết mục đích. Ghi nhắc này ngay cạnh nút "Xuất CSV".</p></div>
+  </section>
+
+  <section id="qt-22" class="v11">
+    <h2 class="sec"><span class="num">QT-22</span>Bảo vệ dữ liệu cá nhân</h2>
+    <ul class="list">
+      <li><b>Giới hạn tần suất</b> <span class="badge gold">chỉnh được</span>: <code>/api/dang-ky</code> tối đa 10 lần/phút/IP; <code>/api/luot-choi</code> tối đa 30 lần/phút/IP. Vượt quá → 429. Máy tại quầy dùng chung một IP, nên mức này đủ rộng cho nhiều người chơi liên tiếp.</li>
+      <li><b>Log</b>: ghi đường dẫn và mã trạng thái như hiện tại, <b>không</b> ghi nội dung yêu cầu, chuỗi truy vấn của API admin (vì <code>q</code> có thể là số điện thoại) hay cookie.</li>
+      <li><b>Lưu trữ</b>: file database chỉ nằm trong volume <code>du-lieu</code>. Không chép vào image, không commit. File <code>*.db</code> thêm vào .gitignore và .dockerignore.</li>
+      <li><b>Mạng</b>: khi đưa ra Internet (ngrok, máy chủ thật) chỉ dùng HTTPS. Trang admin không nên mở ra Internet nếu không cần.</li>
+      <li><b>Header</b>: thêm <code>Content-Security-Policy</code> cho trang admin (chỉ tải script/style từ chính máy chủ và Google Fonts), <code>X-Frame-Options: DENY</code>.</li>
+      <li><b>Thời hạn lưu</b>: theo điều khoản (QT-13). Khi hết hạn, admin xoá thủ công hoặc xoá cả volume (<code>docker compose down -v</code>).</li>
+      <li><b>Bản GitHub Pages</b> không gửi dữ liệu gì về server.</li>
+    </ul>
+  </section>
+
+  <section id="qt-23" class="v11">
+    <h2 class="sec"><span class="num">QT-23</span>Lỗi kết nối và lỗi server</h2>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Tình huống</th><th>Xử lý</th></tr></thead>
+      <tbody>
+        <tr><td>Gửi đăng ký lỗi mạng / 5xx / quá 8 giây</td><td>Báo lỗi ở MH-07, giữ dữ liệu đã nhập, cho bấm gửi lại. Không cho chơi khi chưa đăng ký thành công.</td></tr>
+        <tr><td>Gửi đăng ký nhận 422</td><td>Hiện lỗi server trả về dưới đúng ô tương ứng.</td></tr>
+        <tr><td>Gửi đăng ký nhận 429</td><td>"Bạn thao tác quá nhanh, vui lòng thử lại sau ít phút."</td></tr>
+        <tr><td>Gửi kết quả lượt lỗi mạng / 5xx</td><td><span class="badge violet">Nên có</span> Thử lại 2 lần (sau 2 và 5 giây). Vẫn lỗi thì lưu tạm vào localStorage khoá <code>dapChimCanhCut.luotChoGui.v1</code> (chỉ <code>phien</code>, <code>ma_luot</code> và số liệu lượt, <b>không</b> có thông tin cá nhân), gửi lại khi trang mở lại hoặc có mạng. Giữ tối đa 50 lượt, quá 24 giờ thì bỏ.</td></tr>
+        <tr><td>Gửi kết quả lượt nhận 401 / 422</td><td>Bỏ lượt đó (không thử lại). Người chơi không thấy lỗi, màn hình kết thúc vẫn bình thường.</td></tr>
+        <tr><td>Database lỗi khi khởi động (hỏng file, không ghi được)</td><td>Server in lỗi rõ và dừng; Docker <code>restart: unless-stopped</code> thử lại; <code>/healthz</code> trả 503 khi không truy cập được database.</td></tr>
+      </tbody>
+    </table></div>
   </section>
 
   <nav class="pager" aria-label="Chuyển trang">

@@ -29,6 +29,7 @@
     <nav class="toc" aria-label="Trong trang này">
       <a href="#tong-quan">Bản đồ màn hình</a><a href="#mh-01">MH-01 Bắt đầu</a><a href="#mh-02">MH-02 Đếm ngược</a><a href="#mh-03">MH-03 Chơi</a>
       <a href="#mh-04">MH-04 Giai đoạn</a><a href="#mh-05">MH-05 Tạm dừng</a><a href="#mh-06">MH-06 Kết thúc</a><a href="#bo-cuc">Bố cục theo cỡ màn hình</a><a href="#chung">Quy tắc chung</a>
+      <a href="#v11-man-hinh">Bổ sung v1.1: MH-07…MH-10</a>
     </nav>
   </div>
 
@@ -305,6 +306,158 @@ chiều cao khả dụng = chiều cao màn hình − thanh đầu − thanh th�
       <span class="step">Chữ điểm bay, thông báo giai đoạn</span><span class="arrow">→</span><span class="step hl">Lớp phủ đếm ngược / tạm dừng / kết thúc</span>
     </div>
     <p class="muted" style="margin-top:var(--space-3)">Tuyết rơi nằm trên lưới nhưng <code>pointer-events: none</code> để không chặn cú bấm.</p>
+  </section>
+
+  <!-- ===================== BỔ SUNG v1.1 ===================== -->
+  <section id="v11-man-hinh" class="v11">
+    <div class="v11-tag"><span class="badge orange">Bổ sung v1.1 · 17/11/2026</span></div>
+    <h2 class="sec">Bản đồ màn hình bổ sung</h2>
+    <p class="sec-desc">Một màn hình mới trong game (form đăng ký) và trang admin riêng ở <code>/admin</code>. Trang admin dùng cùng tokens nhưng nền sáng, ưu tiên đọc bảng dữ liệu trên máy tính.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Tên</th><th>Loại</th><th>Đường dẫn / trạng thái</th><th>Chức năng</th></tr></thead>
+      <tbody>
+        <tr><td class="id">MH-07</td><td>Form đăng ký người chơi</td><td>Màn hình trong game</td><td>DANG_KY</td><td>CN-17, CN-18, CN-19</td></tr>
+        <tr><td class="id">MH-08</td><td>Đăng nhập admin</td><td>Trang riêng</td><td><code>/admin/dang-nhap</code></td><td>CN-21</td></tr>
+        <tr><td class="id">MH-09</td><td>Danh sách người chơi</td><td>Trang riêng</td><td><code>/admin</code></td><td>CN-22, CN-23, CN-25</td></tr>
+        <tr><td class="id">MH-10</td><td>Xác nhận xoá</td><td>Hộp thoại trên MH-09</td><td>—</td><td>CN-24</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="mh-07" class="v11">
+    <h2 class="sec"><span class="num">MH-07</span>Form đăng ký người chơi</h2>
+    <p class="sec-desc">Hiện sau khi bấm "Bắt đầu" ở MH-01. Mục tiêu: điền xong trong khoảng 30 giây, không lỗi chính tả số điện thoại.</p>
+    <div class="mock-row">
+      <div class="phone" aria-hidden="true"><div class="screen">
+        <div class="s-row"><img class="s-logo" src="../design/assets/logo-fpt-trang.png" alt=""><span>🔊</span></div>
+        <div class="s-title" style="font-size:18px">Đăng ký chơi</div>
+        <div class="s-small">Điền thông tin để bắt đầu lượt chơi</div>
+        <div class="s-glass dark" style="display:grid;gap:5px">
+          <span style="font-size:9px">Họ và tên</span><div class="s-field">Nguyễn Văn An</div>
+          <span style="font-size:9px">Email</span><div class="s-field">an.nguyen@vidu.com</div>
+          <span style="font-size:9px">Số điện thoại</span><div class="s-field err">0912 34</div>
+          <span style="font-size:9px;color:var(--red-300)">Số điện thoại cần đủ 10 chữ số</span>
+          <div class="s-check"><b></b><span>Tôi đồng ý cho ban tổ chức xử lý dữ liệu cá nhân theo <u>điều khoản</u>.</span></div>
+        </div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;align-items:center;gap:6px;margin-bottom:8px;width:100%">
+          <span class="s-btn" style="opacity:.6">Bắt đầu chơi</span>
+          <span class="s-btn ghost">Quay lại</span>
+        </div>
+      </div></div>
+      <div>
+        <h3 class="sub">Thành phần</h3>
+        <div class="table-wrap"><table class="compact">
+          <thead><tr><th>Thành phần</th><th>Mô tả</th></tr></thead>
+          <tbody>
+            <tr><td>Logo, nút âm thanh</td><td>Như MH-01.</td></tr>
+            <tr><td>Tiêu đề</td><td>"Đăng ký chơi", kiểu tiêu đề lớn có viền chữ.</td></tr>
+            <tr><td>Khung form</td><td>Kính tối <code>--color-surface-strong</code>, bo <code>--radius-lg</code>. Nhãn luôn hiện phía trên ô, không chỉ dùng chữ mờ trong ô.</td></tr>
+            <tr><td>Họ và tên</td><td><code>autocomplete="name"</code>, tối đa 60 ký tự.</td></tr>
+            <tr><td>Email</td><td><code>type="email"</code>, <code>autocomplete="email"</code>, <code>inputmode="email"</code>.</td></tr>
+            <tr><td>Số điện thoại</td><td><code>type="tel"</code>, <code>inputmode="tel"</code>, <code>autocomplete="tel"</code>. Tự chèn khoảng trắng dạng <code>0912 345 678</code> khi gõ.</td></tr>
+            <tr><td>Ô đồng ý</td><td>Bắt buộc, không tích sẵn. Chữ "điều khoản" mở hộp thoại nội dung đồng ý (QT-13).</td></tr>
+            <tr><td>"Bắt đầu chơi"</td><td>Nút chính. Bị khoá đến khi tích ô đồng ý. Khi gửi: "Đang gửi…".</td></tr>
+            <tr><td>"Quay lại"</td><td>Nút phụ, về MH-01, xoá dữ liệu đã nhập.</td></tr>
+          </tbody>
+        </table></div>
+        <h3 class="sub">Trạng thái và quy tắc</h3>
+        <ul class="list">
+          <li><b>Báo lỗi:</b> kiểm tra từng ô khi rời ô và khi bấm gửi. Ô sai viền <code>--red-500</code>, dòng lỗi màu <code>--red-300</code> ngay dưới ô, có <code>aria-describedby</code>. Con trỏ nhảy về ô sai đầu tiên.</li>
+          <li><b>Lỗi kết nối:</b> thông báo đỏ phía trên nút: "Chưa lưu được đăng ký, vui lòng thử lại". Giữ nguyên dữ liệu.</li>
+          <li><b>Thành công:</b> chuyển ngay sang đếm ngược (MH-02), không có màn hình xác nhận riêng.</li>
+          <li><b>Bàn phím ảo:</b> khi ô đang nhập bị bàn phím che thì cuộn ô lên. Form cuộn được trên màn hình thấp (640×360).</li>
+          <li><b>Để yên 60 giây</b> (theo QT-08): về MH-01 và xoá dữ liệu đã nhập, dòng nhắc ở 10 giây cuối như MH-05.</li>
+          <li>Cỡ chữ trong ô tối thiểu 16px để iOS không tự phóng to trang.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="mh-08" class="v11">
+    <h2 class="sec"><span class="num">MH-08</span>Đăng nhập admin</h2>
+    <div class="mock-row">
+      <div class="browser" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i><span>localhost:3000/admin/dang-nhap</span></div>
+        <div class="page" style="justify-items:center;padding:24px 14px">
+          <img src="../design/assets/logo-fpt-trang.png" alt="" style="height:22px;background:var(--night-800);padding:4px 8px;border-radius:6px">
+          <div class="h">Quản trị · Đập Chim Cánh Cụt</div>
+          <div style="width:80%;display:grid;gap:6px">
+            <span class="muted2">Tên đăng nhập</span><div class="in">admin</div>
+            <span class="muted2">Mật khẩu</span><div class="in">••••••••••••</div>
+            <span style="color:var(--red-700)">Tên đăng nhập hoặc mật khẩu không đúng</span>
+            <div class="b" style="text-align:center">Đăng nhập</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <ul class="list">
+          <li>Thẻ đăng nhập căn giữa, nền trang <code>--color-bg</code>, thẻ sáng <code>--color-surface-light</code>.</li>
+          <li>Ô mật khẩu có nút hiện/ẩn mật khẩu. <code>autocomplete="username"</code> và <code>"current-password"</code> để trình duyệt gợi ý.</li>
+          <li>Sai thông tin: một thông báo chung, không nói sai ô nào. Đang bị khoá: "Đăng nhập tạm khoá, thử lại sau N phút".</li>
+          <li>Đăng nhập xong chuyển về <code>/admin</code>. Đang đăng nhập mà vào trang này thì chuyển thẳng về <code>/admin</code>.</li>
+          <li>Trang admin có <code>&lt;meta name="robots" content="noindex"&gt;</code>.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="mh-09" class="v11">
+    <h2 class="sec"><span class="num">MH-09</span>Danh sách người chơi</h2>
+    <div class="browser" aria-hidden="true">
+      <div class="bar"><i></i><i></i><i></i><span>localhost:3000/admin?q=nguyen&amp;trang=1</span></div>
+      <div class="page">
+        <div class="row"><span class="h">Người chơi</span><span class="muted2">· 128 người · 342 lượt</span><span style="margin-left:auto" class="b g">Đăng xuất</span></div>
+        <div class="row"><div class="in">🔍 nguyen</div><span class="b">⬇ Xuất CSV (12)</span></div>
+        <table>
+          <thead><tr><th>Họ và tên</th><th>Email</th><th>Số điện thoại</th><th>Đăng ký ▼</th><th>Lượt</th><th>Điểm cao nhất</th><th>Lượt gần nhất</th><th></th></tr></thead>
+          <tbody>
+            <tr><td>Nguyễn Văn An</td><td>an.nguyen@vidu.com</td><td>0912 345 678</td><td>17/11 14:02</td><td>3</td><td>47 ⭐⭐⭐</td><td>17/11 14:06</td><td><span class="b r">Xoá</span></td></tr>
+            <tr><td>Nguyễn Thị Bình</td><td>binh@vidu.com</td><td>0987 654 321</td><td>17/11 13:40</td><td>1</td><td>22 ⭐</td><td>17/11 13:41</td><td><span class="b r">Xoá</span></td></tr>
+          </tbody>
+        </table>
+        <div class="row muted2"><span>Hiển thị 1–12 / 12</span><span style="margin-left:auto" class="b g">‹ Trước</span><span class="b g">Sau ›</span></div>
+      </div>
+    </div>
+    <h3 class="sub">Thành phần</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Thành phần</th><th>Mô tả</th></tr></thead>
+      <tbody>
+        <tr><td>Thanh đầu</td><td>Tiêu đề "Người chơi", tổng số người chơi và tổng số lượt (theo bộ lọc), nút "Đăng xuất".</td></tr>
+        <tr><td>Ô tìm kiếm</td><td>Một ô, gợi ý "Tìm theo họ tên, email hoặc số điện thoại". Từ khoá nằm trên URL (<code>?q=</code>) để tải lại trang vẫn giữ.</td></tr>
+        <tr><td>"Xuất CSV"</td><td>Ghi rõ số dòng sẽ xuất. Bị khoá khi kết quả trống.</td></tr>
+        <tr><td>Bảng</td><td>Cột: Họ và tên · Email · Số điện thoại (hiển thị có khoảng trắng) · Đăng ký · Lượt · Điểm cao nhất (kèm sao) · Lượt gần nhất · nút Xoá. Bấm tiêu đề cột có ▲▼ để sắp xếp.</td></tr>
+        <tr><td>Phân trang</td><td>20 dòng/trang, "Hiển thị a–b / tổng", nút Trước/Sau. Số trang trên URL (<code>?trang=</code>).</td></tr>
+        <tr><td>Thông báo</td><td>"Đã xoá Nguyễn Văn An" hiện 4 giây ở góc trên, có <code>role="status"</code>.</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="list">
+      <li><b>Cỡ màn hình:</b> thiết kế cho máy tính từ 1024px. Dưới 768px bảng cuộn ngang trong khung, cột họ tên cố định bên trái. Trang không bị cuộn ngang.</li>
+      <li><b>Trạng thái trống:</b> "Chưa có người chơi nào đăng ký" hoặc "Không tìm thấy người chơi phù hợp" kèm nút "Xoá bộ lọc".</li>
+      <li><b>Phiên hết hạn</b> khi đang dùng: thao tác tiếp theo chuyển về MH-08 với thông báo "Phiên đăng nhập đã hết, vui lòng đăng nhập lại".</li>
+    </ul>
+  </section>
+
+  <section id="mh-10" class="v11">
+    <h2 class="sec"><span class="num">MH-10</span>Xác nhận xoá</h2>
+    <div class="mock-row">
+      <div class="browser" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i><span>localhost:3000/admin</span></div>
+        <div class="page" style="background:rgba(11,30,63,.35);padding:30px 18px">
+          <div style="background:#fff;border-radius:12px;padding:14px;display:grid;gap:8px;box-shadow:var(--shadow-md)">
+            <div class="h">Xoá người chơi?</div>
+            <div>Xoá <b>Nguyễn Văn An</b> (0912 345 678) và <b>3 lượt chơi</b>. Không thể khôi phục.</div>
+            <div class="row" style="justify-content:flex-end"><span class="b g">Huỷ</span><span class="b r">Xoá vĩnh viễn</span></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <ul class="list">
+          <li>Hộp thoại <code>role="alertdialog"</code>, lớp nền tối. Nút được chọn sẵn là <b>"Huỷ"</b>, phím <kbd>Esc</kbd> cũng là huỷ.</li>
+          <li>Nút "Xoá vĩnh viễn" màu <code>--color-danger</code>. Khi đang xoá: "Đang xoá…", không bấm được lần hai.</li>
+          <li>Xoá lỗi: giữ hộp thoại, báo "Chưa xoá được, vui lòng thử lại".</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
   <nav class="pager" aria-label="Chuyển trang">

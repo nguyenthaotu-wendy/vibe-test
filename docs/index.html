@@ -31,6 +31,7 @@
       <span class="badge">Ngày 16/11/2026</span>
       <span class="badge violet">Nguồn: YÊU CẦU 2.1</span>
       <span class="badge orange">Trạng thái: chờ duyệt</span>
+      <a class="badge orange" href="#v11" style="text-decoration:none">Bổ sung v1.1 · 17/11/2026: đăng ký người chơi &amp; admin</a>
     </div>
   </div>
 
@@ -74,12 +75,41 @@
       <thead><tr><th>#</th><th>Câu hỏi</th><th>Đã chốt</th><th>Ảnh hưởng tới</th></tr></thead>
       <tbody>
         <tr><td class="id">Q1</td><td>Game dùng vào mục đích gì?</td><td>Game dùng tại <b>sự kiện</b> mang thương hiệu FPT.</td><td>01 · bối cảnh</td></tr>
-        <tr><td class="id">Q2</td><td>Có thu thập thông tin người chơi (lead) không?</td><td><b>Chưa làm ở phiên bản này.</b> Sẽ có yêu cầu riêng khi cần thu thập thông tin.</td><td>01 · ngoài phạm vi</td></tr>
+        <tr><td class="id">Q2</td><td>Có thu thập thông tin người chơi (lead) không?</td><td><b>Chưa làm ở phiên bản này.</b> Sẽ có yêu cầu riêng khi cần thu thập thông tin. <span class="badge orange">Đã có ở v1.1, xem Q6–Q8</span></td><td>01 · ngoài phạm vi</td></tr>
         <tr><td class="id">Q3</td><td>Logo FPT hiện ở đâu?</td><td>Trên <b>cả 3 màn hình</b>. Ở màn hình chơi, logo nhỏ nằm trên thanh trên cùng.</td><td>CN-15 · 03</td></tr>
         <tr><td class="id">Q4</td><td>Người chơi bỏ đi giữa chừng thì sao?</td><td>Ẩn tab hoặc khoá máy thì <b>tự tạm dừng</b>. Màn hình kết thúc hoặc tạm dừng để yên <b>60 giây</b> thì <b>tự về màn hình bắt đầu</b>.</td><td>CN-13, CN-14 · QT-08</td></tr>
         <tr><td class="id">Q5</td><td>Âm thanh và đóng gói?</td><td>Âm thanh <b>tự tạo bằng Web Audio</b>, nhân vật vẽ <b>SVG</b>, toàn bộ game nằm trong <b>1 file HTML</b>.</td><td>01 · CN-12 · QT-11</td></tr>
       </tbody>
     </table></div>
+  </section>
+
+  <section id="v11" class="v11">
+    <div class="v11-tag"><span class="badge orange">Bổ sung v1.1 · 17/11/2026</span><span class="badge">Chưa viết code</span></div>
+    <h2 class="sec">Đăng ký người chơi &amp; trang admin</h2>
+    <p class="sec-desc">Người chơi nhập họ tên, email, số điện thoại trước lượt đầu; dữ liệu và điểm lưu vào database. Ban tổ chức đăng nhập trang admin để xem, tìm kiếm, xoá và xuất CSV. Chỉ có ở bản chạy Docker, bản GitHub Pages giữ nguyên v1.</p>
+
+    <h3 class="sub">Phỏng vấn làm rõ v1.1</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>#</th><th>Câu hỏi</th><th>Đã chốt</th><th>Ảnh hưởng tới</th></tr></thead>
+      <tbody>
+        <tr><td class="id">Q6</td><td>Database đặt ở đâu?</td><td><b>SQLite</b>, một file trong volume Docker. Link GitHub Pages giữ bản cũ, không đăng ký.</td><td>QĐ-06, QĐ-09 · QT-15</td></tr>
+        <tr><td class="id">Q7</td><td>Tài khoản admin quản lý thế nào?</td><td><b>1 tài khoản</b>, tên và mật khẩu đặt trong <code>.env</code>.</td><td>QĐ-07 · CN-21 · QT-18</td></tr>
+        <tr><td class="id">Q8</td><td>Luồng đăng ký ra sao?</td><td>Mỗi <b>người chơi mới đăng ký một lần</b>, trùng số điện thoại dùng lại hồ sơ cũ, <b>điểm từng lượt gắn với người chơi</b>. "Chơi lại" không phải điền lại.</td><td>QĐ-08 · CN-17…CN-20 · QT-14, QT-17</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">Đọc phần bổ sung ở từng tài liệu</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Tài liệu</th><th>Mục bổ sung</th><th>Mã</th></tr></thead>
+      <tbody>
+        <tr><td><a href="01-tong-quan.html#v11-tong-quan">01 Tổng quan</a></td><td>Hai phiên bản song song, phạm vi, quyết định, ràng buộc, rủi ro</td><td class="id">QĐ-06…QĐ-09</td></tr>
+        <tr><td><a href="02-chuc-nang.html#v11-dang-ky">02 Chức năng</a></td><td>Luồng mới, 10 chức năng và tiêu chí chấp nhận</td><td class="id">CN-17…CN-26</td></tr>
+        <tr><td><a href="03-man-hinh.html#v11-man-hinh">03 Màn hình</a></td><td>Form đăng ký, đăng nhập admin, danh sách người chơi, xác nhận xoá</td><td class="id">MH-07…MH-10</td></tr>
+        <tr><td><a href="04-quy-tac-du-lieu.html#v11-quy-tac">04 Quy tắc &amp; dữ liệu</a></td><td>Kiểm tra form, đồng ý, database, API, phiên, bảo mật, CSV</td><td class="id">QT-12…QT-23</td></tr>
+        <tr><td><a href="05-ke-hoach-test.html#v11-test">05 Kế hoạch test</a></td><td>Phạm vi, môi trường, dữ liệu test, 36 ca kiểm thử mới</td><td class="id">TC-48…TC-83</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><span class="ic">⚠️</span><p><b>Cần trước khi dùng thật:</b> ban tổ chức/pháp chế cung cấp nội dung điều khoản đồng ý, mục đích sử dụng dữ liệu, thời hạn lưu và kênh yêu cầu xoá (QT-13).</p></div>
   </section>
 
   <section id="tom-tat">

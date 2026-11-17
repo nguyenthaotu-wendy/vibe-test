@@ -38,6 +38,7 @@
     <p class="lead">16 chức năng của phiên bản 1, sơ đồ trạng thái của game, và tiêu chí chấp nhận cho từng chức năng. Thông số và công thức chi tiết nằm ở <a href="04-quy-tac-du-lieu.html">04 Quy tắc &amp; dữ liệu</a>.</p>
     <nav class="toc" aria-label="Trong trang này">
       <a href="#trang-thai">1. Sơ đồ trạng thái</a><a href="#danh-sach">2. Danh sách chức năng</a><a href="#chi-tiet">3. Chi tiết và tiêu chí chấp nhận</a>
+      <a href="#v11-dang-ky">4. Bổ sung v1.1: Đăng ký người chơi &amp; admin</a>
     </nav>
   </div>
 
@@ -324,6 +325,198 @@
           <li>Khoảng 60 khung hình/giây trên điện thoại tầm trung ở giai đoạn Bão tuyết.</li>
         </ul></div>
         <p class="refs">Mọi màn hình · Quy tắc QT-11</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== BỔ SUNG v1.1 ===================== -->
+  <section id="v11-dang-ky" class="v11">
+    <div class="v11-tag"><span class="badge orange">Bổ sung v1.1 · 17/11/2026</span><span class="badge">Chưa viết code</span></div>
+    <h2 class="sec"><span class="num">4.</span>Đăng ký người chơi &amp; trang admin</h2>
+    <p class="sec-desc">Người chơi nhập họ tên, email, số điện thoại trước lượt đầu. Dữ liệu và điểm từng lượt lưu vào database. Ban tổ chức đăng nhập trang admin để xem, tìm kiếm, xoá và xuất CSV. Phần này thay cho mục "không thu thập thông tin người chơi" của v1 (QĐ-02).</p>
+
+    <h3 class="sub">Quyết định đã chốt (phỏng vấn 17/11/2026)</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Quyết định</th><th>Hệ quả</th></tr></thead>
+      <tbody>
+        <tr><td class="id">QĐ-06</td><td>Database là <b>SQLite</b>, một file nằm trong <b>volume Docker</b>. Không thêm dịch vụ mới vào Compose.</td><td>Dữ liệu còn nguyên khi tạo lại container. Không nằm trong image hay repo.</td></tr>
+        <tr><td class="id">QĐ-07</td><td>Trang admin có <b>1 tài khoản</b>, tên và mật khẩu đặt qua <b>biến môi trường (.env)</b>.</td><td>Không có trang quản lý tài khoản. Đổi mật khẩu = sửa .env rồi khởi động lại.</td></tr>
+        <tr><td class="id">QĐ-08</td><td>Mỗi <b>người chơi mới đăng ký một lần</b> trước lượt đầu. Trùng số điện thoại thì <b>dùng lại hồ sơ cũ</b>. Điểm từng lượt được <b>gắn với người chơi</b>.</td><td>"Chơi lại" không phải điền lại. Về trang chủ thì phiên kết thúc, form trống cho người kế tiếp.</td></tr>
+        <tr><td class="id">QĐ-09</td><td>Đăng ký chỉ có trên <b>bản chạy server (Docker)</b>. Link GitHub Pages giữ bản v1, không có đăng ký.</td><td>GitHub Pages chỉ phục vụ file tĩnh, không ghi được vào database.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="note warn"><span class="ic">⚠️</span><p><b>Còn mở, cần ban tổ chức cung cấp trước khi dùng thật:</b> mục đích sử dụng dữ liệu, thời hạn lưu trữ và nội dung điều khoản đồng ý. Thu thập họ tên, email, số điện thoại là xử lý dữ liệu cá nhân, cần có sự đồng ý rõ ràng của người chơi (Nghị định 13/2023/NĐ-CP). Tài liệu dùng nội dung giữ chỗ (QT-13).</p></div>
+
+    <h3 class="sub">Luồng mới</h3>
+    <div class="flow" role="list">
+      <span class="step" role="listitem">Màn hình bắt đầu</span><span class="arrow">→</span>
+      <span class="step hl" role="listitem">Form đăng ký (MH-07)</span><span class="arrow">→</span>
+      <span class="step" role="listitem">Đếm ngược</span><span class="arrow">→</span>
+      <span class="step" role="listitem">Đang chơi</span><span class="arrow">→</span>
+      <span class="step" role="listitem">Kết thúc · gửi kết quả lượt</span><span class="arrow">→</span>
+      <span class="step" role="listitem">Chơi lại (không điền lại) / Trang chủ (kết thúc phiên)</span>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Từ</th><th>Sự kiện</th><th>Đến</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td>Bắt đầu</td><td>Bấm "Bắt đầu", chưa có phiên người chơi</td><td><b>DANG_KY</b> (mới)</td><td>Thay cho chuyển thẳng sang Đếm ngược của v1.</td></tr>
+        <tr><td>DANG_KY</td><td>Gửi form hợp lệ, server trả về phiên</td><td>Đếm ngược</td><td>Khởi tạo âm thanh tại cú bấm "Bắt đầu chơi".</td></tr>
+        <tr><td>DANG_KY</td><td>Bấm "Quay lại" hoặc để yên 60 giây</td><td>Bắt đầu</td><td>Xoá dữ liệu đang nhập trong form.</td></tr>
+        <tr><td>Kết thúc</td><td>Bấm "Chơi lại"</td><td>Đếm ngược</td><td>Giữ phiên, không điền lại.</td></tr>
+        <tr><td>Kết thúc / Tạm dừng</td><td>Bấm "Trang chủ" hoặc để yên 60 giây</td><td>Bắt đầu</td><td><b>Kết thúc phiên</b> người chơi.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">Danh sách chức năng bổ sung</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Chức năng</th><th>Ưu tiên</th><th>Màn hình</th><th>Quy tắc</th></tr></thead>
+      <tbody>
+        <tr><td class="id"><a href="#cn-17">CN-17</a></td><td>Form đăng ký người chơi</td><td><span class="badge red">Phải có</span></td><td>MH-07</td><td>QT-12, QT-13</td></tr>
+        <tr><td class="id"><a href="#cn-18">CN-18</a></td><td>Nhận diện người chơi cũ theo số điện thoại</td><td><span class="badge red">Phải có</span></td><td>MH-07</td><td>QT-14</td></tr>
+        <tr><td class="id"><a href="#cn-19">CN-19</a></td><td>Phiên người chơi trên máy</td><td><span class="badge red">Phải có</span></td><td>MH-07, MH-06</td><td>QT-17</td></tr>
+        <tr><td class="id"><a href="#cn-20">CN-20</a></td><td>Lưu kết quả từng lượt vào database</td><td><span class="badge red">Phải có</span> · gửi lại khi mất mạng: <span class="badge violet">Nên có</span></td><td>MH-06</td><td>QT-15, QT-16, QT-23</td></tr>
+        <tr><td class="id"><a href="#cn-21">CN-21</a></td><td>Đăng nhập / đăng xuất admin</td><td><span class="badge red">Phải có</span></td><td>MH-08</td><td>QT-18</td></tr>
+        <tr><td class="id"><a href="#cn-22">CN-22</a></td><td>Xem danh sách người chơi</td><td><span class="badge red">Phải có</span></td><td>MH-09</td><td>QT-19</td></tr>
+        <tr><td class="id"><a href="#cn-23">CN-23</a></td><td>Tìm kiếm người chơi</td><td><span class="badge red">Phải có</span></td><td>MH-09</td><td>QT-19</td></tr>
+        <tr><td class="id"><a href="#cn-24">CN-24</a></td><td>Xoá người chơi</td><td><span class="badge red">Phải có</span></td><td>MH-10</td><td>QT-20</td></tr>
+        <tr><td class="id"><a href="#cn-25">CN-25</a></td><td>Xuất danh sách ra CSV</td><td><span class="badge red">Phải có</span></td><td>MH-09</td><td>QT-21</td></tr>
+        <tr><td class="id"><a href="#cn-26">CN-26</a></td><td>Bảo vệ dữ liệu cá nhân</td><td><span class="badge red">Phải có</span></td><td>—</td><td>QT-18, QT-22</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">Chi tiết và tiêu chí chấp nhận</h3>
+    <div class="grid g-2">
+      <article class="card fn" id="cn-17">
+        <div class="fn-head"><span class="code">CN-17</span><span class="badge red">Phải có</span></div>
+        <h3>Form đăng ký người chơi</h3>
+        <p>Hiện sau khi bấm "Bắt đầu" nếu chưa có phiên. 3 ô: Họ và tên, Email, Số điện thoại, cùng ô đồng ý xử lý dữ liệu cá nhân và nút "Bắt đầu chơi".</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Cả 3 ô đều bắt buộc. Báo lỗi ngay dưới từng ô sai, bằng tiếng Việt, theo QT-12.</li>
+          <li>Chưa tích ô đồng ý thì nút "Bắt đầu chơi" bị khoá.</li>
+          <li>Server kiểm tra lại toàn bộ, không tin dữ liệu từ trình duyệt.</li>
+          <li>Đang gửi thì nút hiện "Đang gửi…" và không bấm được lần nữa.</li>
+          <li>Không gửi được (mất mạng, server lỗi): báo "Chưa lưu được đăng ký, vui lòng thử lại", giữ nguyên dữ liệu đã nhập, chưa cho chơi.</li>
+          <li>Trên điện thoại, ô email mở bàn phím email, ô số điện thoại mở bàn phím số.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-07 · Quy tắc QT-12, QT-13</p>
+      </article>
+
+      <article class="card fn" id="cn-18">
+        <div class="fn-head"><span class="code">CN-18</span><span class="badge red">Phải có</span></div>
+        <h3>Nhận diện người chơi cũ</h3>
+        <p>Khoá nhận diện là số điện thoại đã chuẩn hoá. Đăng ký lại bằng số đã có thì dùng lại hồ sơ cũ, các lượt mới gắn vào hồ sơ đó.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Hai lần đăng ký cùng số (kể cả viết <code>0912 345 678</code> và <code>+84912345678</code>) chỉ tạo 1 người chơi.</li>
+          <li>Không ghi đè họ tên, email đã lưu.</li>
+          <li>Thông báo giống hệt người mới, không tiết lộ số điện thoại đã có trong hệ thống hay thông tin đã lưu.</li>
+        </ul></div>
+        <p class="refs">Quy tắc QT-14</p>
+      </article>
+
+      <article class="card fn" id="cn-19">
+        <div class="fn-head"><span class="code">CN-19</span><span class="badge red">Phải có</span></div>
+        <h3>Phiên người chơi trên máy</h3>
+        <p>Sau khi đăng ký, máy giữ một phiên để gắn kết quả lượt với người chơi. Phiên kết thúc khi về trang chủ, để người kế tiếp tại quầy không dùng nhầm hồ sơ.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>"Chơi lại" vào đếm ngược ngay, không hiện form.</li>
+          <li>"Trang chủ", tự về trang chủ sau 60 giây, tải lại trang hoặc đóng tab đều kết thúc phiên. Lần "Bắt đầu" sau phải điền form trống.</li>
+          <li>Phiên hết hạn sau 2 giờ. Hết hạn giữa chừng thì lượt đang chơi vẫn gửi được (QT-17), lượt sau phải đăng ký lại.</li>
+          <li>Máy không lưu họ tên, email, số điện thoại trong localStorage.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-07, MH-06 · Quy tắc QT-17</p>
+      </article>
+
+      <article class="card fn" id="cn-20">
+        <div class="fn-head"><span class="code">CN-20</span><span class="badge red">Phải có</span></div>
+        <h3>Lưu kết quả từng lượt</h3>
+        <p>Vào KET_THUC thì gửi kết quả lượt lên server: điểm, sao, thống kê (QT-09), thời điểm. Lượt bị huỷ không gửi.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Mỗi lượt hoàn thành tạo đúng 1 dòng trong database, kể cả lượt 0 điểm.</li>
+          <li>Gửi trùng (bấm nhanh, gửi lại) không tạo dòng thứ hai (mã lượt duy nhất, QT-16).</li>
+          <li>Màn hình kết thúc hiện ngay, không chờ server. Bảng 5 điểm cao trên máy vẫn như v1.</li>
+          <li><span class="badge violet">Nên có</span> Gửi thất bại thì giữ tạm trên máy và thử lại khi có mạng (QT-23).</li>
+          <li>Server từ chối kết quả không hợp lệ (QT-16).</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-06 · Quy tắc QT-15, QT-16, QT-23</p>
+      </article>
+
+      <article class="card fn" id="cn-21">
+        <div class="fn-head"><span class="code">CN-21</span><span class="badge red">Phải có</span></div>
+        <h3>Đăng nhập admin</h3>
+        <p>Trang <code>/admin</code> yêu cầu đăng nhập bằng tài khoản trong .env. Có nút "Đăng xuất".</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Chưa đăng nhập: mọi trang và API admin đều chuyển về trang đăng nhập hoặc trả 401, không lộ dữ liệu.</li>
+          <li>Sai tên hoặc mật khẩu: một thông báo chung "Tên đăng nhập hoặc mật khẩu không đúng".</li>
+          <li>Sai 5 lần liên tiếp từ cùng địa chỉ: khoá đăng nhập 15 phút.</li>
+          <li>Phiên admin hết hạn sau 8 giờ hoặc khi bấm "Đăng xuất".</li>
+          <li>Server không khởi động nếu thiếu mật khẩu admin hoặc mật khẩu dưới 12 ký tự.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-08 · Quy tắc QT-18</p>
+      </article>
+
+      <article class="card fn" id="cn-22">
+        <div class="fn-head"><span class="code">CN-22</span><span class="badge red">Phải có</span></div>
+        <h3>Xem danh sách người chơi</h3>
+        <p>Bảng người chơi: họ tên, email, số điện thoại, ngày đăng ký, số lượt chơi, điểm cao nhất, lượt gần nhất.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Mặc định sắp xếp người đăng ký mới nhất lên đầu. Bấm tiêu đề cột Ngày đăng ký, Số lượt, Điểm cao nhất để đổi thứ tự.</li>
+          <li>20 dòng mỗi trang, có tổng số người chơi và nút trang trước/sau.</li>
+          <li>Họ tên chứa ký tự HTML (vd. <code>&lt;b&gt;</code>) hiện nguyên văn, không chạy như mã.</li>
+          <li>Chưa có ai: "Chưa có người chơi nào đăng ký".</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-09 · Quy tắc QT-19</p>
+      </article>
+
+      <article class="card fn" id="cn-23">
+        <div class="fn-head"><span class="code">CN-23</span><span class="badge red">Phải có</span></div>
+        <h3>Tìm kiếm</h3>
+        <p>Một ô tìm kiếm chung cho họ tên, email, số điện thoại.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Tìm theo một phần, không phân biệt hoa thường và dấu: "nguyen" tìm ra "Nguyễn".</li>
+          <li>Số điện thoại tìm được dù gõ có khoảng trắng, dấu chấm hay bắt đầu bằng +84.</li>
+          <li>Kết quả cập nhật sau khi ngừng gõ 300 ms hoặc nhấn Enter, quay về trang 1.</li>
+          <li>Không có kết quả: "Không tìm thấy người chơi phù hợp".</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-09 · Quy tắc QT-19</p>
+      </article>
+
+      <article class="card fn" id="cn-24">
+        <div class="fn-head"><span class="code">CN-24</span><span class="badge red">Phải có</span></div>
+        <h3>Xoá người chơi</h3>
+        <p>Mỗi dòng có nút "Xoá". Xoá hẳn người chơi cùng mọi lượt chơi của họ, phục vụ cả trường hợp người chơi yêu cầu xoá dữ liệu.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Luôn có hộp xác nhận ghi rõ họ tên và số lượt sẽ bị xoá, nêu "Không thể khôi phục".</li>
+          <li>Xoá xong: dòng biến mất, tổng số giảm, có thông báo "Đã xoá".</li>
+          <li>Không còn dữ liệu của người đó trong database, kể cả bảng lượt chơi.</li>
+          <li>Phiên của người chơi đó (nếu còn) bị vô hiệu, kết quả gửi sau bị từ chối.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-10 · Quy tắc QT-20</p>
+      </article>
+
+      <article class="card fn" id="cn-25">
+        <div class="fn-head"><span class="code">CN-25</span><span class="badge red">Phải có</span></div>
+        <h3>Xuất CSV</h3>
+        <p>Nút "Xuất CSV" tải về danh sách người chơi theo đúng bộ lọc tìm kiếm đang áp dụng (tất cả các trang, không chỉ trang đang xem).</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Mở bằng Excel trên Windows hiện đúng tiếng Việt có dấu.</li>
+          <li>Số điện thoại giữ số 0 ở đầu.</li>
+          <li>Ô bắt đầu bằng <code>=</code>, <code>+</code>, <code>-</code>, <code>@</code> không bị Excel chạy như công thức.</li>
+          <li>Tên file có ngày giờ xuất: <code>nguoi-choi-20261117-1430.csv</code>.</li>
+        </ul></div>
+        <p class="refs">Màn hình MH-09 · Quy tắc QT-21</p>
+      </article>
+
+      <article class="card fn" id="cn-26">
+        <div class="fn-head"><span class="code">CN-26</span><span class="badge red">Phải có</span></div>
+        <h3>Bảo vệ dữ liệu cá nhân</h3>
+        <p>Chỉ admin đã đăng nhập mới xem được dữ liệu người chơi. Dữ liệu không đi ra ngoài server ngoài file CSV do admin chủ động tải.</p>
+        <div class="ac"><b>Tiêu chí chấp nhận</b><ul>
+          <li>Log server không chứa họ tên, email, số điện thoại.</li>
+          <li>File database và .env không nằm trong image Docker hay repo Git.</li>
+          <li>Khi đưa ra Internet, chỉ chạy qua HTTPS.</li>
+          <li>Có giới hạn tần suất đăng ký để chống spam (QT-22).</li>
+        </ul></div>
+        <p class="refs">Quy tắc QT-18, QT-22</p>
       </article>
     </div>
   </section>

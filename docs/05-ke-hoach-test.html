@@ -36,6 +36,7 @@
     <nav class="toc" aria-label="Trong trang này">
       <a href="#pham-vi">1. Phạm vi</a><a href="#moi-truong">2. Môi trường</a><a href="#cach-test">3. Cách test</a>
       <a href="#ca-kiem-thu">4. Ca kiểm thử</a><a href="#choi-thu">5. Chơi thử cân bằng</a><a href="#loi">6. Mức độ lỗi</a><a href="#dat">7. Tiêu chí đạt</a><a href="#lich">8. Trình tự</a>
+      <a href="#v11-test">9. Bổ sung v1.1: Đăng ký &amp; admin</a>
     </nav>
   </div>
 
@@ -172,6 +173,57 @@ Bằng chứng:  ảnh chụp / video / lỗi trong Console</code></pre>
     </div>
   </section>
 
+  <!-- ===================== BỔ SUNG v1.1 ===================== -->
+  <section id="v11-test" class="v11">
+    <div class="v11-tag"><span class="badge orange">Bổ sung v1.1 · 17/11/2026</span></div>
+    <h2 class="sec"><span class="num">9.</span>Kiểm thử đăng ký người chơi &amp; admin</h2>
+    <p class="sec-desc">Kiểm thử CN-17…CN-26 và QT-12…QT-23. Các ca TC-48…TC-83 nằm trong danh sách có ô tích ở <a href="#ca-kiem-thu">mục 4</a>, nhóm G–J.</p>
+
+    <h3 class="sub">Phạm vi bổ sung</h3>
+    <div class="grid g-2">
+      <div class="card"><span class="badge teal">Kiểm tra</span>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>Form đăng ký, chuẩn hoá và kiểm tra dữ liệu ở cả trình duyệt lẫn server.</li>
+          <li>Lưu người chơi và lượt chơi vào SQLite, dữ liệu còn sau khi tạo lại container.</li>
+          <li>Đăng nhập admin, danh sách, tìm kiếm, sắp xếp, phân trang, xoá, xuất CSV.</li>
+          <li>Bảo mật cơ bản: truy cập trái phép, XSS, SQL injection, CSRF, chèn công thức CSV, giới hạn tần suất.</li>
+          <li>Không lộ dữ liệu cá nhân qua log, image, repo, localStorage.</li>
+        </ul></div>
+      <div class="card"><span class="badge red">Không kiểm tra</span>
+        <ul class="list" style="margin-top:var(--space-3)">
+          <li>Nội dung pháp lý của điều khoản đồng ý (ban tổ chức/pháp chế duyệt).</li>
+          <li>Kiểm thử xâm nhập chuyên sâu, tải lớn trên Internet.</li>
+          <li>Bản GitHub Pages ngoài việc xác nhận vẫn chạy như v1 (TC-81).</li>
+        </ul></div>
+    </div>
+
+    <h3 class="sub">Môi trường bổ sung</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Môi trường</th><th>Dùng cho</th></tr></thead>
+      <tbody>
+        <tr><td class="id">MT-7</td><td>Docker Compose trên máy test, file <code>.env</code> riêng với mật khẩu test (không dùng mật khẩu thật)</td><td>Toàn bộ nhóm G–J</td></tr>
+        <tr><td class="id">MT-8</td><td>Microsoft Excel trên Windows, và Google Sheets</td><td>Mở file CSV (TC-74, TC-75)</td></tr>
+        <tr><td class="id">MT-9</td><td>Công cụ gọi API (curl hoặc tương đương) và trình xem SQLite</td><td>Gọi API trực tiếp, kiểm tra database</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">Dữ liệu test</h3>
+    <ul class="list">
+      <li>Chỉ dùng <b>dữ liệu giả</b>: tên, email kiểu <code>@vidu.test</code>, số điện thoại không có thật. <b>Không</b> dùng dữ liệu người chơi thật để test.</li>
+      <li>Chuẩn bị bộ <b>1.000 người chơi giả</b> (kèm 1–5 lượt mỗi người) cho TC-82, có cả họ tên có dấu, trùng họ, email trùng nhau.</li>
+      <li>Chuẩn bị một số dòng chèn thẳng vào database (bỏ qua kiểm tra form) chứa ký tự đặc biệt cho TC-69, TC-75.</li>
+      <li>Xoá volume test (<code>docker compose down -v</code>) sau khi test xong.</li>
+    </ul>
+
+    <h3 class="sub">Tiêu chí đạt v1.1</h3>
+    <ul class="list">
+      <li>Mọi ca TC-48…TC-83 gắn với chức năng <b>Phải có</b> đều đạt trên MT-1, MT-4, MT-5 và MT-7.</li>
+      <li>Không còn lỗi Nghiêm trọng hoặc Cao, đặc biệt ở nhóm I (admin) và J (dữ liệu, bảo mật).</li>
+      <li>Ca kiểm thử v1 (TC-01…TC-47) chạy lại vẫn đạt (không hồi quy), trừ TC-02, TC-03 được hiểu là đi qua form đăng ký trước.</li>
+      <li>Nội dung điều khoản thật đã thay cho nội dung giữ chỗ ở QT-13.</li>
+    </ul>
+  </section>
+
   <nav class="pager" aria-label="Chuyển trang">
     <a href="04-quy-tac-du-lieu.html"><small>← Trước</small><b>04 Quy tắc &amp; dữ liệu</b></a>
     <a class="next" href="index.html"><small>Về →</small><b>Mục lục</b></a>
@@ -241,6 +293,51 @@ Bằng chứng:  ảnh chụp / video / lỗi trong Console</code></pre>
       ["TC-45","Tất cả","Mở Console, chơi 3 lượt liên tiếp, có tạm dừng và tắt/bật âm.","Không có lỗi hay cảnh báo nào trong Console.","MT-1"],
       ["TC-46","CN-03","Xoay điện thoại dọc ↔ ngang 3 lần trong lúc chơi.","Bố cục đổi đúng. Điểm, thời gian, con vật không bị mất hay chạy sai.","MT-4"],
       ["TC-47","Tất cả","Để máy chạy 2 giờ trên máy quầy: chơi ≥ 20 lượt xen kẽ bỏ dở và tự về trang chủ.","Không chậm dần, không tăng bộ nhớ liên tục, không lỗi. Bảng điểm đúng.","MT-5"]
+    ]},
+    /* ===== Bổ sung v1.1 · 17/11/2026 ===== */
+    { ten: "G · Đăng ký người chơi (v1.1)", ca: [
+      ["TC-48","CN-17 · MH-07","Ở MH-01 bấm Bắt đầu. Nhập vài ô rồi bấm Quay lại, bấm Bắt đầu lần nữa.","Form đăng ký hiện ra. Quay lại về MH-01. Lần sau form trống.","MT-1, MT-4"],
+      ["TC-49","QT-12","Họ tên: để trống; \"A\"; 61 ký tự; \"An123\"; \"  nguyễn   thị  ánh \"; \"Nguyễn Thị Ánh\".","4 trường hợp đầu báo đúng lỗi. Trường hợp 5 được lưu thành \"nguyễn thị ánh\". Trường hợp 6 hợp lệ.","MT-1"],
+      ["TC-50","QT-12","Email: \"abc\"; \"a@b\"; \"a b@vidu.test\"; \"An.Nguyen@ViDu.test\".","3 trường hợp đầu báo \"Email chưa đúng định dạng\". Trường hợp 4 hợp lệ, lưu chữ thường.","MT-1"],
+      ["TC-51","QT-12","SĐT: \"0912345678\"; \"+84 912.345.678\"; \"091234567\"; \"0212345678\"; \"09123abc78\".","2 trường hợp đầu hợp lệ và đều lưu \"0912345678\". 3 trường hợp sau báo đúng lỗi.","MT-1"],
+      ["TC-52","CN-17 · QT-13","Điền đúng nhưng không tích ô đồng ý. Gọi API trực tiếp với dong_y=false.","Nút Bắt đầu chơi bị khoá. API trả 422. Đăng ký hợp lệ thì dòng DB có dong_y_luc và phien_ban_dieu_khoan.","MT-1, MT-9"],
+      ["TC-53","QT-12","Gọi thẳng POST /api/dang-ky với dữ liệu sai từng trường (bỏ qua trình duyệt).","Server trả 422 kèm lỗi đúng trường, không tạo dòng nào.","MT-9"],
+      ["TC-54","CN-18 · QT-14","Đăng ký \"0912345678\" tên A. Đăng ký lại \"+84 912 345 678\" tên B, email khác.","Chỉ có 1 người chơi, vẫn tên A và email cũ. Hai phản hồi API giống hệt nhau (mã và nội dung).","MT-9"],
+      ["TC-55","CN-19 · QT-17","Đăng ký, chơi xong bấm Chơi lại. Sau đó bấm Trang chủ rồi Bắt đầu. Lần khác: tải lại trang giữa lượt. Lần khác: để yên 60 giây ở form.","Chơi lại không hiện form. Trang chủ → form trống. Tải lại → phải đăng ký lại. Để yên → về MH-01, dữ liệu đã nhập bị xoá.","MT-1, MT-5"],
+      ["TC-56","CN-17 · QT-23","Dừng container rồi gửi form. Bật lại container, bấm gửi lần nữa.","Báo \"Chưa lưu được đăng ký, vui lòng thử lại\", dữ liệu đã nhập còn nguyên. Lần sau gửi được và vào đếm ngược.","MT-7"],
+      ["TC-57","MH-07","Mở form trên điện thoại, chạm từng ô.","Ô email mở bàn phím email, ô SĐT mở bàn phím số. Trang không tự phóng to. Bàn phím không che ô đang nhập.","MT-3, MT-4"]
+    ]},
+    { ten: "H · Lưu kết quả lượt (v1.1)", ca: [
+      ["TC-58","CN-20","Đăng ký rồi chơi 3 lượt, trong đó 1 lượt không bấm gì (0 điểm). Xem database.","Có đúng 3 dòng luot_choi gắn đúng người chơi. Điểm và thống kê khớp màn hình kết thúc từng lượt.","MT-7, MT-9"],
+      ["TC-59","CN-20 · QT-16","Gửi lại cùng một ma_luot 2 lần qua API.","Lần 1 trả 201, lần 2 trả 200. Database chỉ có 1 dòng.","MT-9"],
+      ["TC-60","QT-16","Gửi kết quả vô lý: diem=5000; combo_dai_nhat lớn hơn số chim đập; điểm vượt (thường + 3×vàng)×2.","Server trả 422, không lưu.","MT-9"],
+      ["TC-61","QT-23","Tắt mạng (hoặc dừng container) ngay trước khi hết giờ. Bật lại, mở lại trang.","Màn hình kết thúc vẫn bình thường. Lượt được lưu tạm và gửi lại sau. localStorage không chứa họ tên, email, SĐT.","MT-1"],
+      ["TC-62","CN-20","Tạm dừng giữa lượt rồi bấm Trang chủ (huỷ lượt).","Không có dòng luot_choi nào cho lượt bị huỷ.","MT-7"]
+    ]},
+    { ten: "I · Trang admin (v1.1)", ca: [
+      ["TC-63","CN-21 · QT-18","Chưa đăng nhập, mở /admin và gọi GET/DELETE /api/admin/... và tải .csv.","Trang chuyển về MH-08. API trả 401. Không lộ dữ liệu người chơi nào.","MT-1, MT-9"],
+      ["TC-64","CN-21","Đăng nhập: sai tên; sai mật khẩu; đúng cả hai.","Hai lần sai hiện cùng một thông báo chung. Đúng thì vào /admin.","MT-1"],
+      ["TC-65","CN-21 · QT-18","Nhập sai 5 lần liên tiếp, rồi nhập đúng.","Lần thứ 6 báo tạm khoá 15 phút, kể cả khi đúng mật khẩu. Sau 15 phút đăng nhập được.","MT-1"],
+      ["TC-66","CN-21 · QT-18","Đăng nhập, xem cookie trong DevTools. Bấm Đăng xuất rồi bấm Back.","Cookie có HttpOnly, SameSite=Strict. Sau đăng xuất không xem lại được dữ liệu.","MT-1"],
+      ["TC-67","QT-18","Khởi động với .env thiếu ADMIN_PASSWORD; lần khác với mật khẩu 8 ký tự.","Server không chạy, log ghi rõ lý do.","MT-7"],
+      ["TC-68","CN-22 · QT-19","Với 45 người chơi giả: xem danh sách, đổi sắp xếp, chuyển trang.","Đúng 20/20/5 dòng mỗi trang, tổng = 45. Sắp xếp đúng theo cột. Số lượt và điểm cao nhất khớp database.","MT-1"],
+      ["TC-69","CN-22","Chèn thẳng vào DB người chơi tên <img src=x onerror=alert(1)>. Mở danh sách và hộp xác nhận xoá.","Tên hiện nguyên văn, không có hộp alert, không lỗi Console.","MT-1, MT-9"],
+      ["TC-70","CN-23 · QT-19","Tìm: \"nguyen\"; \"NGUYỄN\"; \"0912 345\"; \"+84912\"; \"vidu.test\"; \"%\"; \"zzz\".","Hai từ đầu ra người họ Nguyễn. SĐT tìm được ở mọi cách viết. \"%\" không trả hết danh sách. \"zzz\" báo không tìm thấy.","MT-1"],
+      ["TC-71","QT-15 · QT-19","Tìm với q = ' OR 1=1 -- và \"; DROP TABLE nguoi_choi;--","Không lỗi, không trả về toàn bộ danh sách, bảng vẫn còn.","MT-1, MT-9"],
+      ["TC-72","CN-24 · QT-20","Bấm Xoá một người có 3 lượt: thử Esc, rồi Huỷ, rồi Xoá vĩnh viễn. Gửi kết quả lượt bằng phiên cũ của người đó.","Esc/Huỷ không xoá. Xoá thì dòng biến mất, DB không còn người và 3 lượt. Phiên cũ bị từ chối (401).","MT-1, MT-9"],
+      ["TC-73","CN-24","Mở 2 tab admin, xoá cùng một người ở cả hai.","Tab thứ hai báo \"Người chơi này đã bị xoá trước đó\" và tải lại danh sách.","MT-1"],
+      ["TC-74","CN-25 · QT-21","Tìm \"nguyen\" rồi Xuất CSV. Mở bằng Excel và Google Sheets.","Chỉ có người khớp bộ lọc, đủ cột, đúng tiếng Việt có dấu, SĐT giữ số 0, tên file đúng dạng ngày giờ.","MT-8"],
+      ["TC-75","QT-21","Chèn thẳng vào DB người chơi có email \"=HYPERLINK('http://x')@vidu.test\" và tên có dấu phẩy, nháy kép. Xuất CSV, mở Excel.","Ô hiện dạng văn bản, không chạy công thức. Cột không bị lệch.","MT-8, MT-9"],
+      ["TC-76","QT-18","Gửi DELETE /api/admin/nguoi-choi/1 kèm cookie admin nhưng Origin là trang khác.","Bị từ chối (403), không xoá.","MT-9"]
+    ]},
+    { ten: "J · Dữ liệu, bảo mật, vận hành (v1.1)", ca: [
+      ["TC-77","QT-15","Đăng ký vài người. Chạy docker compose down rồi up -d --build. Lần khác: down -v.","Sau down/up dữ liệu còn nguyên. Sau down -v dữ liệu mất hết.","MT-7"],
+      ["TC-78","CN-26 · QT-22","Đăng ký, tìm kiếm theo SĐT, xoá, xuất CSV. Xem docker compose logs.","Log không chứa họ tên, email, SĐT hay từ khoá tìm kiếm.","MT-7"],
+      ["TC-79","CN-26 · QT-22","Liệt kê file trong image (docker exec) và git ls-files.","Không có .env, không có file *.db trong image hay repo. Có .env.example.","MT-7"],
+      ["TC-80","QT-22","Gửi 11 lần đăng ký trong 1 phút từ cùng máy.","Lần 11 nhận 429, form hiện thông báo thao tác quá nhanh.","MT-9"],
+      ["TC-81","QĐ-09","Mở link GitHub Pages và chơi 1 lượt.","Vẫn là bản v1: không có form, không gọi /api, không lỗi Console.","MT-1"],
+      ["TC-82","CN-22 · CN-25","Với 1.000 người chơi giả: mở danh sách, tìm kiếm, xuất CSV.","Danh sách và tìm kiếm phản hồi dưới 0,5 giây. CSV tải xong dưới 3 giây, đủ 1.000 dòng.","MT-7"],
+      ["TC-83","QT-23","Đổi quyền thư mục /data để không ghi được, khởi động lại.","Server báo lỗi rõ ràng, /healthz trả 503, Docker hiện unhealthy.","MT-7"]
     ]}
   ];
 

@@ -30,6 +30,7 @@
       <a href="#muc-tieu">1. Mục tiêu</a><a href="#boi-canh">2. Bối cảnh sự kiện</a><a href="#nguoi-choi">3. Người chơi</a>
       <a href="#vong-choi">4. Vòng chơi</a><a href="#pham-vi">5. Phạm vi</a><a href="#ky-thuat">6. Ràng buộc kỹ thuật</a>
       <a href="#quyet-dinh">7. Quyết định đã chốt</a><a href="#thuat-ngu">8. Thuật ngữ</a><a href="#rui-ro">9. Rủi ro</a>
+      <a href="#v11-tong-quan">10. Bổ sung v1.1: Đăng ký người chơi &amp; admin</a>
     </nav>
   </div>
 
@@ -58,6 +59,7 @@
       <li>Bảng 5 điểm cao nhất được lưu trên chính máy tại quầy, tạo không khí thi đua giữa các khách trong buổi.</li>
     </ul>
     <div class="note warn"><span class="ic">⚠️</span><p><b>Không thu thập thông tin người chơi</b> ở phiên bản này. Bảng điểm cao chỉ ghi điểm, số sao và ngày chơi, không có tên hay số điện thoại. Khi cần thu thập thông tin, sẽ có yêu cầu riêng.</p></div>
+    <div class="note violet"><span class="ic">🔄</span><p><b>Cập nhật v1.1 (17/11/2026):</b> bản chạy server (Docker) có thêm đăng ký người chơi (họ tên, email, số điện thoại) và trang admin. Bản GitHub Pages vẫn không thu thập thông tin. Xem <a href="#v11-tong-quan">mục 10</a>.</p></div>
   </section>
 
   <section id="nguoi-choi">
@@ -96,7 +98,7 @@
       <div class="card">
         <span class="badge teal">Trong phạm vi v1</span>
         <ul class="list" style="margin-top:var(--space-4)">
-          <li>1 người chơi, offline, không tài khoản, không server.</li>
+          <li>1 người chơi, offline, không tài khoản, không server. <span class="badge orange">v1.1: bản Docker có server và database</span></li>
           <li>3 màn hình: bắt đầu, chơi, kết thúc, cùng các lớp phủ đếm ngược, thông báo giai đoạn và tạm dừng.</li>
           <li>3 loại con vật, 3 giai đoạn, combo, xếp hạng sao.</li>
           <li>Bảng 5 điểm cao nhất và tuỳ chọn âm thanh, lưu bằng localStorage.</li>
@@ -113,8 +115,8 @@
           <li>Chọn mức độ khó (dễ / thường / khó).</li>
           <li>Vật phẩm đặc biệt: thêm giờ, đóng băng thời gian, búa lớn.</li>
           <li>Bảng xếp hạng online, đăng nhập, chơi nhiều người.</li>
-          <li>Ghi tên người chơi vào bảng điểm cao.</li>
-          <li>Màn hình quản trị cho nhân viên (xoá bảng điểm…).</li>
+          <li>Ghi tên người chơi vào bảng điểm cao. <span class="badge orange">v1.1: tên lưu trong database, chỉ admin xem</span></li>
+          <li>Màn hình quản trị cho nhân viên (xoá bảng điểm…). <span class="badge orange">v1.1: có trang admin quản lý người chơi</span></li>
           <li>Đa ngôn ngữ: toàn bộ chữ trong game bằng tiếng Việt.</li>
         </ul>
       </div>
@@ -146,7 +148,7 @@
       <thead><tr><th>Mã</th><th>Quyết định</th><th>Lý do</th></tr></thead>
       <tbody>
         <tr><td class="id">QĐ-01</td><td>Game dùng cho sự kiện thương hiệu FPT.</td><td>Mục đích sử dụng thực tế.</td></tr>
-        <tr><td class="id">QĐ-02</td><td>Không thu thập thông tin người chơi ở v1.</td><td>Giữ đúng phạm vi YEU-CAU.md. Sẽ có yêu cầu riêng khi cần.</td></tr>
+        <tr><td class="id">QĐ-02</td><td>Không thu thập thông tin người chơi ở v1. <span class="badge orange">Thay bằng QĐ-06…09 ở v1.1</span></td><td>Giữ đúng phạm vi YEU-CAU.md. Sẽ có yêu cầu riêng khi cần.</td></tr>
         <tr><td class="id">QĐ-03</td><td>Logo FPT trên cả 3 màn hình, nhỏ gọn ở màn hình chơi.</td><td>Nhận diện thương hiệu suốt lượt chơi.</td></tr>
         <tr><td class="id">QĐ-04</td><td>Ẩn tab hoặc khoá máy thì tự tạm dừng. Để yên 60 giây ở màn hình tạm dừng hoặc kết thúc thì tự về trang chủ.</td><td>Máy đặt tại quầy, người chơi đến và đi liên tục.</td></tr>
         <tr><td class="id">QĐ-05</td><td>Âm thanh Web Audio, nhân vật SVG, 1 file HTML.</td><td>Chạy offline, dễ chép sang máy khác, không lo bản quyền tài nguyên.</td></tr>
@@ -182,6 +184,97 @@
         <tr><td>Dữ liệu localStorage hỏng hoặc bị xoá.</td><td><span class="badge teal">Thấp</span></td><td>Đọc có kiểm tra. Dữ liệu sai thì coi như bảng trống, không làm game lỗi (QT-10).</td></tr>
       </tbody>
     </table></div>
+  </section>
+
+  <!-- ===================== BỔ SUNG v1.1 ===================== -->
+  <section id="v11-tong-quan" class="v11">
+    <div class="v11-tag"><span class="badge orange">Bổ sung v1.1 · 17/11/2026</span><span class="badge">Chưa viết code</span></div>
+    <h2 class="sec"><span class="num">10.</span>Đăng ký người chơi &amp; trang admin</h2>
+    <p class="sec-desc">Ban tổ chức cần biết ai đã chơi để liên hệ sau sự kiện. Người chơi nhập họ tên, email, số điện thoại trước lượt đầu. Ban tổ chức đăng nhập trang admin để xem, tìm kiếm, xoá và xuất danh sách ra CSV.</p>
+
+    <h3 class="sub">Hai phiên bản song song</h3>
+    <div class="grid g-2">
+      <div class="card">
+        <span class="badge orange">Bản Docker (v1.1)</span>
+        <h3 style="margin-top:var(--space-3)">Có đăng ký</h3>
+        <p>Chạy trên máy tại quầy hoặc máy chủ: <code>docker compose up</code>. Server Node.js lưu dữ liệu vào SQLite trong volume Docker. Có trang <code>/admin</code>.</p>
+      </div>
+      <div class="card">
+        <span class="badge teal">Bản GitHub Pages (v1)</span>
+        <h3 style="margin-top:var(--space-3)">Không đăng ký</h3>
+        <p>Link công khai <code>nguyenthaotu-wendy.github.io/vibe-test</code> giữ nguyên bản v1. Không có form, không gửi dữ liệu đi đâu.</p>
+      </div>
+    </div>
+
+    <h3 class="sub">Phạm vi v1.1</h3>
+    <div class="grid g-2">
+      <div class="card">
+        <span class="badge teal">Trong phạm vi v1.1</span>
+        <ul class="list" style="margin-top:var(--space-4)">
+          <li>Form đăng ký trước lượt đầu, có ô đồng ý xử lý dữ liệu cá nhân.</li>
+          <li>Nhận diện người chơi cũ theo số điện thoại.</li>
+          <li>Lưu điểm và thống kê từng lượt, gắn với người chơi.</li>
+          <li>Trang admin 1 tài khoản (đặt trong .env): xem, tìm kiếm, sắp xếp, xoá, xuất CSV.</li>
+          <li>Bảo vệ dữ liệu cá nhân cơ bản: chỉ admin xem, log không chứa thông tin cá nhân, giới hạn tần suất.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <span class="badge red">Ngoài phạm vi v1.1</span>
+        <ul class="list" style="margin-top:var(--space-4)">
+          <li>Nhiều tài khoản admin, phân quyền, nhật ký thao tác theo người.</li>
+          <li>Gửi email/SMS xác minh hay thông báo cho người chơi.</li>
+          <li>Bảng xếp hạng công khai theo tên người chơi.</li>
+          <li>Sửa thông tin người chơi trên trang admin.</li>
+          <li>Đăng ký trên bản GitHub Pages.</li>
+          <li>Chống gian lận điểm ở mức cao (điểm vẫn do trình duyệt tính).</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3 class="sub">Quyết định đã chốt</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Mã</th><th>Quyết định</th><th>Lý do</th></tr></thead>
+      <tbody>
+        <tr><td class="id">QĐ-06</td><td>Database SQLite, một file trong volume Docker.</td><td>Không thêm dịch vụ, nhẹ cho máy tại quầy, dữ liệu còn khi tạo lại container.</td></tr>
+        <tr><td class="id">QĐ-07</td><td>1 tài khoản admin, đặt qua biến môi trường (.env).</td><td>Đủ cho nhóm nhỏ dùng chung, không lưu mật khẩu trong code.</td></tr>
+        <tr><td class="id">QĐ-08</td><td>Người chơi mới đăng ký một lần, trùng số điện thoại dùng lại hồ sơ, điểm gắn với người chơi.</td><td>"Chơi lại" không phiền, ban tổ chức thấy điểm cao nhất của từng người.</td></tr>
+        <tr><td class="id">QĐ-09</td><td>Đăng ký chỉ có ở bản Docker. GitHub Pages giữ bản v1.</td><td>GitHub Pages chỉ phục vụ file tĩnh.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">Ràng buộc kỹ thuật bổ sung</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Hạng mục</th><th>Ràng buộc</th></tr></thead>
+      <tbody>
+        <tr><td>Server</td><td>Node.js trong Docker như hiện tại, thêm API đăng ký, lượt chơi và trang admin.</td></tr>
+        <tr><td>Database</td><td>SQLite, file <code>/data/dap-chim-canh-cut.db</code> trong volume <code>du-lieu</code>. Không nằm trong image hay repo.</td></tr>
+        <tr><td>Cấu hình bí mật</td><td><code>ADMIN_USER</code>, <code>ADMIN_PASSWORD</code> trong <code>.env</code> (không commit). Repo có <code>.env.example</code>.</td></tr>
+        <tr><td>Mạng</td><td>Đăng ký cần kết nối tới server. Máy tại quầy chạy Docker ngay trên máy thì không cần Internet.</td></tr>
+        <tr><td>Ra Internet</td><td>Chỉ qua HTTPS. Không nên mở trang admin ra Internet nếu không cần.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">Rủi ro bổ sung</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Rủi ro</th><th>Mức</th><th>Cách giảm</th></tr></thead>
+      <tbody>
+        <tr><td>Thu thập dữ liệu cá nhân chưa đúng quy định (Nghị định 13/2023/NĐ-CP).</td><td><span class="badge red">Cao</span></td><td>Ô đồng ý bắt buộc, lưu thời điểm và phiên bản điều khoản. Ban tổ chức/pháp chế cung cấp nội dung điều khoản, mục đích, thời hạn lưu trước khi dùng thật (QT-13).</td></tr>
+        <tr><td>Lộ dữ liệu người chơi (mật khẩu admin yếu, file CSV bị chia sẻ, admin mở ra Internet).</td><td><span class="badge red">Cao</span></td><td>Mật khẩu tối thiểu 12 ký tự, khoá sau 5 lần sai, cookie an toàn, chỉ HTTPS. Nhắc trách nhiệm cạnh nút Xuất CSV (QT-18, QT-21, QT-22).</td></tr>
+        <tr><td>Người chơi ngại điền form, ít người chơi hơn.</td><td><span class="badge orange">Trung bình</span></td><td>Form 3 ô, tự định dạng số điện thoại, đăng ký một lần cho nhiều lượt chơi.</td></tr>
+        <tr><td>Mất dữ liệu (xoá nhầm volume, hỏng ổ đĩa máy quầy).</td><td><span class="badge orange">Trung bình</span></td><td>Sao lưu file database định kỳ trong sự kiện. Không chạy <code>docker compose down -v</code> khi chưa sao lưu.</td></tr>
+        <tr><td>Mất mạng giữa máy chơi và server.</td><td><span class="badge teal">Thấp</span></td><td>Báo lỗi rõ ở form. Kết quả lượt lưu tạm và gửi lại sau (QT-23).</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3 class="sub">Thuật ngữ bổ sung</h3>
+    <dl class="defs">
+      <dt>Người chơi</dt><dd>Một hồ sơ trong database, nhận diện bằng số điện thoại. Có thể có nhiều lượt chơi.</dd>
+      <dt>Phiên người chơi</dt><dd>Mã tạm thời trên máy chơi, gắn kết quả lượt với người chơi. Kết thúc khi về trang chủ hoặc sau 2 giờ.</dd>
+      <dt>Admin</dt><dd>Người của ban tổ chức đăng nhập trang <code>/admin</code> để quản lý danh sách người chơi.</dd>
+      <dt>Điều khoản đồng ý</dt><dd>Nội dung người chơi đồng ý cho ban tổ chức xử lý dữ liệu cá nhân, có số phiên bản.</dd>
+    </dl>
+
+    <p style="margin-top:var(--space-6)">Chi tiết: <a href="02-chuc-nang.html#v11-dang-ky">02 · CN-17…CN-26</a> · <a href="03-man-hinh.html#v11-man-hinh">03 · MH-07…MH-10</a> · <a href="04-quy-tac-du-lieu.html#v11-quy-tac">04 · QT-12…QT-23</a> · <a href="05-ke-hoach-test.html#v11-test">05 · TC-48…TC-83</a></p>
   </section>
 
   <nav class="pager" aria-label="Chuyển trang">
