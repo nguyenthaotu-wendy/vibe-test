@@ -384,10 +384,32 @@ bấm lỗ trống / con đã bị đập / đang lặn / ngoài trạng thái D
       <li>Cả hai trường hợp trả về <b>cùng một phản hồi</b> (cùng mã trạng thái, cùng nội dung), để không dò được số nào đã đăng ký.</li>
       <li>Email <b>không</b> cần duy nhất: hai số điện thoại khác nhau có thể dùng chung một email.</li>
     </ol>
+    <div class="note violet"><span class="ic">🔄</span><div>
+      <p><b>Cập nhật khi viết code (17/11/2026, QĐ-11) — thay cho các mục 1, 3, 4, 5 ở trên:</b></p>
+      <ol class="list" style="margin-top:var(--space-2)">
+        <li><b>Email</b> (chữ thường) và <b>số điện thoại</b> (đã chuẩn hoá) đều là khoá <code>UNIQUE</code>.</li>
+        <li>Không khớp người chơi nào: tạo mới → <b>201</b>.</li>
+        <li>Khớp <b>đúng một</b> người chơi ở <b>cả</b> email và số điện thoại: dùng lại hồ sơ, không ghi đè họ tên, cập nhật thời điểm và phiên bản đồng ý → <b>201</b>.</li>
+        <li>Còn lại (email thuộc người A, SĐT thuộc người B; hoặc chỉ một trong hai đã có): <b>409</b> "Email hoặc số điện thoại đã được dùng để đăng ký. Vui lòng nhập đúng thông tin đã đăng ký trước đó, hoặc dùng thông tin khác."</li>
+        <li>Hai người đăng ký trùng cùng lúc: database chặn bằng ràng buộc <code>UNIQUE</code>, server kiểm tra lại và trả kết quả theo các mục trên.</li>
+        <li>Đánh đổi đã chấp nhận: phản hồi 409 cho biết email/SĐT đã có trong hệ thống. Giới hạn tần suất (QT-22) hạn chế việc dò hàng loạt.</li>
+      </ol>
+    </div></div>
   </section>
 
   <section id="qt-15" class="v11">
     <h2 class="sec"><span class="num">QT-15</span>Database (SQLite)</h2>
+    <div class="note violet"><span class="ic">🔄</span><div>
+      <p><b>Cập nhật khi viết code (17/11/2026, QĐ-10):</b> dùng <b>PostgreSQL 16</b> thay SQLite. Cấu trúc bảng giữ nguyên tên cột như bên dưới, với các khác biệt:</p>
+      <ul class="list" style="margin-top:var(--space-2)">
+        <li>Dịch vụ <code>db</code> (<code>postgres:16-alpine</code>) trong compose.yaml, dữ liệu trong volume <code>du-lieu-db</code>, <b>không mở cổng</b> ra máy. App kết nối qua <code>PGHOST=db</code>. Tên, mật khẩu, tên database lấy từ <code>.env</code> (<code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code>, <code>POSTGRES_DB</code>).</li>
+        <li>App chờ <code>db</code> healthy (<code>pg_isready</code>), tự tạo bảng khi khởi động (<code>CREATE TABLE IF NOT EXISTS</code>), thử kết nối lại tối đa ~60 giây.</li>
+        <li>Kiểu dữ liệu: <code>id BIGSERIAL</code>, thời gian <code>TIMESTAMPTZ</code>, <code>ma_luot UUID</code>, có ràng buộc <code>CHECK</code> cho điểm và thống kê.</li>
+        <li><code>nguoi_choi.email</code> thêm <code>UNIQUE</code> (QT-14 cập nhật).</li>
+        <li>Thêm bảng <code>phien_nguoi_choi(ma_bam, nguoi_choi_id → ON DELETE CASCADE, het_han, luot_gan_nhat)</code> lưu bản băm SHA-256 của phiên (QT-17).</li>
+        <li>Không cần <code>PRAGMA</code> và <code>wal_checkpoint</code> (QT-20). Sao lưu bằng <code>pg_dump</code> (xem README).</li>
+      </ul>
+    </div></div>
     <div class="table-wrap"><table class="compact">
       <thead><tr><th>Hạng mục</th><th>Quy định</th></tr></thead>
       <tbody>

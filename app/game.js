@@ -165,7 +165,11 @@
     stars: $$('#stars .star'), starMsg: $('#star-msg'), endScore: $('#end-score'), ribbon: $('#ribbon'),
     stThuong: $('#st-thuong'), stVang: $('#st-vang'), stHaiCau: $('#st-haicau'), stTile: $('#st-tile'), stCombo: $('#st-combo'),
     top5: $('#top5'), btnReplay: $('#btn-replay'), btnHome: $('#btn-home'),
-    idleHints: $$('.js-idle'), debug: $('#debug')
+    idleHints: $$('.js-idle'), debug: $('#debug'),
+    reg: $('#scr-reg'), regForm: $('#reg-form'), regMsg: $('#reg-msg'), btnReg: $('#btn-reg'), btnRegBack: $('#btn-reg-back'),
+    fTen: $('#f-ten'), fEmail: $('#f-email'), fSdt: $('#f-sdt'), fDongY: $('#f-dongy'),
+    eTen: $('#e-ten'), eEmail: $('#e-email'), eSdt: $('#e-sdt'), eDongY: $('#e-dongy'),
+    dlgDk: $('#dlg-dieukhoan'), btnDk: $('#btn-dieukhoan'), dkNoiDung: $('#dk-noidung'), dkPhienBan: $('#dk-phienban')
   };
 
   // Lưới 3×3
@@ -228,7 +232,8 @@
 
   function show(screen) {
     el.start.hidden = screen !== 'start';
-    el.play.hidden = screen === 'start';
+    el.reg.hidden = screen !== 'reg';
+    el.play.hidden = screen === 'start' || screen === 'reg';
     el.end.hidden = screen !== 'end';
     el.endDim.hidden = screen !== 'end';
     el.play.classList.toggle('ending', screen === 'end');
@@ -241,6 +246,9 @@
     resetRound();
     el.ovPause.hidden = true; el.ovCount.hidden = true;
     el.startRecord.textContent = bang.length ? '🏆 Kỷ lục: ' + bang[0].diem : 'Chưa có kỷ lục';
+    // CN-19: về trang chủ là kết thúc phiên người chơi, form trống cho người kế tiếp
+    DK.phien = null;
+    xoaForm();
     show('start');
     setIdleHint('');
     el.btnStart.focus({ preventScroll: true });
@@ -278,9 +286,192 @@
     initAudio();
     clearTimers();
     resetRound();
+    G.maLuot = taoMaLuot();
     show('play');
     startCountdown();
   }
+
+  /* ---------------- v1.1 · CN-17…CN-20 Đăng ký người chơi ---------------- */
+  // Chỉ bật khi có server trả lời /api/cau-hinh (bản Docker). Bản GitHub Pages giữ nguyên v1.
+  var DK = { bat: false, phien: null, dangGui: false };
+  var KHOA_HANG_DOI = 'dapChimCanhCut.luotChoGui.v1';
+
+  function taoMaLuot() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    var b = new Uint8Array(16); crypto.getRandomValues(b);
+    b[6] = (b[6] & 0x0f) | 0x40; b[8] = (b[8] & 0x3f) | 0x80;
+    var h = Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+    return h.slice(0, 8) + '-' + h.slice(8, 12) + '-' + h.slice(12, 16) + '-' + h.slice(16, 20) + '-' + h.slice(20);
+  }
+
+  function fetchHetGio(url, opt, ms) {
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var t = ctrl ? setTimeout(function () { ctrl.abort(); }, ms || 8000) : null;
+    return fetch(url, Object.assign({ cache: 'no-store', credentials: 'same-origin' }, opt || {}, ctrl ? { signal: ctrl.signal } : {}))
+      .finally(function () { if (t) clearTimeout(t); });
+  }
+
+  function kiemTraServer() {
+    fetchHetGio('/api/cau-hinh', {}, 4000).then(function (r) { return r.ok ? r.json() : null; }).then(function (c) {
+      if (!c || !c.dang_ky) return;
+      DK.bat = true;
+      el.dkNoiDung.textContent = c.noi_dung_dieu_khoan || '';
+      el.dkPhienBan.textContent = 'Phiên bản điều khoản: ' + (c.phien_ban_dieu_khoan || '');
+      guiHangDoi();
+    }).catch(function () { /* không có server → chơi như v1 */ });
+  }
+
+  // QT-12 phía trình duyệt (server kiểm tra lại)
+  function chuanSdt(s) {
+    var d = String(s || '').replace(/[\s.\-()]/g, '');
+    if (d.indexOf('+84') === 0) d = '0' + d.slice(3);
+    else if (/^84\d{9}$/.test(d)) d = '0' + d.slice(2);
+    return d;
+  }
+  function kiemTruong(ten) {
+    var v;
+    if (ten === 'ho_ten') {
+      v = el.fTen.value.normalize('NFC').trim().replace(/\s+/g, ' ');
+      if (!v) return 'Vui lòng nhập họ tên';
+      if (Array.from(v).length < 2 || Array.from(v).length > 60) return 'Họ tên cần từ 2 đến 60 ký tự';
+      try { if (!/^[\p{L}\p{M}' -]+$/u.test(v)) return 'Họ tên chỉ gồm chữ cái'; } catch (e) { /* trình duyệt cũ: để server kiểm tra */ }
+      return '';
+    }
+    if (ten === 'email') {
+      v = el.fEmail.value.replace(/\s+/g, '').toLowerCase();
+      if (!v) return 'Vui lòng nhập email';
+      if (v.length > 100 || !/^[^\s@]+@[^\s@]+\.[^\s@.]+$/.test(v)) return 'Email chưa đúng định dạng';
+      return '';
+    }
+    if (ten === 'so_dien_thoai') {
+      v = chuanSdt(el.fSdt.value);
+      if (!v) return 'Vui lòng nhập số điện thoại';
+      if (!/^\d+$/.test(v) || v.length !== 10) return 'Số điện thoại cần đủ 10 chữ số';
+      if (!/^0(3|5|7|8|9)\d{8}$/.test(v)) return 'Số điện thoại di động không hợp lệ';
+      return '';
+    }
+    return '';
+  }
+  var O_FORM = { ho_ten: ['fTen', 'eTen'], email: ['fEmail', 'eEmail'], so_dien_thoai: ['fSdt', 'eSdt'], dong_y: ['fDongY', 'eDongY'] };
+  function datLoi(ten, msg) {
+    var o = O_FORM[ten]; if (!o) return;
+    el[o[1]].textContent = msg || '';
+    el[o[0]].setAttribute('aria-invalid', msg ? 'true' : 'false');
+  }
+  function xoaForm() {
+    if (!el.regForm) return;
+    el.regForm.reset();
+    Object.keys(O_FORM).forEach(function (k) { datLoi(k, ''); });
+    el.regMsg.textContent = '';
+    el.btnReg.disabled = true;
+    el.btnReg.textContent = 'Bắt đầu chơi';
+    DK.dangGui = false;
+  }
+  function moForm() {
+    G.state = 'reg';
+    xoaForm();
+    show('reg');
+    datIdle();
+    setIdleHint('');
+    el.fTen.focus({ preventScroll: true });
+  }
+  function dinhDangSdt() {
+    // Tự chèn khoảng trắng dạng 0912 345 678 khi gõ số bắt đầu bằng 0
+    var v = el.fSdt.value;
+    if (!/^0[\d ]*$/.test(v)) return;
+    var d = v.replace(/\s/g, '').slice(0, 10);
+    var f = d.length > 7 ? d.slice(0, 4) + ' ' + d.slice(4, 7) + ' ' + d.slice(7) : d.length > 4 ? d.slice(0, 4) + ' ' + d.slice(4) : d;
+    if (f !== v) el.fSdt.value = f;
+  }
+
+  function guiDangKy(e) {
+    e.preventDefault();
+    if (DK.dangGui) return;
+    initAudio();   // cú bấm thật của người dùng → mở âm thanh (iOS)
+    var dau = null;
+    ['ho_ten', 'email', 'so_dien_thoai'].forEach(function (k) {
+      var m = kiemTruong(k); datLoi(k, m);
+      if (m && !dau) dau = el[O_FORM[k][0]];
+    });
+    if (!el.fDongY.checked) { datLoi('dong_y', 'Vui lòng đồng ý với điều khoản để tham gia'); dau = dau || el.fDongY; }
+    if (dau) { dau.focus(); return; }
+
+    DK.dangGui = true;
+    el.btnReg.disabled = true;
+    el.btnReg.textContent = 'Đang gửi…';
+    el.regMsg.textContent = '';
+    fetchHetGio('/api/dang-ky', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ho_ten: el.fTen.value, email: el.fEmail.value, so_dien_thoai: el.fSdt.value, dong_y: el.fDongY.checked })
+    }, 8000).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (b) { return { s: r.status, b: b }; });
+    }).then(function (kq) {
+      if (G.state !== 'reg') return;
+      if (kq.s === 201 && kq.b.phien) {
+        DK.phien = kq.b.phien;
+        DK.dangGui = false;
+        el.btnReg.textContent = 'Bắt đầu chơi';
+        batDauLuot();
+        return;
+      }
+      if (kq.s === 422 && kq.b.loi) {
+        Object.keys(kq.b.loi).forEach(function (k) { datLoi(k, kq.b.loi[k]); });
+        var k0 = Object.keys(kq.b.loi)[0];
+        if (O_FORM[k0]) el[O_FORM[k0][0]].focus();
+      } else if (kq.s === 409 || kq.s === 429) {
+        el.regMsg.textContent = kq.b.thong_bao || 'Không đăng ký được, vui lòng thử lại.';
+      } else {
+        el.regMsg.textContent = 'Chưa lưu được đăng ký, vui lòng thử lại.';
+      }
+      ketThucGui();
+    }).catch(function () {
+      if (G.state !== 'reg') return;
+      el.regMsg.textContent = 'Chưa lưu được đăng ký, vui lòng thử lại.';
+      ketThucGui();
+    });
+  }
+  function ketThucGui() {
+    DK.dangGui = false;
+    el.btnReg.textContent = 'Bắt đầu chơi';
+    el.btnReg.disabled = !el.fDongY.checked;
+  }
+
+  /* CN-20 · Gửi kết quả lượt. Lỗi mạng → thử lại, rồi lưu tạm (không có thông tin cá nhân). */
+  function docHangDoi() {
+    try { var a = JSON.parse(store.get(KHOA_HANG_DOI) || '[]'); return Array.isArray(a) ? a : []; } catch (e) { return []; }
+  }
+  function ghiHangDoi(a) { store.set(KHOA_HANG_DOI, JSON.stringify(a.slice(-50))); }
+  function guiMotLuot(muc) {
+    return fetchHetGio('/api/luot-choi', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + muc.phien },
+      body: JSON.stringify(muc.luot)
+    }, 8000).then(function (r) { return r.status; });
+  }
+  function guiLuot(phien, luot) {
+    var muc = { phien: phien, luot: luot, luc: Date.now() };
+    var lan = 0, cho = [2000, 5000];
+    (function thu() {
+      guiMotLuot(muc).then(function (s) {
+        if (s >= 500 || s === 429) throw new Error('thử lại');
+        // 2xx: xong. 401/422: bỏ lượt, không thử lại (QT-23)
+      }).catch(function () {
+        if (lan < cho.length) { setTimeout(thu, cho[lan++]); return; }
+        var a = docHangDoi(); a.push(muc); ghiHangDoi(a);
+      });
+    })();
+  }
+  function guiHangDoi() {
+    var a = docHangDoi().filter(function (m) { return Date.now() - m.luc < 24 * 3600 * 1000; });
+    if (!a.length) { ghiHangDoi([]); return; }
+    var conLai = [];
+    a.reduce(function (p, m) {
+      return p.then(function () {
+        return guiMotLuot(m).then(function (s) { if (s >= 500 || s === 429) conLai.push(m); }, function () { conLai.push(m); });
+      });
+    }, Promise.resolve()).then(function () { ghiHangDoi(conLai); });
+  }
+  window.addEventListener('online', function () { if (DK.bat) guiHangDoi(); });
 
   /* ---------------- QT-02, QT-03 · Sinh con vật ---------------- */
   function chonLoai(t) {
@@ -529,7 +720,7 @@
   function datIdle() { G.idleUntil = Date.now() + CAU_HINH.tuVeTrangChu * 1000; }
   function setIdleHint(s) { el.idleHints.forEach(function (h) { h.textContent = s; }); }
   function kiemTraIdle() {
-    if (G.state !== 'paused' && G.state !== 'end') return;
+    if (G.state !== 'paused' && G.state !== 'end' && G.state !== 'reg') return;
     var con = G.idleUntil - Date.now();
     if (con <= 0) { goHome(); return; }
     setIdleHint(con <= CAU_HINH.nhacTuVe * 1000 ? 'Tự về trang chủ sau ' + Math.ceil(con / 1000) + ' giây' : '');
@@ -557,6 +748,16 @@
       var kq = xepBang(bang, { diem: G.score, sao: sao, ngay: new Date().toISOString() });
       bang = kq.ds; viTri = kq.viTri;
       ghiBang(bang);
+    }
+
+    // v1.1 · CN-20: gửi kết quả lượt về server (không chờ, màn hình kết thúc hiện ngay)
+    if (DK.bat && DK.phien && G.maLuot) {
+      guiLuot(DK.phien, {
+        ma_luot: G.maLuot, diem: G.score,
+        so_thuong: G.stats.thuong, so_vang: G.stats.vang, so_hai_cau: G.stats.haiCau,
+        so_lan_bam: G.stats.bam, combo_dai_nhat: G.comboMax
+      });
+      G.maLuot = null;
     }
 
     el.timeup.hidden = false;
@@ -720,7 +921,24 @@
   el.play.addEventListener('touchstart', function (e) { if (e.touches.length > 1) e.preventDefault(); }, { passive: false });
   document.addEventListener('dblclick', function (e) { e.preventDefault(); });
 
-  el.btnStart.addEventListener('click', batDauLuot);
+  // v1.1: có server và chưa có phiên → mở form đăng ký trước (CN-17)
+  el.btnStart.addEventListener('click', function () {
+    if (DK.bat && !DK.phien) { initAudio(); moForm(); } else batDauLuot();
+  });
+  el.regForm.addEventListener('submit', guiDangKy);
+  el.btnRegBack.addEventListener('click', goHome);
+  el.fDongY.addEventListener('change', function () {
+    if (!DK.dangGui) el.btnReg.disabled = !el.fDongY.checked;
+    if (el.fDongY.checked) datLoi('dong_y', '');
+  });
+  [['ho_ten', 'fTen'], ['email', 'fEmail'], ['so_dien_thoai', 'fSdt']].forEach(function (p) {
+    el[p[1]].addEventListener('blur', function () { if (el[p[1]].value) datLoi(p[0], kiemTruong(p[0])); });
+    el[p[1]].addEventListener('input', function () { if (el[p[1]].getAttribute('aria-invalid') === 'true') datLoi(p[0], kiemTruong(p[0])); });
+  });
+  el.fSdt.addEventListener('input', dinhDangSdt);
+  el.btnDk.addEventListener('click', function () {
+    if (el.dlgDk.showModal) el.dlgDk.showModal(); else window.alert(el.dkNoiDung.textContent);
+  });
   el.btnPause.addEventListener('click', function () { if (G.state === 'paused') resume(); else pause(); });
   el.btnResume.addEventListener('click', resume);
   el.btnPauseHome.addEventListener('click', goHome);       // lượt bị huỷ, không lưu
@@ -735,14 +953,14 @@
   });
 
   document.addEventListener('keydown', function (e) {
-    if (G.state === 'paused' || G.state === 'end') datIdle();
+    if (G.state === 'paused' || G.state === 'end' || G.state === 'reg') datIdle();
     if (e.key === 'Escape' || e.key === 'p' || e.key === 'P') {
       if (G.state === 'playing' || G.state === 'countdown') { e.preventDefault(); pause(); }
       else if (G.state === 'paused') { e.preventDefault(); resume(); }
     }
   });
   document.addEventListener('pointerdown', function () {
-    if (G.state === 'paused' || G.state === 'end') datIdle();
+    if (G.state === 'paused' || G.state === 'end' || G.state === 'reg') datIdle();
   }, true);
 
   // QT-08: ẩn tab / khoá máy / rời trang → tự tạm dừng
@@ -776,5 +994,6 @@
   capNhatNutAm();
   resetRound();
   goHome();
+  kiemTraServer();
   requestAnimationFrame(frame);
 })();

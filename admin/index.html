@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Người chơi · Quản trị Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="/design/tokens.css">
+<link rel="stylesheet" href="/admin/assets/admin.css">
+</head>
+<body class="admin-page">
+<header class="topbar">
+  <img class="logo" src="/design/assets/logo-fpt-trang.png" alt="FPT">
+  <span class="divider" aria-hidden="true"></span>
+  <span class="app-name">Quản trị · Đập Chim Cánh Cụt</span>
+  <button class="btn btn-ghost btn-sm" id="btn-logout" type="button">Đăng xuất</button>
+</header>
+
+<main class="wrap">
+  <div class="head-row">
+    <h1>Người chơi</h1>
+    <p class="summary" id="summary" aria-live="polite"></p>
+  </div>
+
+  <div class="toolbar">
+    <label class="search">
+      <span class="sr-only">Tìm kiếm</span>
+      <input id="q" type="search" placeholder="Tìm theo họ tên, email hoặc số điện thoại" maxlength="100" autocomplete="off">
+    </label>
+    <a class="btn btn-primary btn-sm" id="btn-csv" href="/api/admin/nguoi-choi.csv" download>⬇ Xuất CSV</a>
+  </div>
+  <p class="csv-note">File CSV chứa dữ liệu cá nhân. Người tải về chịu trách nhiệm lưu giữ an toàn và xoá khi hết mục đích.</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Họ và tên</th>
+          <th scope="col">Email</th>
+          <th scope="col">Số điện thoại</th>
+          <th scope="col"><button class="sort" data-sort="moi_nhat" data-sort-alt="cu_nhat">Đăng ký</button></th>
+          <th scope="col" class="num"><button class="sort" data-sort="nhieu_luot">Lượt</button></th>
+          <th scope="col" class="num"><button class="sort" data-sort="diem_cao">Điểm cao nhất</button></th>
+          <th scope="col">Lượt gần nhất</th>
+          <th scope="col"><span class="sr-only">Thao tác</span></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="empty" id="empty" hidden>
+    <p id="empty-text"></p>
+    <button class="btn btn-ghost btn-sm" id="btn-clear" type="button" hidden>Xoá bộ lọc</button>
+  </div>
+
+  <nav class="pager" aria-label="Phân trang">
+    <span id="range"></span>
+    <button class="btn btn-ghost btn-sm" id="btn-prev" type="button">‹ Trước</button>
+    <button class="btn btn-ghost btn-sm" id="btn-next" type="button">Sau ›</button>
+  </nav>
+</main>
+
+<!-- MH-10 Xác nhận xoá -->
+<dialog class="confirm" id="dlg-xoa" role="alertdialog" aria-labelledby="xoa-title" aria-describedby="xoa-desc">
+  <h2 id="xoa-title">Xoá người chơi?</h2>
+  <p id="xoa-desc"></p>
+  <p class="error" id="xoa-error" role="alert"></p>
+  <div class="actions">
+    <button class="btn btn-ghost" id="btn-huy" type="button">Huỷ</button>
+    <button class="btn btn-danger" id="btn-xoa" type="button">Xoá vĩnh viễn</button>
+  </div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script src="/admin/assets/admin.js"></script>
+</body>
+</html>

@@ -222,6 +222,37 @@ button:focus-visible{outline:none;box-shadow:var(--ring-focus)}
 .actions{display:flex;gap:var(--space-3);width:100%;flex:0 0 auto;padding-top:var(--space-2)}
 .actions .btn{flex:1;padding-left:var(--space-3);padding-right:var(--space-3);white-space:nowrap}
 
+/* ============ MH-07 Form đăng ký (v1.1) ============ */
+.reg-form{gap:var(--space-3)}
+.reg-title{font-family:var(--font-display);font-weight:var(--weight-black);font-size:var(--text-3xl);line-height:1;text-align:center;
+  -webkit-text-stroke:var(--text-stroke-display) var(--night-800);paint-order:stroke fill;text-shadow:var(--text-shadow-display)}
+.reg-sub{color:var(--color-text-muted);text-align:center;margin-top:calc(var(--space-2) * -1)}
+.reg-box{width:100%;background:var(--color-surface-strong);border:1px solid var(--color-border);border-radius:var(--radius-lg);
+  padding:var(--space-4);display:grid;gap:var(--space-2);backdrop-filter:blur(var(--blur-glass));-webkit-backdrop-filter:blur(var(--blur-glass))}
+.field{display:grid;gap:4px}
+.field label{font-weight:var(--weight-bold);font-size:var(--text-sm)}
+.field input{font:inherit;font-size:16px;color:var(--color-text-on-light);background:#fff;border:2px solid var(--ice-300);
+  border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);min-height:46px;width:100%;-webkit-user-select:text;user-select:text}
+.field input:focus{outline:none;border-color:var(--color-focus);box-shadow:var(--glow-teal)}
+.field input[aria-invalid="true"]{border-color:var(--red-500)}
+.err{color:var(--red-300);font-size:var(--text-sm);min-height:0}
+.err:empty{display:none}
+.check{display:flex;gap:var(--space-2);align-items:flex-start;font-size:var(--text-sm);cursor:pointer;margin-top:var(--space-1)}
+.check input{width:20px;height:20px;flex:0 0 20px;margin-top:2px;accent-color:var(--aurora-teal)}
+.link{font:inherit;color:var(--aurora-teal);background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
+.form-msg{width:100%;color:#fff;background:rgba(255,77,109,.3);border:1px solid var(--red-500);border-radius:var(--radius-md);
+  padding:var(--space-2) var(--space-3);font-size:var(--text-sm)}
+.form-msg:empty{display:none}
+.reg-form .btn-ghost{width:100%}
+.terms{margin:auto;max-width:min(92vw,420px);border:1px solid var(--color-border);border-radius:var(--radius-xl);padding:var(--space-5);
+  background:var(--night-800);color:var(--color-text);display:none}
+.terms[open]{display:grid;gap:var(--space-3)}
+.terms::backdrop{background:rgba(5,12,30,.7)}
+.terms h2{font-size:var(--text-xl);font-weight:var(--weight-black)}
+.terms p{color:var(--ice-100);font-size:var(--text-sm);line-height:var(--leading-normal)}
+.terms .dk-ver{color:var(--color-text-muted);font-size:var(--text-xs)}
+.terms form{display:flex;justify-content:flex-end}
+
 /* ---------- Debug (?debug=1) ---------- */
 .debug{position:absolute;left:6px;bottom:6px;z-index:20;font:12px/1.35 var(--font-mono);background:rgba(0,0,0,.65);color:#9CFFDA;
   padding:6px 8px;border-radius:6px;pointer-events:none;white-space:pre}

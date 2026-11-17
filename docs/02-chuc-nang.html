@@ -339,7 +339,9 @@
     <div class="table-wrap"><table>
       <thead><tr><th>Mã</th><th>Quyết định</th><th>Hệ quả</th></tr></thead>
       <tbody>
-        <tr><td class="id">QĐ-06</td><td>Database là <b>SQLite</b>, một file nằm trong <b>volume Docker</b>. Không thêm dịch vụ mới vào Compose.</td><td>Dữ liệu còn nguyên khi tạo lại container. Không nằm trong image hay repo.</td></tr>
+        <tr><td class="id">QĐ-06</td><td>Database là <b>SQLite</b>, một file nằm trong <b>volume Docker</b>. Không thêm dịch vụ mới vào Compose. <span class="badge orange">Thay bằng QĐ-10</span></td><td>Dữ liệu còn nguyên khi tạo lại container. Không nằm trong image hay repo.</td></tr>
+        <tr><td class="id">QĐ-10</td><td><b>Cập nhật khi viết code:</b> database là <b>PostgreSQL 16</b> (dịch vụ <code>db</code>, volume <code>du-lieu-db</code>).</td><td>Xem QT-15 (cập nhật).</td></tr>
+        <tr><td class="id">QĐ-11</td><td><b>Cập nhật khi viết code:</b> email và số điện thoại <b>đều là khoá không trùng</b>.</td><td>Xem QT-14 (cập nhật), CN-18.</td></tr>
         <tr><td class="id">QĐ-07</td><td>Trang admin có <b>1 tài khoản</b>, tên và mật khẩu đặt qua <b>biến môi trường (.env)</b>.</td><td>Không có trang quản lý tài khoản. Đổi mật khẩu = sửa .env rồi khởi động lại.</td></tr>
         <tr><td class="id">QĐ-08</td><td>Mỗi <b>người chơi mới đăng ký một lần</b> trước lượt đầu. Trùng số điện thoại thì <b>dùng lại hồ sơ cũ</b>. Điểm từng lượt được <b>gắn với người chơi</b>.</td><td>"Chơi lại" không phải điền lại. Về trang chủ thì phiên kết thúc, form trống cho người kế tiếp.</td></tr>
         <tr><td class="id">QĐ-09</td><td>Đăng ký chỉ có trên <b>bản chạy server (Docker)</b>. Link GitHub Pages giữ bản v1, không có đăng ký.</td><td>GitHub Pages chỉ phục vụ file tĩnh, không ghi được vào database.</td></tr>
@@ -411,6 +413,7 @@
           <li>Thông báo giống hệt người mới, không tiết lộ số điện thoại đã có trong hệ thống hay thông tin đã lưu.</li>
         </ul></div>
         <p class="refs">Quy tắc QT-14</p>
+        <div class="note violet"><span class="ic">🔄</span><p><b>Cập nhật khi viết code (QĐ-11):</b> nhập lại đúng <b>cả email và số điện thoại</b> → dùng lại hồ sơ. Email hoặc SĐT đã thuộc người khác (hoặc lệch nhau) → từ chối với thông báo "Email hoặc số điện thoại đã được dùng để đăng ký…", form giữ nguyên dữ liệu. Tiêu chí "không tiết lộ số đã có trong hệ thống" không còn áp dụng cho trường hợp từ chối.</p></div>
       </article>
 
       <article class="card fn" id="cn-19">

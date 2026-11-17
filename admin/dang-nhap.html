@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Đăng nhập quản trị · Đập Chim Cánh Cụt</title>
+<link rel="stylesheet" href="/design/tokens.css">
+<link rel="stylesheet" href="/admin/assets/admin.css">
+</head>
+<body class="login-page">
+<main class="login-card">
+  <img class="login-logo" src="/design/assets/logo-fpt-trang.png" alt="FPT">
+  <h1>Quản trị · Đập Chim Cánh Cụt</h1>
+  <p class="notice" id="notice" role="status"></p>
+  <form id="form-login" novalidate>
+    <label for="ten">Tên đăng nhập</label>
+    <input id="ten" name="ten" type="text" autocomplete="username" required autofocus>
+    <label for="mat-khau">Mật khẩu</label>
+    <div class="pw">
+      <input id="mat-khau" name="mat_khau" type="password" autocomplete="current-password" required>
+      <button type="button" class="pw-toggle" id="pw-toggle" aria-label="Hiện mật khẩu" aria-pressed="false">👁</button>
+    </div>
+    <p class="error" id="error" role="alert"></p>
+    <button class="btn btn-primary" id="btn-login" type="submit">Đăng nhập</button>
+  </form>
+</main>
+<script src="/admin/assets/dang-nhap.js"></script>
+</body>
+</html>

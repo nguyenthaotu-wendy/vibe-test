@@ -1,12 +1,43 @@
 name: dap-chim-canh-cut
 
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: dap-chim-canh-cut-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?Thiếu POSTGRES_USER trong .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Thiếu POSTGRES_PASSWORD trong .env}
+      POSTGRES_DB: ${POSTGRES_DB:?Thiếu POSTGRES_DB trong .env}
+    volumes:
+      - du-lieu-db:/var/lib/postgresql/data
+    # Không mở cổng ra máy: chỉ dịch vụ app trong cùng mạng Compose kết nối được
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
+
   app:
     build: .
     image: dap-chim-canh-cut:latest
     container_name: dap-chim-canh-cut
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "3000:3000"
     environment:
       PORT: "3000"
+      PGHOST: db
+      PGPORT: "5432"
+      PGUSER: ${POSTGRES_USER}
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+      PGDATABASE: ${POSTGRES_DB}
+      ADMIN_USER: ${ADMIN_USER:?Thiếu ADMIN_USER trong .env}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Thiếu ADMIN_PASSWORD trong .env}
+      COOKIE_SECURE: ${COOKIE_SECURE:-0}
     restart: unless-stopped
+
+volumes:
+  du-lieu-db:

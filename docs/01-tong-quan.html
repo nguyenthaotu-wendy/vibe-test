@@ -235,7 +235,9 @@
     <div class="table-wrap"><table>
       <thead><tr><th>Mã</th><th>Quyết định</th><th>Lý do</th></tr></thead>
       <tbody>
-        <tr><td class="id">QĐ-06</td><td>Database SQLite, một file trong volume Docker.</td><td>Không thêm dịch vụ, nhẹ cho máy tại quầy, dữ liệu còn khi tạo lại container.</td></tr>
+        <tr><td class="id">QĐ-06</td><td>Database SQLite, một file trong volume Docker. <span class="badge orange">Thay bằng QĐ-10</span></td><td>Không thêm dịch vụ, nhẹ cho máy tại quầy, dữ liệu còn khi tạo lại container.</td></tr>
+        <tr><td class="id">QĐ-10</td><td><b>Cập nhật khi viết code (17/11/2026):</b> database là <b>PostgreSQL 16</b>, dịch vụ <code>db</code> riêng trong Compose, dữ liệu trong volume <code>du-lieu-db</code>. Mật khẩu database và admin trong <code>.env</code>.</td><td>Theo yêu cầu khi viết code. Dễ chuyển lên máy chủ thật sau này.</td></tr>
+        <tr><td class="id">QĐ-11</td><td><b>Cập nhật khi viết code:</b> <b>email và số điện thoại đều không được trùng</b>. Nhập lại đúng cả hai → dùng lại hồ sơ cũ; chỉ một trong hai đã thuộc người khác → từ chối.</td><td>Theo yêu cầu "email không trùng". Đánh đổi: thông báo từ chối cho biết email/SĐT đã có trong hệ thống.</td></tr>
         <tr><td class="id">QĐ-07</td><td>1 tài khoản admin, đặt qua biến môi trường (.env).</td><td>Đủ cho nhóm nhỏ dùng chung, không lưu mật khẩu trong code.</td></tr>
         <tr><td class="id">QĐ-08</td><td>Người chơi mới đăng ký một lần, trùng số điện thoại dùng lại hồ sơ, điểm gắn với người chơi.</td><td>"Chơi lại" không phiền, ban tổ chức thấy điểm cao nhất của từng người.</td></tr>
         <tr><td class="id">QĐ-09</td><td>Đăng ký chỉ có ở bản Docker. GitHub Pages giữ bản v1.</td><td>GitHub Pages chỉ phục vụ file tĩnh.</td></tr>

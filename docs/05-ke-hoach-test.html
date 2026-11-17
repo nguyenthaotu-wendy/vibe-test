@@ -179,6 +179,12 @@ Bằng chứng:  ảnh chụp / video / lỗi trong Console</code></pre>
     <h2 class="sec"><span class="num">9.</span>Kiểm thử đăng ký người chơi &amp; admin</h2>
     <p class="sec-desc">Kiểm thử CN-17…CN-26 và QT-12…QT-23. Các ca TC-48…TC-83 nằm trong danh sách có ô tích ở <a href="#ca-kiem-thu">mục 4</a>, nhóm G–J.</p>
 
+    <div class="note violet"><span class="ic">🔄</span><p><b>Cập nhật khi viết code (17/11/2026):</b> database là PostgreSQL (QĐ-10), email và SĐT đều không trùng (QĐ-11). Đọc các ca sau theo nội dung mới:
+      <b>TC-54</b> → nhập lại đúng cả email và SĐT thì dùng lại hồ sơ (201); email hoặc SĐT đã thuộc người khác thì 409.
+      <b>TC-77</b> → volume là <code>du-lieu-db</code> của dịch vụ <code>db</code>.
+      <b>TC-79</b> → không có file <code>*.db</code>; kiểm tra image không chứa <code>.env</code>.
+      <b>TC-83</b> → dừng dịch vụ <code>db</code> (<code>docker compose stop db</code>) thay cho đổi quyền thư mục; <code>/healthz</code> phải trả 503.</p></div>
+
     <h3 class="sub">Phạm vi bổ sung</h3>
     <div class="grid g-2">
       <div class="card"><span class="badge teal">Kiểm tra</span>

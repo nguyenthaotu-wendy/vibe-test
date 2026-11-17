@@ -100,6 +100,50 @@
     </div>
   </section>
 
+  <!-- ============ MH-07 Form đăng ký người chơi (v1.1, chỉ khi có server) ============ -->
+  <section class="screen start reg" id="scr-reg" aria-label="Đăng ký người chơi" hidden>
+    <header class="start-top">
+      <img class="logo" src="../design/assets/logo-fpt-trang.png" alt="FPT">
+      <button class="btn btn-ghost btn-sound js-sound" type="button" aria-pressed="true">🔊 Âm thanh: Bật</button>
+    </header>
+    <form class="start-body reg-form" id="reg-form" novalidate>
+      <h1 class="reg-title">Đăng ký chơi</h1>
+      <p class="reg-sub">Điền thông tin để bắt đầu lượt chơi</p>
+      <div class="reg-box">
+        <div class="field">
+          <label for="f-ten">Họ và tên</label>
+          <input id="f-ten" name="ho_ten" type="text" autocomplete="name" maxlength="60" aria-describedby="e-ten" required>
+          <p class="err" id="e-ten" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="100" aria-describedby="e-email" required>
+          <p class="err" id="e-email" aria-live="polite"></p>
+        </div>
+        <div class="field">
+          <label for="f-sdt">Số điện thoại</label>
+          <input id="f-sdt" name="so_dien_thoai" type="tel" inputmode="tel" autocomplete="tel" maxlength="16" placeholder="0912 345 678" aria-describedby="e-sdt" required>
+          <p class="err" id="e-sdt" aria-live="polite"></p>
+        </div>
+        <label class="check">
+          <input id="f-dongy" type="checkbox" aria-labelledby="lbl-dongy" aria-describedby="e-dongy">
+          <span id="lbl-dongy">Tôi đồng ý cho ban tổ chức xử lý dữ liệu cá nhân theo <button type="button" class="link" id="btn-dieukhoan">điều khoản</button>.</span>
+        </label>
+        <p class="err" id="e-dongy" aria-live="polite"></p>
+      </div>
+      <p class="form-msg" id="reg-msg" role="alert"></p>
+      <button class="btn btn-primary btn-lg" id="btn-reg" type="submit" disabled>Bắt đầu chơi</button>
+      <button class="btn btn-ghost" id="btn-reg-back" type="button">Quay lại</button>
+      <p class="idle-hint js-idle" aria-live="polite"></p>
+    </form>
+    <dialog class="terms" id="dlg-dieukhoan" aria-labelledby="dk-title">
+      <h2 id="dk-title">Điều khoản xử lý dữ liệu cá nhân</h2>
+      <p id="dk-noidung"></p>
+      <p class="dk-ver" id="dk-phienban"></p>
+      <form method="dialog"><button class="btn btn-primary">Đã hiểu</button></form>
+    </dialog>
+  </section>
+
   <!-- ============ MH-03 Màn hình chơi (+ MH-02, MH-04, MH-05) ============ -->
   <section class="screen play" id="scr-play" aria-label="Màn hình chơi" hidden>
     <div class="hud-wrap">

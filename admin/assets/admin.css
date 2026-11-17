@@ -1,0 +1,87 @@
+/* Trang quản trị — dùng biến trong /design/tokens.css. Nền sáng, ưu tiên đọc bảng. */
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+body{font-family:var(--font-body);font-weight:var(--weight-regular);line-height:var(--leading-normal);color:var(--color-text-on-light);background:var(--ice-100);min-height:100vh}
+button,input{font:inherit}
+:focus-visible{outline:none;box-shadow:var(--ring-focus)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Nút ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border:0;cursor:pointer;text-decoration:none;
+  font-weight:var(--weight-black);border-radius:var(--radius-md);padding:var(--space-2) var(--space-5);white-space:nowrap}
+.btn-primary{background:var(--gradient-primary);color:#fff;box-shadow:0 4px 0 var(--color-primary-edge)}
+.btn-primary:active{transform:translateY(3px);box-shadow:0 1px 0 var(--color-primary-edge)}
+.btn-ghost{background:#fff;color:var(--night-800);box-shadow:inset 0 0 0 1px var(--ice-300)}
+.btn-danger{background:var(--gradient-danger);color:#fff;box-shadow:0 3px 0 var(--color-danger-edge)}
+.btn-sm{min-height:40px;padding:var(--space-1) var(--space-4);font-size:var(--text-sm)}
+.btn-xs{min-height:32px;padding:2px var(--space-3);font-size:var(--text-xs);border-radius:var(--radius-sm)}
+.btn:disabled,.btn.disabled{opacity:.5;cursor:not-allowed;filter:grayscale(.5)}
+.error{color:var(--red-700);font-size:var(--text-sm);font-weight:var(--weight-bold);min-height:0}
+.error:empty{display:none}
+
+/* ---------- MH-08 Đăng nhập ---------- */
+.login-page{display:grid;place-items:center;padding:var(--space-4);background:var(--color-bg-gradient)}
+.login-card{width:100%;max-width:400px;background:var(--color-surface-light);border-radius:var(--radius-xl);padding:var(--space-8) var(--space-6);
+  box-shadow:var(--shadow-lg);display:grid;gap:var(--space-4)}
+.login-logo{height:var(--logo-height-sm);width:auto;justify-self:center;background:var(--night-800);padding:6px 12px;border-radius:var(--radius-sm);box-sizing:content-box}
+.login-card h1{font-size:var(--text-xl);font-weight:var(--weight-black);text-align:center;line-height:var(--leading-snug)}
+.login-card form{display:grid;gap:var(--space-2)}
+.login-card label{font-weight:var(--weight-bold);font-size:var(--text-sm);margin-top:var(--space-2)}
+.login-card input{width:100%;min-height:46px;border:2px solid var(--ice-300);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);font-size:16px;background:#fff;color:inherit}
+.login-card input:focus{border-color:var(--color-focus)}
+.login-card .btn{margin-top:var(--space-3);width:100%}
+.pw{position:relative}
+.pw input{padding-right:52px}
+.pw-toggle{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:44px;height:38px;border:0;background:none;cursor:pointer;font-size:18px;border-radius:var(--radius-sm)}
+.notice{background:var(--ice-50);border:1px solid var(--ice-300);border-radius:var(--radius-md);padding:var(--space-2) var(--space-3);font-size:var(--text-sm)}
+.notice:empty{display:none}
+
+/* ---------- MH-09 Danh sách ---------- */
+.topbar{display:flex;align-items:center;gap:var(--space-3);padding:var(--space-3) var(--space-6);background:var(--night-800);color:#fff;flex-wrap:wrap}
+.topbar .logo{height:var(--logo-height-sm);width:auto}
+.topbar .divider{width:1px;height:26px;background:rgba(255,255,255,.3)}
+.topbar .app-name{font-weight:var(--weight-bold)}
+.topbar .btn{margin-left:auto}
+.wrap{max-width:1200px;margin:0 auto;padding:var(--space-6)}
+.head-row{display:flex;align-items:baseline;gap:var(--space-3);flex-wrap:wrap}
+.head-row h1{font-size:var(--text-2xl);font-weight:var(--weight-black)}
+.summary{color:var(--color-text-on-light-muted)}
+.toolbar{display:flex;gap:var(--space-3);margin-top:var(--space-4);flex-wrap:wrap}
+.search{flex:1;min-width:220px}
+.search input{width:100%;min-height:40px;border:2px solid var(--ice-300);border-radius:var(--radius-md);padding:var(--space-1) var(--space-3);background:#fff;color:inherit}
+.search input:focus{border-color:var(--color-focus)}
+.csv-note{font-size:var(--text-xs);color:var(--color-text-on-light-muted);margin-top:var(--space-2)}
+.table-wrap{margin-top:var(--space-4);overflow-x:auto;background:#fff;border:1px solid var(--ice-200);border-radius:var(--radius-lg)}
+table{width:100%;border-collapse:collapse;font-size:var(--text-sm);min-width:900px}
+th,td{text-align:left;padding:var(--space-2) var(--space-3);border-bottom:1px solid var(--ice-100);vertical-align:middle}
+th{background:var(--ice-50);font-size:var(--text-xs);text-transform:uppercase;letter-spacing:var(--tracking-wide);color:var(--color-text-on-light-muted);white-space:nowrap}
+tbody tr:hover{background:var(--ice-50)}
+th:first-child,td.name{position:sticky;left:0;background:#fff;z-index:1}
+th:first-child{background:var(--ice-50)}
+td.name{font-weight:var(--weight-bold)}
+.num{text-align:right;font-variant-numeric:tabular-nums}
+.nowrap{white-space:nowrap}
+.sort{font:inherit;text-transform:inherit;letter-spacing:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+.sort::after{content:" ↕";opacity:.4}
+.sort.on{color:var(--night-800)}
+.sort.on[aria-sort="descending"]::after{content:" ▼";opacity:1}
+.sort.on[aria-sort="ascending"]::after{content:" ▲";opacity:1}
+.empty{text-align:center;padding:var(--space-8);display:grid;gap:var(--space-3);justify-items:center;color:var(--color-text-on-light-muted)}
+.pager{display:flex;align-items:center;gap:var(--space-2);justify-content:flex-end;margin-top:var(--space-4);flex-wrap:wrap}
+.pager span{margin-right:auto;color:var(--color-text-on-light-muted);font-size:var(--text-sm)}
+
+/* ---------- MH-10 Xác nhận xoá ---------- */
+.confirm{margin:auto;max-width:min(92vw,460px);border:0;border-radius:var(--radius-xl);padding:var(--space-6);box-shadow:var(--shadow-lg);color:inherit}
+.confirm::backdrop{background:rgba(11,30,63,.55)}
+.confirm h2{font-size:var(--text-xl);font-weight:var(--weight-black);margin-bottom:var(--space-2)}
+.confirm p{margin-bottom:var(--space-3)}
+.confirm .actions{display:flex;justify-content:flex-end;gap:var(--space-3)}
+
+.toast{position:fixed;top:var(--space-4);left:50%;transform:translateX(-50%);z-index:50;background:var(--night-800);color:#fff;
+  padding:var(--space-2) var(--space-5);border-radius:var(--radius-pill);box-shadow:var(--shadow-md);font-weight:var(--weight-bold)}
+
+@media (max-width:640px){
+  .wrap{padding:var(--space-4)}
+  .topbar{padding:var(--space-3) var(--space-4)}
+  .topbar .divider,.topbar .app-name{display:none}
+}

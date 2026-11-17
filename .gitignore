@@ -18,3 +18,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+
+# Mẫu cấu hình được phép commit (không chứa mật khẩu thật)
+!.env.example
