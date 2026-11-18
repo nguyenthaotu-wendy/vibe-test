@@ -152,6 +152,28 @@ async function xuLy(req, res, url) {
     catch (e) { return gui(res, 503, 'database không truy cập được'); }
   }
 
+  // TẠM THỜI (chẩn đoán proxy trên Render) — sẽ gỡ. Chỉ trả về CẤU TRÚC header, không trả giá trị IP.
+  if (p === '/api/chan-doan-ip' && m === 'GET') {
+    const h = req.headers;
+    const tach = (v) => String(v || '').split(',').map((s) => s.trim()).filter(Boolean);
+    const xff = tach(h['x-forwarded-for']);
+    const goc = (req.socket.remoteAddress || '').replace(/^::ffff:/, '');
+    const cf = h['cf-connecting-ip'] || '';
+    const tc = h['true-client-ip'] || '';
+    const xr = h['x-real-ip'] || '';
+    const viTri = (v) => (v ? xff.indexOf(v) : null);
+    const loai = (v) => (!v ? null : /^(10\.|127\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(v) ? 'noi-bo' : 'cong-khai');
+    return guiJson(res, 200, {
+      socket: loai(goc),
+      xff_so_phan_tu: xff.length,
+      xff_loai: xff.map(loai),
+      co_cf_connecting_ip: !!cf, cf_trong_xff_tai: viTri(cf),
+      co_true_client_ip: !!tc, true_client_ip_trong_xff_tai: viTri(tc), true_client_bang_cf: !!tc && tc === cf,
+      co_x_real_ip: !!xr, x_real_ip_trong_xff_tai: viTri(xr),
+      ip_dang_dung_trong_xff_tai: xff.indexOf(ipCua(req))
+    });
+  }
+
   /* ----- API người chơi ----- */
   if (p === '/api/cau-hinh' && m === 'GET') return guiJson(res, 200, api.cauHinh());
   if (p === '/api/dang-ky' && m === 'POST') {
