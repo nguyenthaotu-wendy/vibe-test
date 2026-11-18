@@ -25,3 +25,12 @@ Thumbs.db
 .vscode
 .idea
 *.swp
+
+# Cấu hình deploy, không cần trong image
+compose.prod.yaml
+Caddyfile
+scripts
+.gitattributes
+*.sql
+*.sql.gz
+sao-luu

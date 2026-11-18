@@ -86,8 +86,25 @@ async function docJson(req) {
   catch (e) { if (e.status) throw e; throw Object.assign(new Error('JSON không hợp lệ'), { status: 400 }); }
 }
 
+/* T3 · IP thật của người dùng khi đứng sau reverse proxy (Caddy).
+   Chỉ tin X-Forwarded-For khi TRUST_PROXY=1 VÀ kết nối đến từ địa chỉ nội bộ (mạng Docker).
+   Lấy giá trị cuối cùng trong header: đó là IP do proxy của mình ghi vào, không phải giá trị
+   do người dùng tự gửi lên (Caddy cũng xoá X-Forwarded-For từ nguồn không tin cậy). */
+const TRUST_PROXY = process.env.TRUST_PROXY === '1';
+
+function laDiaChiNoiBo(ip) {
+  return /^(10\.|127\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(ip) ||
+    ip === '::1' || /^f[cd][0-9a-f]{2}:/i.test(ip);
+}
+
 function ipCua(req) {
-  return (req.socket.remoteAddress || '').replace(/^::ffff:/, '');
+  const goc = (req.socket.remoteAddress || '').replace(/^::ffff:/, '');
+  if (!TRUST_PROXY || !laDiaChiNoiBo(goc)) return goc;
+  const xff = req.headers['x-forwarded-for'];
+  if (!xff) return goc;
+  const ds = String(xff).split(',').map((s) => s.trim()).filter(Boolean);
+  const cuoi = (ds[ds.length - 1] || '').replace(/^::ffff:/, '');
+  return /^[0-9a-f.:]{2,45}$/i.test(cuoi) ? cuoi : goc;
 }
 
 /** Ghép đường dẫn an toàn: trả về null nếu cố đi ra ngoài thư mục gốc. */

@@ -1,0 +1,21 @@
+# T2 · Caddy: HTTPS tự động cho tên miền trong biến DOMAIN (đặt ở .env).
+# Caddy tự xin và gia hạn chứng chỉ Let's Encrypt, tự chuyển http → https.
+# Cần: bản ghi DNS A của DOMAIN trỏ về IP máy ảo, cổng 80 và 443 mở.
+
+{$DOMAIN} {
+	encode zstd gzip
+
+	header {
+		# HSTS: trình duyệt chỉ dùng HTTPS cho tên miền này trong 1 năm
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	# Caddy ghi IP người dùng vào X-Forwarded-For và bỏ giá trị do người dùng tự gửi.
+	reverse_proxy app:3000
+
+	log {
+		# Chỉ ghi lỗi, không ghi từng yêu cầu (tránh lưu IP, đường dẫn tìm kiếm của admin)
+		level ERROR
+	}
+}

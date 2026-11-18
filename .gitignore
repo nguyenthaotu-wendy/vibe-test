@@ -21,3 +21,9 @@ Thumbs.db
 
 # Mẫu cấu hình được phép commit (không chứa mật khẩu thật)
 !.env.example
+!.env.production.example
+
+# Bản sao lưu database (chứa dữ liệu cá nhân)
+*.sql
+*.sql.gz
+sao-luu/

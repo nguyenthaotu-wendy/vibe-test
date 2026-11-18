@@ -59,3 +59,25 @@ Bản chạy Docker có thêm **đăng ký người chơi** (họ tên, email, s
 - Bảng điểm cao trên máy và tuỳ chọn âm thanh vẫn lưu trong trình duyệt (localStorage).
 - Link GitHub Pages là bản tĩnh, không có server nên **không có đăng ký**, game chơi như bản v1.
 - Phông Baloo 2 tải từ Google Fonts. Khi máy không có mạng, game dùng phông dự phòng.
+
+## Chạy thật trên máy chủ (HTTPS)
+
+Kế hoạch đầy đủ cho Google Cloud Free Tier: `docs/06-ke-hoach-deploy.html`.
+
+| File | Vai trò |
+|---|---|
+| `compose.prod.yaml` | Chồng lên `compose.yaml`: thêm Caddy (HTTPS tự động), giới hạn RAM cho máy 1 GB, tinh chỉnh PostgreSQL, xoay vòng log, không mở cổng 3000 |
+| `Caddyfile` | Tên miền lấy từ biến `DOMAIN`, Caddy tự xin và gia hạn chứng chỉ Let's Encrypt |
+| `.env.production.example` | Mẫu `.env` cho máy chủ: `DOMAIN`, mật khẩu mới, `COOKIE_SECURE=1`, nội dung điều khoản |
+| `scripts/sao-luu.sh` | Sao lưu database (`pg_dump` nén), giữ 7 bản, chạy bằng cron |
+
+Trên máy chủ, sau khi bản ghi DNS của tên miền đã trỏ về IP máy:
+
+```bash
+cp .env.production.example .env && chmod 600 .env   # rồi sửa .env
+docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+```
+
+- Chỉ Caddy mở cổng 80 và 443. App đọc IP thật của người dùng từ Caddy (`TRUST_PROXY=1`), nên giới hạn tần suất và khoá đăng nhập vẫn tính theo từng người.
+- Thử trên máy cá nhân: đặt `DOMAIN=localhost` rồi mở `https://localhost` (Caddy dùng chứng chỉ nội bộ nên trình duyệt sẽ cảnh báo).
+- Sao lưu hằng ngày: `crontab -e` rồi thêm `0 2 * * * cd $HOME/dcc && ./scripts/sao-luu.sh >> $HOME/sao-luu/sao-luu.log 2>&1`.

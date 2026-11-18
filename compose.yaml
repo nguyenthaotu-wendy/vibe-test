@@ -37,6 +37,9 @@ services:
       ADMIN_USER: ${ADMIN_USER:?Thiếu ADMIN_USER trong .env}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:?Thiếu ADMIN_PASSWORD trong .env}
       COOKIE_SECURE: ${COOKIE_SECURE:-0}
+      # T4 · Điều khoản đồng ý (QT-13). Để trống thì dùng nội dung giữ chỗ trong server/lib/api.js
+      NOI_DUNG_DIEU_KHOAN: ${NOI_DUNG_DIEU_KHOAN:-}
+      PHIEN_BAN_DIEU_KHOAN: ${PHIEN_BAN_DIEU_KHOAN:-}
     restart: unless-stopped
 
 volumes:

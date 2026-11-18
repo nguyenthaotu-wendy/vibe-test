@@ -1,0 +1,66 @@
+# =====================================================================
+# Cấu hình chạy thật trên máy ảo e2-micro (1 GB RAM) — docs/06-ke-hoach-deploy.html
+# Dùng chồng lên compose.yaml:
+#   docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+# Cần Docker Compose ≥ 2.24 (để dùng !reset).
+# =====================================================================
+
+x-log: &log
+  logging:
+    driver: json-file
+    options:
+      max-size: "10m"
+      max-file: "3"
+
+services:
+  # T1 · Reverse proxy, HTTPS tự động (Let's Encrypt) cho DOMAIN
+  caddy:
+    image: caddy:2-alpine
+    container_name: dap-chim-canh-cut-caddy
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      DOMAIN: ${DOMAIN:?Thiếu DOMAIN trong .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    mem_limit: 64m
+    restart: unless-stopped
+    <<: *log
+
+  app:
+    # Không mở cổng 3000 ra máy: chỉ Caddy ra Internet
+    ports: !reset []
+    environment:
+      NODE_OPTIONS: "--max-old-space-size=128"
+      COOKIE_SECURE: "1"      # luôn bật: bản prod chỉ chạy sau HTTPS của Caddy
+      TRUST_PROXY: "1"        # T3: đọc IP thật từ X-Forwarded-For do Caddy ghi
+    mem_limit: 192m
+    <<: *log
+
+  db:
+    # Tinh chỉnh PostgreSQL cho máy 1 GB RAM
+    command:
+      - postgres
+      - -c
+      - shared_buffers=64MB
+      - -c
+      - work_mem=2MB
+      - -c
+      - maintenance_work_mem=32MB
+      - -c
+      - effective_cache_size=192MB
+      - -c
+      - max_connections=20
+    mem_limit: 256m
+    <<: *log
+
+volumes:
+  caddy-data:
+  caddy-config:
