@@ -420,7 +420,7 @@ gcloud compute snapshots list</code></pre>
     <h3 class="sub">Thay đổi code cho phương án này</h3>
     <ul class="list">
       <li><code>server/lib/db.js</code>: hỗ trợ <code>DATABASE_URL</code>; SSL bật và kiểm tra chứng chỉ khi máy chủ database không phải nội bộ; chờ kết nối 15 giây (Neon thức dậy từ trạng thái ngủ); số kết nối tối đa đặt qua <code>DB_POOL_MAX</code>.</li>
-      <li><code>server/server.js</code>: thêm <code>TRUST_PROXY_HOPS</code> để chọn đúng IP người dùng khi có nhiều lớp proxy; mặc định 1, kiểm tra lại sau khi deploy.</li>
+      <li><code>server/server.js</code>: thêm <code>TRUST_PROXY_HEADER</code> và <code>TRUST_PROXY_HOPS</code>. Trên Render (sau Cloudflare), <code>X-Forwarded-For</code> có dạng [giá trị người dùng tự gửi…, IP thật, Cloudflare, Render nội bộ], nên đọc <code>cf-connecting-ip</code> (Cloudflare luôn ghi đè), dự phòng phần tử thứ 3 từ cuối. Đã kiểm tra 18/11/2026: 11 lần đăng ký với IP giả mạo khác nhau → lần thứ 11 bị chặn (429).</li>
       <li><code>render.yaml</code>: dịch vụ <code>dap-chim-canh-cut</code>, gói free, <code>/healthz</code>, biến môi trường.</li>
     </ul>
     <h3 class="sub">Khác biệt so với phương án Google Cloud</h3>

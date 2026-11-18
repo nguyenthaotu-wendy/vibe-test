@@ -90,7 +90,7 @@ Không cần Google Cloud, không cần nạp tiền. Server chạy trên **Rend
 ### 4. Kiểm tra sau khi chạy
 - `https://<tên miền>/healthz` trả `ok`; trang chủ có form đăng ký; `/admin` chuyển về trang đăng nhập.
 - Đăng ký thử bằng dữ liệu giả, chơi 1 lượt, đăng nhập `/admin` thấy người vừa đăng ký, rồi **xoá** dòng thử.
-- Sai mật khẩu admin 5 lần từ điện thoại (4G): chỉ điện thoại đó bị khoá, máy khác vẫn đăng nhập được. Nếu máy khác cũng bị khoá, đổi `TRUST_PROXY_HOPS` trên Render thành `2` rồi thử lại.
+- Sai mật khẩu admin 5 lần từ điện thoại (4G): chỉ điện thoại đó bị khoá, máy khác vẫn đăng nhập được. Server đọc IP thật từ header `cf-connecting-ip` (Render đứng sau Cloudflare, `TRUST_PROXY_HEADER` trong `render.yaml`).
 
 ### Xoá sạch sau khoá học
 Xuất CSV nếu cần giữ dữ liệu, gỡ bản ghi DNS, xoá dịch vụ trên Render (**Settings → Delete Web Service**), xoá project trên Neon (**Settings → Delete project**).
