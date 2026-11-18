@@ -1,0 +1,40 @@
+# =====================================================================
+# Render Blueprint — deploy miễn phí lên Render (web service chạy Dockerfile).
+# Database dùng Neon (PostgreSQL miễn phí, ngoài Render): dán chuỗi kết nối
+# vào biến DATABASE_URL khi Render hỏi.
+# Hướng dẫn: README.md · mục "Deploy miễn phí: Render + Neon".
+# =====================================================================
+services:
+  - type: web
+    name: dap-chim-canh-cut
+    runtime: docker
+    plan: free
+    region: singapore
+    branch: feat/deploy-render
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      # Chuỗi kết nối Neon, dạng postgresql://...neon.tech/neondb?sslmode=require
+      - key: DATABASE_URL
+        sync: false
+      - key: ADMIN_USER
+        value: quantri
+      # Render tự tạo chuỗi ngẫu nhiên mạnh; xem trong Render → Environment
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: COOKIE_SECURE
+        value: "1"
+      - key: TRUST_PROXY
+        value: "1"
+      - key: TRUST_PROXY_HOPS
+        value: "1"
+      - key: DB_POOL_MAX
+        value: "5"
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=384"
+      # Điều khoản đồng ý (QT-13): điền nội dung thật trên Render → Environment
+      - key: NOI_DUNG_DIEU_KHOAN
+        sync: false
+      - key: PHIEN_BAN_DIEU_KHOAN
+        value: "2026-11-v1"

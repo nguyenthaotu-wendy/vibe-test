@@ -50,6 +50,7 @@
       <a href="#bo-nho">4. RAM 1 GB: swap &amp; giới hạn</a><a href="#thay-doi">5. Thay đổi cần làm trong repo</a>
       <a href="#cac-buoc">6. Các bước deploy</a><a href="#chi-phi">7. Chi phí &amp; cách tránh</a>
       <a href="#bao-mat">8. Rủi ro bảo mật</a><a href="#xoa-sach">9. Xoá sạch sau khoá học</a>
+      <a href="#render">10. Phương án miễn phí: Render + Neon</a>
     </nav>
   </div>
 
@@ -400,6 +401,40 @@ gcloud compute snapshots list</code></pre>
       <li><b>Sau 1–2 ngày:</b> mở Billing → Reports, chi phí theo ngày phải về 0.</li>
       <li>Xoá các file sao lưu và CSV còn trên máy cá nhân khi hết mục đích.</li>
     </ol>
+  </section>
+
+  <!-- 10 -->
+  <section id="render" class="v11">
+    <div class="v11-tag"><span class="badge orange">Bổ sung 18/11/2026</span><span class="badge teal">Đã chọn</span></div>
+    <h2 class="sec"><span class="num">10.</span>Phương án miễn phí đã chọn: Render + Neon</h2>
+    <p class="sec-desc">Google Cloud yêu cầu tài khoản thanh toán nạp trước tối thiểu 800.000 ₫ mới mở được (tài khoản đang ở trạng thái "closed"), kể cả khi chỉ dùng Free Tier. Vì vậy chọn phương án không cần nạp tiền và vẫn gắn được tên miền riêng. Các mục 1–9 giữ lại để dùng khi chuyển sang Google Cloud sau này.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Thành phần</th><th>Dịch vụ (gói Free)</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td>Server game + đăng ký + admin</td><td><b>Render</b> web service, chạy <code>Dockerfile</code> có sẵn, vùng Singapore</td><td>Cấu hình trong <code>render.yaml</code>; HTTPS và tên miền riêng miễn phí; tự deploy khi push nhánh <code>feat/deploy-render</code>.</td></tr>
+        <tr><td>Database</td><td><b>Neon</b> PostgreSQL 16, vùng Singapore</td><td>Kết nối qua <code>DATABASE_URL</code> có SSL kiểm tra chứng chỉ.</td></tr>
+        <tr><td>Tên miền</td><td>Nhà đăng ký tên miền hiện có</td><td>CNAME (tên miền con) hoặc A/ALIAS (tên miền gốc) trỏ về Render.</td></tr>
+        <tr><td>Mật khẩu admin</td><td>Render tự sinh (<code>generateValue</code>)</td><td>Không đi qua máy cá nhân hay khung chat; xem ở Render → Environment.</td></tr>
+      </tbody>
+    </table></div>
+    <h3 class="sub">Thay đổi code cho phương án này</h3>
+    <ul class="list">
+      <li><code>server/lib/db.js</code>: hỗ trợ <code>DATABASE_URL</code>; SSL bật và kiểm tra chứng chỉ khi máy chủ database không phải nội bộ; chờ kết nối 15 giây (Neon thức dậy từ trạng thái ngủ); số kết nối tối đa đặt qua <code>DB_POOL_MAX</code>.</li>
+      <li><code>server/server.js</code>: thêm <code>TRUST_PROXY_HOPS</code> để chọn đúng IP người dùng khi có nhiều lớp proxy; mặc định 1, kiểm tra lại sau khi deploy.</li>
+      <li><code>render.yaml</code>: dịch vụ <code>dap-chim-canh-cut</code>, gói free, <code>/healthz</code>, biến môi trường.</li>
+    </ul>
+    <h3 class="sub">Khác biệt so với phương án Google Cloud</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Hạng mục</th><th>Render + Neon</th></tr></thead>
+      <tbody>
+        <tr><td>Chi phí</td><td>0 ₫ (ngoài phí tên miền)</td></tr>
+        <tr><td>Thời gian phản hồi</td><td>Server ngủ sau ~15 phút rảnh; lần vào đầu chờ 30–60 giây. Trong sự kiện có người chơi liên tục thì không ảnh hưởng.</td></tr>
+        <tr><td>Dữ liệu cá nhân</td><td>Nằm ở Render và Neon (bên thứ ba, Singapore). Cần nêu trong điều khoản đồng ý.</td></tr>
+        <tr><td>Sao lưu</td><td>Neon gói Free có khôi phục theo thời điểm trong thời gian ngắn; xuất CSV từ /admin định kỳ nếu cần giữ lâu.</td></tr>
+        <tr><td>Rủi ro</td><td>Giới hạn gói Free có thể đổi; nếu hết hạn mức, dịch vụ tạm dừng chứ không tự tính phí.</td></tr>
+      </tbody>
+    </table></div>
+    <p style="margin-top:var(--space-4)">Các bước chi tiết (Neon → Render → tên miền → kiểm tra → xoá sạch): <code>README.md</code>, mục "Deploy miễn phí: Render + Neon".</p>
   </section>
 
   <nav class="pager" aria-label="Chuyển trang">

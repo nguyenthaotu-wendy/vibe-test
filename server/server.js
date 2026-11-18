@@ -91,6 +91,9 @@ async function docJson(req) {
    Lấy giá trị cuối cùng trong header: đó là IP do proxy của mình ghi vào, không phải giá trị
    do người dùng tự gửi lên (Caddy cũng xoá X-Forwarded-For từ nguồn không tin cậy). */
 const TRUST_PROXY = process.env.TRUST_PROXY === '1';
+// Số proxy tin cậy đứng trước app: Caddy = 1. Trên dịch vụ có nhiều lớp proxy (vd. Render)
+// có thể cần lớn hơn; kiểm tra sau khi deploy (docs/06 · phương án Render).
+const TRUST_PROXY_HOPS = Math.max(1, parseInt(process.env.TRUST_PROXY_HOPS, 10) || 1);
 
 function laDiaChiNoiBo(ip) {
   return /^(10\.|127\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(ip) ||
@@ -103,7 +106,7 @@ function ipCua(req) {
   const xff = req.headers['x-forwarded-for'];
   if (!xff) return goc;
   const ds = String(xff).split(',').map((s) => s.trim()).filter(Boolean);
-  const cuoi = (ds[ds.length - 1] || '').replace(/^::ffff:/, '');
+  const cuoi = (ds[Math.max(0, ds.length - TRUST_PROXY_HOPS)] || '').replace(/^::ffff:/, '');
   return /^[0-9a-f.:]{2,45}$/i.test(cuoi) ? cuoi : goc;
 }
 

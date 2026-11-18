@@ -1,13 +1,38 @@
 /* =====================================================================
    QT-15 · Database PostgreSQL
-   Kết nối qua biến môi trường chuẩn của node-postgres:
-   PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE (đặt trong compose.yaml / .env).
+   Hai cách cấu hình kết nối:
+   1. DATABASE_URL (vd. Neon trên Render): postgresql://user:pass@host/db?sslmode=require
+      → bật SSL có kiểm tra chứng chỉ khi máy chủ không phải nội bộ.
+   2. Biến chuẩn của node-postgres: PGHOST, PGPORT, PGUSER, PGPASSWORD, PGDATABASE
+      (Docker Compose trên máy / máy ảo).
    ===================================================================== */
 'use strict';
 
 const { Pool } = require('pg');
 
-const pool = new Pool({ max: 10, idleTimeoutMillis: 30000, connectionTimeoutMillis: 5000 });
+function cauHinhKetNoi() {
+  const chung = {
+    max: Number(process.env.DB_POOL_MAX) || 10,
+    idleTimeoutMillis: 30000,
+    // Neon gói miễn phí tự "ngủ" khi rảnh; lần kết nối đầu cần vài giây để thức dậy
+    connectionTimeoutMillis: 15000
+  };
+  const url = process.env.DATABASE_URL;
+  if (!url) return chung;
+  let host = '';
+  try { host = new URL(url).hostname; } catch (e) { throw new Error('DATABASE_URL không hợp lệ'); }
+  const noiBo = /^(localhost|127\.|db$|10\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(host);
+  // Bỏ sslmode khỏi chuỗi để tự quyết định SSL ở dưới (tránh pg hiểu khác nhau giữa các phiên bản)
+  const u = new URL(url);
+  u.searchParams.delete('sslmode');
+  u.searchParams.delete('channel_binding');
+  return Object.assign(chung, {
+    connectionString: u.toString(),
+    ssl: noiBo || process.env.DB_SSL === '0' ? false : { rejectUnauthorized: true }
+  });
+}
+
+const pool = new Pool(cauHinhKetNoi());
 pool.on('error', (e) => console.error('[db] lỗi kết nối nền:', e.code || e.message));
 
 const SCHEMA = `
