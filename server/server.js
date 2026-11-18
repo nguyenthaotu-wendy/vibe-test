@@ -100,9 +100,18 @@ function laDiaChiNoiBo(ip) {
     ip === '::1' || /^f[cd][0-9a-f]{2}:/i.test(ip);
 }
 
+// Header IP do proxy tin cậy đặt và luôn ghi đè (vd. Render đứng sau Cloudflare: cf-connecting-ip).
+// Để trống thì dùng X-Forwarded-For theo TRUST_PROXY_HOPS (vd. Caddy trên máy ảo).
+const TRUST_PROXY_HEADER = String(process.env.TRUST_PROXY_HEADER || '').trim().toLowerCase();
+const RE_IP = /^[0-9a-f.:]{2,45}$/i;
+
 function ipCua(req) {
   const goc = (req.socket.remoteAddress || '').replace(/^::ffff:/, '');
   if (!TRUST_PROXY || !laDiaChiNoiBo(goc)) return goc;
+  if (TRUST_PROXY_HEADER) {
+    const v = String(req.headers[TRUST_PROXY_HEADER] || '').trim().replace(/^::ffff:/, '');
+    if (RE_IP.test(v)) return v;
+  }
   const xff = req.headers['x-forwarded-for'];
   if (!xff) return goc;
   const ds = String(xff).split(',').map((s) => s.trim()).filter(Boolean);

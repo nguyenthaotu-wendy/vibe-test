@@ -27,8 +27,13 @@ services:
         value: "1"
       - key: TRUST_PROXY
         value: "1"
+      # Render đứng sau Cloudflare: IP thật nằm ở cf-connecting-ip (Cloudflare luôn ghi đè).
+      # X-Forwarded-For có dạng [giá trị người dùng tự gửi…, IP thật, Cloudflare, Render nội bộ]
+      # → nếu thiếu header trên thì lấy phần tử thứ 3 từ cuối.
+      - key: TRUST_PROXY_HEADER
+        value: cf-connecting-ip
       - key: TRUST_PROXY_HOPS
-        value: "1"
+        value: "3"
       - key: DB_POOL_MAX
         value: "5"
       - key: NODE_OPTIONS
